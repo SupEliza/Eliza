@@ -1,0 +1,54 @@
+import axios from "axios";
+
+const API = axios.create({    
+    baseURL: "https://elizaapi.onrender.com/codes",
+    // baseURL: "http://localhost:8080/codes",
+    withCredentials: true,
+});
+
+async function getCodes(limit){
+    try {
+        const response = await API.get(`/get/${limit}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+async function addCode(params){
+    try {
+        const response = await API.post("/add", params);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+async function moveToBin(id){
+    try {
+        const response = await API.post(`/bin/add/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+async function removeFromBin(id){
+    try {
+        const response = await API.post(`/bin/remove/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+async function deleteCode(id){
+    try {
+        const response = await API.post(`/bin/delete/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+export { getCodes, moveToBin, deleteCode, removeFromBin, addCode };
