@@ -331,7 +331,7 @@ function Users ({addNotification}) {
                 <User key={user.id}>
                   <UsersListElement>{user.id}</UsersListElement>
                   <UsersListElement>{user.username}</UsersListElement>
-                  <UsersListElement>{user.role}</UsersListElement>
+                  <UsersListElement>{user.user_permissions}</UsersListElement>
                   <UsersListElement>
                     <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmModal(user.id)} src={deletePNG} alt="Deletar"/>
                     <ActionIcon data-tooltip-id="edit" onClick={() => handleEditMember(user.username, user.role)} src={editPNG} alt="Editar"/>

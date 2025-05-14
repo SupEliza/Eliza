@@ -272,7 +272,7 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
                             <option value={""}>Selecione</option>
 
                             {permissions.map((group) => (
-                                <option key={group.perm} value={group.perm}>{group.perm}</option>
+                                <option key={group.name} value={group.name}>{group.name}</option>
                             ))}
                         </SelectInput>
                     </InputContent>

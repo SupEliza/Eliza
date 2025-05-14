@@ -268,7 +268,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
                             <option value={""}>Selecione</option>
 
                             {permissions.map((group) => (
-                                <option key={group.perm} value={group.perm}>{group.perm}</option>
+                                <option key={group.name} value={group.name}>{group.name}</option>
                             ))}
                         </SelectInput>
                     </InputContent>
