@@ -179,7 +179,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
     const [buttonDisable, setButtonDisable] = useState(false);
     const [permissions, setPermissions] = useState([]);
 
-    async function fetchPermissions() {
+    async function fetchGroups() {
         try {
             const response = await getGroups();
 
@@ -193,7 +193,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
     }
 
     useEffect(() => {
-        fetchPermissions();
+        fetchGroups();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -209,7 +209,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
             setLoading(true);
             setButtonDisable(true);
 
-            const response = await register({ username, password, role: selectedGroup });
+            const response = await register({ username, password, group: selectedGroup });
 
             if (response.success === true) {
                 addNotification(response.message);
