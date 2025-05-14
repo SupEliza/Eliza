@@ -2,8 +2,8 @@ import styled from "styled-components"
 import { useEffect, useState } from "react"
 import FormButton from "../Inputs/Button";
 import APIResponse from "../ApiResponse";
-import { getPerms } from "../../services/permissions";
-import { setPerms } from "../../services/users";
+import { getGroups } from "../../services/groups";
+import { updateGroup } from "../../services/users";
 import CircleLoad from "../CircleLoad";
 
 const Container = styled.div`
@@ -184,14 +184,14 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
-    const [permissions, setPermissions] = useState([]);
+    const [groups, setGroups] = useState([]);
 
-    async function fetchPermissions() {
+    async function fetchGroups() {
         try {
-            const response = await getPerms();
+            const response = await getGroups();
 
             if (response.success === true) {
-                setPermissions(response.perms);
+                setGroups(response.groups);
             }
 
         } catch (error) {
@@ -200,7 +200,7 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
     }
 
     useEffect(() => {
-        fetchPermissions();
+        fetchGroups();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -215,7 +215,7 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
         try {
             setLoading(true);
             setButtonDisable(true);
-            const response = await setPerms({ username: member, newPerms: [selectedGroup] });
+            const response = await updateGroup({ username: member, newGroup: selectedGroup });
 
             if (response.success === true) {
                 addNotification(response.message);
@@ -271,7 +271,7 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
                         <SelectInput value={selectedGroup} onChange={(e) => {setSelectedGroup(e.target.value)}}>
                             <option value={""}>Selecione</option>
 
-                            {permissions.map((group) => (
+                            {groups.map((group) => (
                                 <option key={group.name} value={group.name}>{group.name}</option>
                             ))}
                         </SelectInput>

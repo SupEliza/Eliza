@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { getPerms } from "../../services/permissions";
+import { getGroups } from "../../services/groups";
 import { useEffect, useState } from "react"
 import FormButton from "../Inputs/Button";
 import APIResponse from "../ApiResponse";
@@ -181,10 +181,10 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
 
     async function fetchPermissions() {
         try {
-            const response = await getPerms();
+            const response = await getGroups();
 
             if (response.success === true) {
-                setPermissions(response.perms);
+                setPermissions(response.groups);
             }
 
         } catch (error) {

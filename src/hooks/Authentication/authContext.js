@@ -40,7 +40,7 @@ export function AuthProvider({ children }) {
                 return;
             }
 
-            if(!response || response.success !== true || !response.user || !response.user.username || response.user.user_permissions[0] !== "Admin") {
+            if(!response || response.success !== true || !response.user || !response.user.username || response.user.user_group !== "Admin") {
                 setUser(null);
                 return;
             }
