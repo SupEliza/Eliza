@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { getRoles } from "../../services/roles";
+import { getPerms } from "../../services/permissions";
 import { useEffect, useState } from "react"
 import FormButton from "../Inputs/Button";
 import APIResponse from "../ApiResponse";
@@ -177,14 +177,14 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
-    const [groups, setGroups] = useState([]);
+    const [perms, setPerms] = useState([]);
 
     async function fetchRoles() {
         try {
-            const response = await getRoles();
+            const response = await getPerms();
 
             if (response.success === true) {
-                setGroups(response.roles);
+                setPerms(response.perms);
             }
 
         } catch (error) {
@@ -267,8 +267,8 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
                         <SelectInput value={selectedGroup} onChange={(e) => {setSelectedGroup(e.target.value)}}>
                             <option value={""}>Selecione</option>
 
-                            {groups.filter((group) => group.name !== "Customers").map((group) => (
-                                <option key={group.name} value={group.name}>{group.name}</option>
+                            {perms.map((group) => (
+                                <option key={group.perm} value={group.perm}>{group.perm}</option>
                             ))}
                         </SelectInput>
                     </InputContent>

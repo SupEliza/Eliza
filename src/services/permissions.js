@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const API = axios.create({    
-    baseURL: "https://elizaapi.onrender.com/roles",
+    baseURL: "https://elizaapi.onrender.com/permissions",
     // baseURL: "http://localhost:8080/roles",
     withCredentials: true,
 });
 
-async function getRoles(){
+async function getPerms(){
     try {
         const response = await API.get("");
         return response.data;
@@ -15,4 +15,4 @@ async function getRoles(){
     }
 }
 
-export { getRoles };
+export { getPerms };
