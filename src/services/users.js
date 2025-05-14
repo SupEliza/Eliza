@@ -42,9 +42,9 @@ async function deleteUser(id){
     }
 }
 
-async function setGroup(params){
+async function setPerms(params){
     try {
-        const response = await API.post("/set-role", params);
+        const response = await API.post("/set-perm", params);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
@@ -78,4 +78,4 @@ async function refreshToken(uuid) {
     }
 }
 
-export { login, userAuth, refreshToken, userLogout, getUsers, setGroup, register, deleteUser };
+export { login, userAuth, refreshToken, userLogout, getUsers, setPerms, register, deleteUser };

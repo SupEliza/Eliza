@@ -2,8 +2,8 @@ import styled from "styled-components"
 import { useEffect, useState } from "react"
 import FormButton from "../Inputs/Button";
 import APIResponse from "../ApiResponse";
-import { getRoles } from "../../services/roles";
-import { setGroup } from "../../services/users";
+import { getPerms } from "../../services/permissions";
+import { setPerms } from "../../services/users";
 import CircleLoad from "../CircleLoad";
 
 const Container = styled.div`
@@ -184,14 +184,14 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
-    const [groups, setGroups] = useState([]);
+    const [permissions, setPermissions] = useState([]);
 
-    async function fetchRoles() {
+    async function fetchPermissions() {
         try {
-            const response = await getRoles();
+            const response = await getPerms();
 
             if (response.success === true) {
-                setGroups(response.roles);
+                setPermissions(response.perms);
             }
 
         } catch (error) {
@@ -200,7 +200,7 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
     }
 
     useEffect(() => {
-        fetchRoles();
+        fetchPermissions();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -208,14 +208,14 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
 
         if (!selectedGroup) {
             setApiResponseColor("red");
-            setApiResponse("Por favor, selecione um cargo.");
+            setApiResponse("Por favor, selecione uma permissão.");
             return;
         }
 
         try {
             setLoading(true);
             setButtonDisable(true);
-            const response = await setGroup({ username: member, role: selectedGroup });
+            const response = await setPerms({ username: member, newPerms: [selectedGroup] });
 
             if (response.success === true) {
                 addNotification(response.message);
@@ -271,8 +271,8 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
                         <SelectInput value={selectedGroup} onChange={(e) => {setSelectedGroup(e.target.value)}}>
                             <option value={""}>Selecione</option>
 
-                            {groups.filter((group) => group.name !== "Customers").map((group) => (
-                                <option key={group.name} value={group.name}>{group.name}</option>
+                            {permissions.map((group) => (
+                                <option key={group.perm} value={group.perm}>{group.perm}</option>
                             ))}
                         </SelectInput>
                     </InputContent>

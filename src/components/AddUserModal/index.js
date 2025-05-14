@@ -177,14 +177,14 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
-    const [perms, setPerms] = useState([]);
+    const [permissions, setPermissions] = useState([]);
 
-    async function fetchRoles() {
+    async function fetchPermissions() {
         try {
             const response = await getPerms();
 
             if (response.success === true) {
-                setPerms(response.perms);
+                setPermissions(response.perms);
             }
 
         } catch (error) {
@@ -193,7 +193,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
     }
 
     useEffect(() => {
-        fetchRoles();
+        fetchPermissions();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -267,7 +267,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
                         <SelectInput value={selectedGroup} onChange={(e) => {setSelectedGroup(e.target.value)}}>
                             <option value={""}>Selecione</option>
 
-                            {perms.map((group) => (
+                            {permissions.map((group) => (
                                 <option key={group.perm} value={group.perm}>{group.perm}</option>
                             ))}
                         </SelectInput>

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API = axios.create({    
     baseURL: "https://elizaapi.onrender.com/permissions",
-    // baseURL: "http://localhost:8080/roles",
+    // baseURL: "http://localhost:8080/permissions",
     withCredentials: true,
 });
 
