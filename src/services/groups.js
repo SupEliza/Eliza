@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({    
-    // baseURL: "https://elizaapi.onrender.com/groups",
-    baseURL: "http://localhost:8080/groups",
+    baseURL: "https://elizaapi.onrender.com/groups",
+    // baseURL: "http://localhost:8080/groups",
     withCredentials: true,
 });
 
