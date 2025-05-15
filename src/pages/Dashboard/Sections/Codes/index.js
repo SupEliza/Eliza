@@ -259,7 +259,10 @@ function Codes ({addNotification}) {
 
   const handleExport = async () => {
     setExportLoading(true);
-    if (codesList.length === 0) alert("Nenhum código registrado!");
+    if (codesList.length === 0){ 
+      alert("Nenhum código registrado!");
+      return;
+    }
 
     const response = await getCodes(0);
 

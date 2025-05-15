@@ -3,6 +3,7 @@ import { getNotes } from "../../../../services/notes";
 import { Tooltip } from "react-tooltip";
 import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
+import viewPNG from "../../../../assets/images/view.png";
 import removePNG from "../../../../assets/images/remove.png";
 import styled from "styled-components";
                                                                                                                                                                                                                                                                                                                                                                                                   
@@ -360,7 +361,10 @@ function Notes ({addNotification}) {
                   </NotesListElement>
                   <NotesListElement>
                     <ActionIcon data-tooltip-id="remove" onClick={() => {}} src={removePNG} alt="Deletar"/>
+                    <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/note/${note.id}`, '_blank')}} src={viewPNG} alt="Visualizar"/>
+
                     <Tooltip id="remove" place="top" content="Mover para lixeira"/>
+                    <Tooltip id="view" place="top" content="Visualizar nota"/>
                   </NotesListElement>
                 </Note>
               ))}

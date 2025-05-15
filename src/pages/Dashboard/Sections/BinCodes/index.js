@@ -229,7 +229,10 @@ function BinCodes ({addNotification}) {
   }, []);
 
   function handleExport() {
-    if (codesList.length === 0) alert("Nenhum código registrado!");
+    if (codesList.length === 0) {
+      alert("Nenhum código registrado!")
+      return;
+    };
 
     const txt = codesList.map((code) => `${code.ean};${code.quantity}`).join("\n");
     const blob = new Blob([txt], { type: "text/plain" });

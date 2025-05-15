@@ -7,6 +7,7 @@ import { createGlobalStyle } from 'styled-components';
 import { AuthProvider } from './hooks/Authentication/authContext';
 import DashRoute from './routes/DashRoute.js';
 import LoginRoute from './routes/LoginRoute.js';
+import View from './pages/View/index.js';
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -71,6 +72,13 @@ root.render(
             element={
               <DashRoute>
                 <Dashboard/>
+              </DashRoute>
+            }
+          />
+          <Route path="/dashboard/view/note/:noteID" 
+            element={
+              <DashRoute>
+                <View/>
               </DashRoute>
             }
           />

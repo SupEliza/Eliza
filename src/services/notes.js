@@ -15,4 +15,14 @@ async function getNotes(){
     }
 }
 
-export { getNotes };
+async function getNoteById(id){
+    try {
+        const response = await API.get(`/by-id/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+
+export { getNotes, getNoteById };
