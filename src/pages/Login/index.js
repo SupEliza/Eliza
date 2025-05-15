@@ -1,13 +1,13 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import logo from "../assets/images/eliza2.jpeg";
-import { ReactComponent as Arrow} from "../assets/svg/loginArrow.svg";
-import Background from "../components/AccBackground/background";
-import { login } from "../services/users";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../hooks/Authentication/authContext";
-import APIResponse from "../components/ApiResponse";
-import CircleLoad from "../components/CircleLoad";
+import { login } from "../../services/users";
+import { AuthContext } from "../../hooks/Authentication/authContext";
+import { ReactComponent as Arrow} from "../../assets/svg/loginArrow.svg";
+import styled from "styled-components";
+import logo from "../../assets/images/eliza2.jpeg";
+import Background from "../../components/AccBackground/background";
+import APIResponse from "../../components/ApiResponse";
+import CircleLoad from "../../components/CircleLoad";
 
 const LoginContainer = styled.div`
     display: flex;

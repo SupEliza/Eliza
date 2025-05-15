@@ -1,10 +1,10 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
+import { AuthProvider } from './hooks/Authentication/authContext';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard/index.js';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
-import { AuthProvider } from './hooks/Authentication/authContext';
 import DashRoute from './routes/DashRoute.js';
 import LoginRoute from './routes/LoginRoute.js';
 import View from './pages/View/index.js';
@@ -29,7 +29,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: var(--background);
   }
 
   ::-webkit-scrollbar {

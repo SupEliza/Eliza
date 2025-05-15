@@ -1,74 +1,256 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getNoteById } from "../../services/notes";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import SmallLoad from "../../components/SmallLoad";
+
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    padding: 2rem;  
     box-sizing: border-box;
     gap: 1rem;
     min-height: 100vh;
-    background-color: white;
+    background-color: rgba(245, 246, 250, 1);
+    font-family: 'Nunito Sans', sans-serif;
+
+    @media screen and (min-width: 1000px){
+        min-height: unset;
+        height: 100vh;
+        flex-direction: row;
+    }
 `;
 
+const CardContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 1rem;
+    border: 1px solid rgba(11, 35, 97, 0.3);
+    overflow-y: auto;
+    width: 90%;
+
+    &::-webkit-scrollbar {
+      display: none;
+      width: 2px;
+    }
+
+    @media screen and (min-width: 1000px){
+        min-height: 80%;
+        width: 48%;
+    }
+`   
+
+const TitleContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+    border-radius: 1rem 1rem 0 0;
+    box-sizing: border-box;
+    background-color: var(--background);
+`
+
+const MainTitle = styled.h1`
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 1.5rem;
+    color: white;
+
+    @media screen and (min-width: 768px){
+        font-size: 1.8rem;
+    }
+`;
+
+const InformationContainer = styled.section`
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+`;
+
+const SubtitleContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+`;
+
+const Subtitle = styled.h1`
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 1.2rem;
+    color: var(--background);
+
+    @media screen and (min-width: 768px){
+    font-size: 1.5rem;
+    }
+`;
+
+const InfoText = styled.p`
+    font-size: 1rem;
+    font-weight: 600;
+    color: ${(props) => props.color || "var(--background)"};
+`
+
+const Label = styled.h2`
+    font-size: 1rem;
+    font-weight: 600;
+    color: black;
+`;
+
+const ItemList = styled.div`
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    gap: 1rem;
+`;
+
+const Item = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: rgba(245, 246, 250, 1);
+`;
+
+const ItemElement = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: .2rem;
+`
+
 function View() {
-    const [ note, setNote ] = useState([]);
-    const [ noteItens, setNoteItens ] = useState([]);
+    const [note, setNote] = useState({});
+    const [noteItens, setNoteItens] = useState([]);
+    const [loading, setLoading] = useState(false);
     const { noteID } = useParams();
 
     async function fetchNoteById() {
+        setLoading(true);
         try {
+
             const response = await getNoteById(noteID);
 
             if (!response.success) {
-                throw new Error(response.message)
+                throw new Error(response.message);
             } else {
                 setNote(response.note);
                 setNoteItens(response.note.itens);
-                document.title = `View NF | ${response.note.company}`
+                document.title = `View NF | ${response.note.company}`;
             }
         } catch (error) {
             console.log(error);
         }
+        setLoading(false);
     }
 
     useEffect(() => {
         document.title = "View NF";
-
         fetchNoteById();
     }, []);
 
-    return (
+    return loading ? (
         <Container>
-            <h1>View</h1>
+            <SmallLoad/> 
+        </Container>
+    ) : (
+        <Container>
+            <CardContainer>
+                <TitleContainer>
+                    <MainTitle>Relação de Nota - #{noteID}</MainTitle>
+                </TitleContainer>
 
-            <h2>ID</h2>
-            <p>{note.id}</p>
+                <InformationContainer>
+                    <SubtitleContainer>
+                        <Subtitle>
+                            Informações
+                        </Subtitle>
+                    </SubtitleContainer>
 
-            <h2>Empresa</h2>
-            <p>{note.company}</p>
+                    <ItemList>
+                        <Item>
+                            <Label>Empresa:</Label>
+                            <InfoText>{note.company}</InfoText>
+                        </Item>
 
-            <h2>Itens</h2>
-            {noteItens.map((item, index) => (
-                <>
-                    <p key={index}>{item.codigo}</p>
-                    <p key={index}>{item.quantidade}</p>
-                </>
-            ))}
+                        <Item>
+                            <Label>Boleto:</Label>
+                            <InfoText>{note.ticket ? "Sim" : "Não"}</InfoText>
+                        </Item>
 
-            <h2>Boleto</h2>
-            <p>{note.ticket ? "Sim" : "Nao"}</p>
+                        <Item>
+                            <Label>Usuário:</Label>
+                            <InfoText>{note.user_add}</InfoText>
+                        </Item>
 
-            <h2>Usuario</h2>
-            <p>{note.user_add}</p>
+                        <Item>
+                            <Label>Data de Coleta:</Label>
+                            <InfoText>
+                                {new Date(note.collection_date).toLocaleString("pt-BR", {
+                                timeZone: "UTC",
+                                dateStyle: "short",
+                                })}
+                            </InfoText>
+                        </Item>
+                                
+                        <Item>
+                            <Label>Data de Criação:</Label>
+                            <InfoText>
+                                {new Date(note.created_at).toLocaleString("pt-BR", {
+                                    timeZone: "America/Sao_Paulo",
+                                    dateStyle: "short",
+                                })}
+                            </InfoText>
+                        </Item>
+                    </ItemList>
+                </InformationContainer>
+            </CardContainer>
 
-            <h2>Data de coleta</h2>
-            <p>{note.collection_date}</p>
+            <CardContainer>
+                <TitleContainer>
+                    <MainTitle>Itens</MainTitle>
+                </TitleContainer>
 
-            <h2>Data</h2>
-            <p>{note.created_at}</p>
+                <InformationContainer>
+                    <SubtitleContainer>
+                        <Subtitle>
+                            Itens
+                        </Subtitle>
+                    </SubtitleContainer>
+                    <ItemList>
+                        {noteItens.map((item, index) => (
+                            <Item>
+                                <ItemElement>
+                                    <InfoText color="black">Código:</InfoText>
+                                    <InfoText>
+                                        {item.codigo}
+                                    </InfoText>
+                                </ItemElement>
+
+                                <ItemElement>
+                                    <InfoText color="black">Qtd:</InfoText>
+                                    <InfoText>
+                                        {item.quantidade}
+                                    </InfoText>
+                                </ItemElement>
+                            </Item>
+                        ))}
+                    </ItemList>
+                </InformationContainer>
+            </CardContainer>
         </Container>
     );
 }
