@@ -105,7 +105,7 @@ const CodesListContainer = styled.div`
   gap: .5rem;
   height: 100%;
   width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(11, 35, 97, 0.3);
 `;
 
 const CodesListHeader = styled.div`
@@ -191,7 +191,7 @@ const Code = styled.div`
   width: 100%;
 `;
 
-function Codes ({addNotification}) {
+function BinCodes ({addNotification}) {
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
@@ -334,7 +334,7 @@ function Codes ({addNotification}) {
     <Container>
       <CodesHeader>
         <Title>
-          Lixeira
+          Lixeira de Baixas
         </Title>
 
         <CodesHeaderRight>
@@ -403,4 +403,4 @@ function Codes ({addNotification}) {
   );
 }
 
-export default Codes
+export default BinCodes

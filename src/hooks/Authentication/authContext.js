@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
                 return;
             }
 
-            const response = await refreshToken(uuid);
+            const response = await refreshToken({uuid});
 
             if (response.success === false) {
                 setUser(null);
@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const intervalId = setInterval(() => {
             refreshAccessToken();
-        }, 15 * 60 * 1000);
+        }, 1 * 60 * 1000);
 
         return () => clearInterval(intervalId);
     }, []);

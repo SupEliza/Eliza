@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 import { ReactComponent as CodesSVG } from "../../../../assets/svg/codes.svg";
 import { ReactComponent as UsersSVG } from "../../../../assets/svg/users.svg";
-import { ReactComponent as SettingsSVG } from "../../../../assets/svg/settings.svg";
+import { ReactComponent as NotesSVG } from "../../../../assets/svg/notes.svg";
+import { ReactComponent as PermissionsSVG } from "../../../../assets/svg/permissions.svg";
 import { ReactComponent as BinSVG } from "../../../../assets/svg/bin.svg";
 import { ReactComponent as LogoutSVG } from "../../../../assets/svg/logout.svg";
 
@@ -74,6 +75,8 @@ const sideBarIcons = {
     Codes: CodesSVG,
     Bin: BinSVG,
     Users: UsersSVG,
+    Notes: NotesSVG,
+    Permissions: PermissionsSVG,
     Logout: LogoutSVG,
 };
 

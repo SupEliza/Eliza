@@ -1,0 +1,381 @@
+import { useEffect, useState } from "react";
+import { getNotes } from "../../../../services/notes";
+import { Tooltip } from "react-tooltip";
+import SmallLoad from "../../../../components/SmallLoad";
+import reloadPNG from "../../../../assets/images/reload.png";
+import removePNG from "../../../../assets/images/remove.png";
+import styled from "styled-components";
+                                                                                                                                                                                                                                                                                                                                                                                                  
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  gap: 1rem;
+  min-height: 100%;
+`;
+
+const NotesHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 1rem;
+
+  @media screen and (min-width: 550px){
+    gap: 0;
+    padding: 0 1.2rem;
+    flex-direction: row;
+  }
+`;
+
+const Title = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  font-family: "Nunito Sans";
+  font-weight: bold;
+  color: black;
+  font-size: 1.6rem;
+
+  @media screen and (min-width: 768px){
+    font-size: 2rem;
+  }
+`
+
+const NotesHeaderRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+
+  @media screen and (min-width: 350px){
+    flex-direction: row;
+    justify-content: space-evenly;  
+  }
+
+  @media screen and (min-width: 550px){
+    gap: 1rem;
+    width: unset;
+  }
+`;
+
+const ReloadIcon = styled.img`
+  width: 3rem;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+
+  &:hover{
+    transform: rotate(360deg);
+  }
+`;
+
+const HeaderButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: var(--background);
+  color: var(--secondary-color);
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  width: 6rem;
+  height: 3rem;
+  cursor: pointer;
+`;
+
+const NotesListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(11, 35, 97, 0.3);
+  gap: .5rem;
+  height: 100%;
+  width: 100%; 
+`;
+
+const NotesListHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  box-sizing: border-box;
+  background-color: var(--background); 
+  color: var(--secondary-color);
+  border-radius: 0.5rem;
+  font-weight: bold;
+  padding: .5rem;
+  margin: .2rem;
+  width: 100%;
+`;
+
+const NotesListElement = styled.div`
+  display: ${({ type, isMobile }) => (type === "ID" ? (isMobile ? "none" : "flex") : "flex")};
+  gap: .2rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: "Nunito Sans";
+  font-size: ${({isHeader}) => (isHeader ? ".8rem" : ".6rem")};
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 0.5rem;
+  margin: 0.5rem;
+  width: ${(props) => props.width || "20%"};
+  
+  @media screen and (min-width: 768px){
+    gap: 1rem;
+    font-size: 1rem;
+  }
+`;
+
+const NotePointer = styled.p`
+  cursor: pointer;
+`;
+
+const ActionIcon = styled.img`
+  width: 1rem;
+  cursor: pointer;
+
+  @media screen and (min-width: 768px){
+    width: 2rem;
+  }
+`;
+
+const NotesList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  max-height: 100%;
+  width: 100%;
+
+  &::-webkit-scrollbar {
+      width: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent; 
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--background);
+    border-radius: 5px;
+  }
+`;
+
+const Note = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  box-sizing: border-box;
+  background-color: #FAFAFA;
+  border-radius: 0.5rem;
+  padding: .5rem;
+  margin: .2rem;
+  width: 100%;
+`;
+
+const LoadMoreButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: var(--background);
+  color: var(--secondary-color);
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  margin: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+`;
+
+function Notes ({addNotification}) {
+  const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
+  const [totalNotes, setTotalNotes] = useState(0);
+  const [notesLimit, setNotesLimit] = useState(10);
+  const [notesList, setNotesList] = useState([]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMobile]);
+
+  async function fetchNotes(append = false) {
+    try {
+      setLoading(true);
+      const response = await getNotes(notesLimit);
+  
+      if (response.success) {
+        setTotalNotes(response.total);
+        const undeletedNotes = response.notes
+          .filter((note) => !note.isDeleted)
+          .sort((a, b) => new Date(b.collection_date) - new Date(a.collection_date));
+  
+        setNotesList((prevList) => {
+          const newList = append ? [...prevList, ...undeletedNotes] : undeletedNotes;
+          return newList.filter((note, index, self) =>
+            index === self.findIndex((c) => c.id === note.id)
+          );
+        });
+      } else{
+        setNotesList([]);
+        setTotalNotes(0);
+      }
+  
+      setSortOrder({ type: "Coleta", ascending: false });
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  useEffect(() => {
+    fetchNotes();
+  }, [notesLimit]);
+
+  function orderList(type) {
+    setNotesList((prevList) => {
+      let sortedList = [...prevList];
+      const isAscending = sortOrder.type === type ? !sortOrder.ascending : true;
+
+      switch (type) {
+        case "Empresa":
+          sortedList.sort((a, b) =>
+            isAscending ? a.company.localeCompare(b.company) : b.company.localeCompare(a.company)
+          );
+          break;
+        case "Data":
+          sortedList.sort((a, b) =>
+            isAscending
+              ? new Date(a.created_at) - new Date(b.created_at)
+              : new Date(b.created_at) - new Date(a.created_at)
+          );
+          break;
+        case "Itens":
+          sortedList.sort((a, b) => (isAscending ? a.itens.length - b.itens.length : b.itens.length - a.itens.length));
+          break;
+        case "Coleta":
+          sortedList.sort((a, b) =>
+            isAscending
+              ? new Date(a.created_at) - new Date(b.created_at)
+              : new Date(b.created_at) - new Date(a.created_at)
+          );
+          break;
+        default:
+          return prevList;
+      }
+      setSortOrder({ type, ascending: isAscending });
+      return [...sortedList];
+    });
+  }
+
+  function handleReloadNotes() {
+    setNotesLimit(10);
+    fetchNotes(false);
+  }
+
+  function handleLoadMore() {
+    setNotesLimit((prev) => prev + 10);
+    fetchNotes(true);
+  }
+
+  const headerList = [
+    { name: "Empresa", action: () => orderList("Empresa") },
+    { name: "Itens", action: () => orderList("Itens") },
+    { name: "Data", action: () => orderList("Data") },
+    { name: "Coleta", action: () => orderList("Coleta") },
+    { name: "Ações" }
+  ];
+
+  return (
+    <Container>
+      <NotesHeader>
+        <Title>
+          Controle de Notas
+        </Title>
+
+        <NotesHeaderRight>
+          {/* <p>Total: {totalNotes}</p> */}
+
+          <ReloadIcon onClick={handleReloadNotes} src={reloadPNG} alt="reload"/>
+
+          {/* <HeaderButton type="button" onClick={() => setAddNoteOpen(true)}>Adicionar</HeaderButton>
+          <HeaderButton type="button" onClick={handleExport}>{exportLoading ? <CircleLoad/> : "Exportar"}</HeaderButton> */}
+        </NotesHeaderRight>
+      </NotesHeader>
+      
+      <NotesListContainer>
+        <NotesListHeader>
+          {headerList.map((header) => (
+            <NotesListElement key={header.name} isHeader>
+              {header.action ? (
+                <NotePointer onClick={header.action}>
+                  {header.name} {sortOrder.type === header.name && (sortOrder.ascending ? "▲" : "▼")}
+                </NotePointer>
+              ) : (
+                header.name
+              )}
+            </NotesListElement>
+          ))}
+        </NotesListHeader>
+
+        {loading ? <SmallLoad/> : 
+          notesList.length !== 0 ?
+            <NotesList>
+              {notesList.map((note) => (
+                <Note key={`${note.id}-${note.created_at}`}>
+                  <NotesListElement>{note.company}</NotesListElement>
+                  <NotesListElement>{note.itens.length}</NotesListElement>
+                  <NotesListElement>
+                    {new Date(note.created_at).toLocaleString("pt-BR", {
+                        timeZone: "America/Sao_Paulo",
+                        dateStyle: "short",
+                    })}
+                  </NotesListElement>
+                  <NotesListElement>
+                    {new Date(note.collection_date).toLocaleString("pt-BR", {
+                        timeZone: "UTC",
+                        dateStyle: "short",
+                    })}
+                  </NotesListElement>
+                  <NotesListElement>
+                    <ActionIcon data-tooltip-id="remove" onClick={() => {}} src={removePNG} alt="Deletar"/>
+                    <Tooltip id="remove" place="top" content="Mover para lixeira"/>
+                  </NotesListElement>
+                </Note>
+              ))}
+
+              {notesLimit < totalNotes && (
+                <NotesListElement>
+                  <LoadMoreButton onClick={handleLoadMore}>Carregar mais</LoadMoreButton>
+                </NotesListElement>
+              )}
+            </NotesList>
+          : <p>Nenhum registro encontrado.</p>
+        }
+      </NotesListContainer>
+    </Container>
+  );
+}
+
+export default Notes

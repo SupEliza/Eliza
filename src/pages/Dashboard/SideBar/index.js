@@ -8,8 +8,8 @@ const SideBarContainer = styled.div`
     flex-direction: column;
     width: ${({ isActive, isMobile }) => (isActive ? (isMobile ? "15rem" : "20rem") : "0")};
     transform: ${({ isActive, isMobile }) => (isActive ? "translateX(0)" : isMobile ? "translateX(-15rem)" : "translateX(-20rem)")};
-    position: ${({ isMobile }) => (isMobile ? "fixed" : "relative")};
-    height: ${({ isMobile }) => (isMobile ? "100%" : "unset")};
+    position: relative;
+    max-height: 100%;
     box-shadow: ${({ isMobile }) => (isMobile ? "0 0 10px rgba(0, 0, 0, 0.3)" : "none")};
     z-index: 100;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
@@ -43,12 +43,15 @@ const Logo = styled.img`
 `;
 
 const SideBarDefaultList = [
-    { name: "Códigos", svg: "Codes" },
-    { name: "Lixeira", svg: "Bin" },
     { name: "Usuários", svg: "Users" },
+    { name: "Permissões", svg: "Permissions" },
+    { name: "Notas", svg: "Notes" },
+    { name: "Baixas", svg: "Codes" },
 ];
 
 const SideBarSettingsList = [
+    { name: "Lixeira de Notas", svg: "Bin" },
+    { name: "Lixeira de Baixas", svg: "Bin" },
     { name: "Sair", svg: "Logout" }
 ];
 
@@ -93,8 +96,8 @@ function SideBar({ isActive, selectedSection, setSelectedSection, setConfirmatio
                 </SideBarIcon>
             </IconContainer>
 
-            <SideBarList list={SideBarDefaultList} selectedSection={selectedSection} handleSelect={handleSelect} subtitle="DASHBOARD" />
-            <SideBarList list={SideBarSettingsList} selectedSection={selectedSection} handleSelect={handleSelect} dividerVisible subtitle="PREFERÊNCIAS"/>
+            <SideBarList list={SideBarDefaultList} selectedSection={selectedSection} handleSelect={handleSelect} subtitle="PAINEL" />
+            <SideBarList list={SideBarSettingsList} selectedSection={selectedSection} handleSelect={handleSelect} dividerVisible subtitle="MANUTENÇÃO"/>
         </SideBarContainer>
     );
 };

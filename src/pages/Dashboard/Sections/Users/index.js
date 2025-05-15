@@ -92,7 +92,7 @@ const UsersListContainer = styled.div`
   text-align: center;
   height: 100%;
   width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(11, 35, 97, 0.3);
 `;
 
 const AddButton = styled.button`

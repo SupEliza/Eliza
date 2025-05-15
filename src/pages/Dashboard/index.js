@@ -4,24 +4,25 @@ import SideBar from "./SideBar";
 import TopBar from "./TopBar";
 import ConfirmModal from "../../components/ConfirmModal/index";
 import Codes from "./Sections/Codes/index";
-import Bin from "./Sections/Bin/index";
+import BinCodes from "./Sections/BinCodes/index";
+import BinNotes from "./Sections/BinNotes/index";
 import Users from "./Sections/Users/index";
-import Settings from "./Sections/Settings/index";
+import Notes from "./Sections/Notes/index";
 import Notify from "../../components/Notify/index"
 import Logout from "../../utils/logout";
+import Permissions from "./Sections/Permissions";
 
 const Container = styled.div`
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
-    overflow-x: hidden;
+    max-height: 100vh;
+    overflow: hidden;
     background-color: rgba(245, 246, 250, 1);
 `;
 
 const DashboardContent = styled.div`
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
     width: 100%;
 `
 
@@ -30,6 +31,7 @@ const SectionContainer = styled.div`
     flex-direction: column;
     margin: 2vh;
     height: 88vh;
+    overflow-y: auto;
     max-width: 100%;
 `
 
@@ -55,7 +57,7 @@ function Dashboard() {
     if (currentSection) {
         setSelectedSection(currentSection);
     } else {
-        setSelectedSection("Códigos");
+        setSelectedSection("Usuários");
     }
   }, []);
 
@@ -67,10 +69,12 @@ function Dashboard() {
   }
 
   const sections = {
-    "Códigos": <Codes addNotification={addNotification}/>,
-    "Lixeira": <Bin addNotification={addNotification}/>,
     "Usuários": <Users addNotification={addNotification}/>,
-    "Configurações": <Settings/>
+    "Permissões": <Permissions addNotification={addNotification}/>,
+    "Notas": <Notes addNotification={addNotification}/>,
+    "Baixas": <Codes addNotification={addNotification}/>,
+    "Lixeira de Notas": <BinNotes addNotification={addNotification}/>,
+    "Lixeira de Baixas": <BinCodes addNotification={addNotification}/>,
   }   
 
   return (

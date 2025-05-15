@@ -71,7 +71,7 @@ async function userAuth() {
 
 async function refreshToken(uuid) {
     try {
-        const response = await API.post(`/refresh-token/${uuid}`);
+        const response = await API.post('/refresh-token', uuid);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;

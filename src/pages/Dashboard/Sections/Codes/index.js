@@ -103,10 +103,10 @@ const CodesListContainer = styled.div`
   border-radius: 1rem;
   padding: 1rem;
   overflow: hidden;
+  border: 1px solid rgba(11, 35, 97, 0.3);
   gap: .5rem;
   height: 100%;
-  width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 100%; 
 `;
 
 const CodesListHeader = styled.div`
@@ -354,7 +354,7 @@ function Codes ({addNotification}) {
     <Container>
       <CodesHeader>
         <Title>
-          Códigos
+          Controle de Baixas
         </Title>
 
         <CodesHeaderRight>
