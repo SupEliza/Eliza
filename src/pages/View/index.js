@@ -4,27 +4,60 @@ import { getNoteById } from "../../services/notes";
 import styled from "styled-components";
 import SmallLoad from "../../components/SmallLoad";
 
-
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2rem;  
     box-sizing: border-box;
-    gap: 1rem;
+    padding: 1rem;
     min-height: 100vh;
     background-color: rgba(245, 246, 250, 1);
     font-family: 'Nunito Sans', sans-serif;
 
     @media screen and (min-width: 1000px){
+        padding: 0;
         min-height: unset;
         height: 100vh;
+    }
+`;
+
+const ContentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(245, 246, 250, 1);
+    font-family: 'Nunito Sans', sans-serif;
+
+    @media screen and (min-width: 1000px){
         flex-direction: row;
     }
 `;
 
-const CardContainer = styled.div`
+const PageTitle = styled.div`   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Nunito Sans";
+    font-size: 1rem;
+    font-weight: bold;
+    box-sizing: border-box;
+    color: white;
+    background-color: var(--background);
+    padding: .8rem;
+    width: 100%;
+
+    @media screen and (min-width: 768px){
+        font-size: 1.5rem;
+  }
+`
+
+const CardContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,17 +73,17 @@ const CardContainer = styled.div`
     }
 
     @media screen and (min-width: 1000px){
-        min-height: 80%;
         width: 48%;
+        height: 80%;
     }
 `   
 
-const TitleContainer = styled.div`
+const TitleContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
+    padding: .8rem;
     width: 100%;
     border-radius: 1rem 1rem 0 0;
     box-sizing: border-box;
@@ -61,13 +94,9 @@ const MainTitle = styled.h1`
     font-family: 'Nunito Sans', sans-serif;
     font-size: 1.5rem;
     color: white;
-
-    @media screen and (min-width: 768px){
-        font-size: 1.8rem;
-    }
 `;
 
-const InformationContainer = styled.section`
+const InformationContentContainer = styled.section`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -76,7 +105,7 @@ const InformationContainer = styled.section`
     width: 100%;
 `;
 
-const SubtitleContainer = styled.div`
+const SubtitleContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -168,89 +197,97 @@ function View() {
         </Container>
     ) : (
         <Container>
-            <CardContainer>
-                <TitleContainer>
-                    <MainTitle>Relação de Nota - #{noteID}</MainTitle>
-                </TitleContainer>
+            <PageTitle>
+                SUPERMERCADOS ELIZA
+            </PageTitle>
 
-                <InformationContainer>
-                    <SubtitleContainer>
-                        <Subtitle>
-                            Informações
-                        </Subtitle>
-                    </SubtitleContainer>
+            <ContentContainer>
 
-                    <ItemList>
-                        <Item>
-                            <Label>Empresa:</Label>
-                            <InfoText>{note.company}</InfoText>
-                        </Item>
 
-                        <Item>
-                            <Label>Boleto:</Label>
-                            <InfoText>{note.ticket ? "Sim" : "Não"}</InfoText>
-                        </Item>
+                <CardContentContainer>
+                    <TitleContentContainer>
+                        <MainTitle>Relação de Nota - #{noteID}</MainTitle>
+                    </TitleContentContainer>
 
-                        <Item>
-                            <Label>Usuário:</Label>
-                            <InfoText>{note.user_add}</InfoText>
-                        </Item>
+                    <InformationContentContainer>
+                        <SubtitleContentContainer>
+                            <Subtitle>
+                                Informações
+                            </Subtitle>
+                        </SubtitleContentContainer>
 
-                        <Item>
-                            <Label>Data de Coleta:</Label>
-                            <InfoText>
-                                {new Date(note.collection_date).toLocaleString("pt-BR", {
-                                timeZone: "UTC",
-                                dateStyle: "short",
-                                })}
-                            </InfoText>
-                        </Item>
-                                
-                        <Item>
-                            <Label>Data de Criação:</Label>
-                            <InfoText>
-                                {new Date(note.created_at).toLocaleString("pt-BR", {
-                                    timeZone: "America/Sao_Paulo",
-                                    dateStyle: "short",
-                                })}
-                            </InfoText>
-                        </Item>
-                    </ItemList>
-                </InformationContainer>
-            </CardContainer>
-
-            <CardContainer>
-                <TitleContainer>
-                    <MainTitle>Itens</MainTitle>
-                </TitleContainer>
-
-                <InformationContainer>
-                    <SubtitleContainer>
-                        <Subtitle>
-                            Itens
-                        </Subtitle>
-                    </SubtitleContainer>
-                    <ItemList>
-                        {noteItens.map((item, index) => (
+                        <ItemList>
                             <Item>
-                                <ItemElement>
-                                    <InfoText color="black">Código:</InfoText>
-                                    <InfoText>
-                                        {item.codigo}
-                                    </InfoText>
-                                </ItemElement>
-
-                                <ItemElement>
-                                    <InfoText color="black">Qtd:</InfoText>
-                                    <InfoText>
-                                        {item.quantidade}
-                                    </InfoText>
-                                </ItemElement>
+                                <Label>Empresa:</Label>
+                                <InfoText>{note.company}</InfoText>
                             </Item>
-                        ))}
-                    </ItemList>
-                </InformationContainer>
-            </CardContainer>
+
+                            <Item>
+                                <Label>Boleto:</Label>
+                                <InfoText>{note.ticket ? "Sim" : "Não"}</InfoText>
+                            </Item>
+
+                            <Item>
+                                <Label>Usuário:</Label>
+                                <InfoText>{note.user_add}</InfoText>
+                            </Item>
+
+                            <Item>
+                                <Label>Data de Coleta:</Label>
+                                <InfoText>
+                                    {new Date(note.collection_date).toLocaleString("pt-BR", {
+                                    timeZone: "UTC",
+                                    dateStyle: "short",
+                                    })}
+                                </InfoText>
+                            </Item>
+                                    
+                            <Item>
+                                <Label>Data de Criação:</Label>
+                                <InfoText>
+                                    {new Date(note.created_at).toLocaleString("pt-BR", {
+                                        timeZone: "America/Sao_Paulo",
+                                        dateStyle: "short",
+                                    })}
+                                </InfoText>
+                            </Item>
+                        </ItemList>
+                    </InformationContentContainer>
+                </CardContentContainer>
+
+                <CardContentContainer>
+                    <TitleContentContainer>
+                        <MainTitle>Itens</MainTitle>
+                    </TitleContentContainer>
+
+                    <InformationContentContainer>
+                        <SubtitleContentContainer>
+                            <Subtitle>
+                                Total de itens: {noteItens.length}
+                            </Subtitle>
+                        </SubtitleContentContainer>
+                        <ItemList>
+                            {noteItens.map((item, index) => (
+                                <Item>
+                                    <ItemElement>
+                                        <InfoText color="black">Código:</InfoText>
+                                        <InfoText>
+                                            {item.codigo}
+                                        </InfoText>
+                                    </ItemElement>
+
+                                    <ItemElement>
+                                        <InfoText color="black">Qtd:</InfoText>
+                                        <InfoText>
+                                            {item.quantidade}
+                                        </InfoText>
+                                    </ItemElement>
+                                </Item>
+                            ))}
+                        </ItemList>
+                    </InformationContentContainer>
+                </CardContentContainer>
+            </ContentContainer>
         </Container>
     );
 }
