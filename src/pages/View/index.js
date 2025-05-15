@@ -214,8 +214,13 @@ function View() {
         <Container>
             <SmallLoad/> 
         </Container>
-    ) : note.length === 0 ?  <Container><PageTitle>NOTA NÃO ENCONTRADA</PageTitle></Container> : 
-        (
+    ) : note.length === 0 ?  (
+            <Container>
+                <PageTitle>
+                    NOTA NÃO ENCONTRADA
+                </PageTitle>
+            </Container> 
+        ) : (
             <Container>
                 <PageTitle>
                     SUPERMERCADOS ELIZA
