@@ -31,6 +31,7 @@ const ContentContainer = styled.div`
     gap: 1rem;
     width: 100%;
     height: 100%;
+    overflow: hidden;
     background-color: rgba(245, 246, 250, 1);
     font-family: 'Nunito Sans', sans-serif;
 
@@ -64,13 +65,8 @@ const CardContentContainer = styled.div`
     background-color: white;
     border-radius: 1rem;
     border: 1px solid rgba(11, 35, 97, 0.3);
-    overflow-y: auto;
+    overflow: hidden;
     width: 90%;
-
-    &::-webkit-scrollbar {
-      display: none;
-      width: 2px;
-    }
 
     @media screen and (min-width: 1000px){
         width: 48%;
@@ -101,7 +97,9 @@ const InformationContentContainer = styled.section`
     flex-direction: column;
     box-sizing: border-box;
     gap: 1rem;
+    overflow-y: auto;
     padding: 1rem;
+    height: 100%;
     width: 100%;
 `;
 
@@ -140,8 +138,23 @@ const ItemList = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    height: 100%;
+    overflow-y: auto;
     width: 100%;
     gap: 1rem;
+
+    &::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent; 
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--background);
+        border-radius: 5px;
+    }
 `;
 
 const Item = styled.div`
@@ -158,6 +171,7 @@ const Item = styled.div`
 const ItemElement = styled.div`
     display: flex;
     flex-direction: row;
+    box-sizing: border-box;
     gap: .2rem;
 `
 
@@ -186,6 +200,11 @@ function View() {
         setLoading(false);
     }
 
+    function copyToClipboard(text){
+        navigator.clipboard.writeText(text);
+        alert("Código copiado");
+    }
+
     useEffect(() => {
         document.title = "View NF";
         fetchNoteById();
@@ -195,101 +214,102 @@ function View() {
         <Container>
             <SmallLoad/> 
         </Container>
-    ) : (
-        <Container>
-            <PageTitle>
-                SUPERMERCADOS ELIZA
-            </PageTitle>
+    ) : note.length === 0 ?  <Container><PageTitle>NOTA NÃO ENCONTRADA</PageTitle></Container> : 
+        (
+            <Container>
+                <PageTitle>
+                    SUPERMERCADOS ELIZA
+                </PageTitle>
 
-            <ContentContainer>
+                <ContentContainer>
 
 
-                <CardContentContainer>
-                    <TitleContentContainer>
-                        <MainTitle>Relação de Nota - #{noteID}</MainTitle>
-                    </TitleContentContainer>
+                    <CardContentContainer>
+                        <TitleContentContainer>
+                            <MainTitle>Relação de Nota - #{noteID}</MainTitle>
+                        </TitleContentContainer>
 
-                    <InformationContentContainer>
-                        <SubtitleContentContainer>
-                            <Subtitle>
-                                Informações
-                            </Subtitle>
-                        </SubtitleContentContainer>
+                        <InformationContentContainer>
+                            <SubtitleContentContainer>
+                                <Subtitle>
+                                    Informações
+                                </Subtitle>
+                            </SubtitleContentContainer>
 
-                        <ItemList>
-                            <Item>
-                                <Label>Empresa:</Label>
-                                <InfoText>{note.company}</InfoText>
-                            </Item>
-
-                            <Item>
-                                <Label>Boleto:</Label>
-                                <InfoText>{note.ticket ? "Sim" : "Não"}</InfoText>
-                            </Item>
-
-                            <Item>
-                                <Label>Usuário:</Label>
-                                <InfoText>{note.user_add}</InfoText>
-                            </Item>
-
-                            <Item>
-                                <Label>Data de Coleta:</Label>
-                                <InfoText>
-                                    {new Date(note.collection_date).toLocaleString("pt-BR", {
-                                    timeZone: "UTC",
-                                    dateStyle: "short",
-                                    })}
-                                </InfoText>
-                            </Item>
-                                    
-                            <Item>
-                                <Label>Data de Criação:</Label>
-                                <InfoText>
-                                    {new Date(note.created_at).toLocaleString("pt-BR", {
-                                        timeZone: "America/Sao_Paulo",
-                                        dateStyle: "short",
-                                    })}
-                                </InfoText>
-                            </Item>
-                        </ItemList>
-                    </InformationContentContainer>
-                </CardContentContainer>
-
-                <CardContentContainer>
-                    <TitleContentContainer>
-                        <MainTitle>Itens</MainTitle>
-                    </TitleContentContainer>
-
-                    <InformationContentContainer>
-                        <SubtitleContentContainer>
-                            <Subtitle>
-                                Total de itens: {noteItens.length}
-                            </Subtitle>
-                        </SubtitleContentContainer>
-                        <ItemList>
-                            {noteItens.map((item, index) => (
+                            <ItemList>
                                 <Item>
-                                    <ItemElement>
-                                        <InfoText color="black">Código:</InfoText>
-                                        <InfoText>
-                                            {item.codigo}
-                                        </InfoText>
-                                    </ItemElement>
-
-                                    <ItemElement>
-                                        <InfoText color="black">Qtd:</InfoText>
-                                        <InfoText>
-                                            {item.quantidade}
-                                        </InfoText>
-                                    </ItemElement>
+                                    <Label>Empresa:</Label>
+                                    <InfoText>{note.company}</InfoText>
                                 </Item>
-                            ))}
-                        </ItemList>
-                    </InformationContentContainer>
-                </CardContentContainer>
-            </ContentContainer>
-        </Container>
-    );
+
+                                <Item>
+                                    <Label>Boleto:</Label>
+                                    <InfoText>{note.ticket ? "Sim" : "Não"}</InfoText>
+                                </Item>
+
+                                <Item>
+                                    <Label>Usuário:</Label>
+                                    <InfoText>{note.user_add}</InfoText>
+                                </Item>
+
+                                <Item>
+                                    <Label>Data de Coleta:</Label>
+                                    <InfoText>
+                                        {new Date(note.collection_date).toLocaleString("pt-BR", {
+                                        timeZone: "UTC",
+                                        dateStyle: "short",
+                                        })}
+                                    </InfoText>
+                                </Item>
+                                        
+                                <Item>
+                                    <Label>Data de Criação:</Label>
+                                    <InfoText>
+                                        {new Date(note.created_at).toLocaleString("pt-BR", {
+                                            timeZone: "America/Sao_Paulo",
+                                            dateStyle: "short",
+                                        })}
+                                    </InfoText>
+                                </Item>
+                            </ItemList>
+                        </InformationContentContainer>
+                    </CardContentContainer>
+
+                    <CardContentContainer>
+                        <TitleContentContainer>
+                            <MainTitle>Itens</MainTitle>
+                        </TitleContentContainer>
+
+                        <InformationContentContainer>
+                            <SubtitleContentContainer>
+                                <Subtitle>
+                                    Total de itens: {noteItens.length}
+                                </Subtitle>
+                            </SubtitleContentContainer>
+                            <ItemList>
+                                {noteItens.map((item, index) => (
+                                    <Item>
+                                        <ItemElement>
+                                            <InfoText color="black">Código:</InfoText>
+                                            <InfoText style={{ cursor: "pointer" }} onClick={() => copyToClipboard(item.codigo)}>
+                                                {item.codigo}
+                                            </InfoText>
+                                        </ItemElement>
+
+                                        <ItemElement>
+                                            <InfoText color="black">Qtd:</InfoText>
+                                            <InfoText>
+                                                {item.quantidade}
+                                            </InfoText>
+                                        </ItemElement>
+                                    </Item>
+                                ))}
+                            </ItemList>
+                        </InformationContentContainer>
+                    </CardContentContainer>
+                </ContentContainer>
+            </Container>
+        );
 }
 
 export default View;
