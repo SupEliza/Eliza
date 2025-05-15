@@ -35,7 +35,7 @@ function View() {
     }
 
     useEffect(() => {
-        document.title = "View Nota";
+        document.title = "View NF";
 
         fetchNoteById();
     }, []);
