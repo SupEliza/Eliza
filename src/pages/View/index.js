@@ -12,7 +12,7 @@ const Container = styled.div`
     box-sizing: border-box;
     padding: 1rem;
     min-height: 100vh;
-    background-color: rgba(245, 246, 250, 1);
+    background-color: ${(props) => props.backgroundColor || "rgba(245, 246, 250, 1)"};
     font-family: 'Nunito Sans', sans-serif;
 
     @media screen and (min-width: 1000px){
@@ -192,6 +192,9 @@ function View() {
             } else {
                 setNote(response.note);
                 setNoteItens(response.note.itens);
+
+                console.log(note.length)
+
                 document.title = `View NF | ${response.note.company}`;
             }
         } catch (error) {
@@ -214,13 +217,7 @@ function View() {
         <Container>
             <SmallLoad/> 
         </Container>
-    ) : note.length === 0 ?  (
-            <Container>
-                <PageTitle>
-                    NOTA NÃO ENCONTRADA
-                </PageTitle>
-            </Container> 
-        ) : (
+    ) : noteItens.length > 0 ? (
             <Container>
                 <PageTitle>
                     SUPERMERCADOS ELIZA
@@ -293,7 +290,7 @@ function View() {
                             </SubtitleContentContainer>
                             <ItemList>
                                 {noteItens.map((item, index) => (
-                                    <Item>
+                                    <Item key={index}>
                                         <ItemElement>
                                             <InfoText color="black">Código:</InfoText>
                                             <InfoText style={{ cursor: "pointer" }} onClick={() => copyToClipboard(item.codigo)}>
@@ -314,6 +311,12 @@ function View() {
                     </CardContentContainer>
                 </ContentContainer>
             </Container>
+        ) : (
+            <Container backgroundColor="var(--background)">
+                <PageTitle>
+                    NOTA NÃO ENCONTRADA
+                </PageTitle>
+            </Container> 
         );
 }
 
