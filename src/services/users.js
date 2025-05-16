@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({    
-    // baseURL: "https://elizaapi.onrender.com/users",
-    baseURL: "http://localhost:8080/users",
+    baseURL: "https://elizaapi.onrender.com/users",
+    // baseURL: "http://localhost:8080/users",
     withCredentials: true,
 });
 

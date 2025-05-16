@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { deleteRole, getRoles } from "../../../../services/roles";
 import ReloadPNG from "../../../../assets/images/reload.png";
-import EditModal from "../../../../components/EditUserModal"
 import styled from "styled-components";
 import editPNG from "../../../../assets/images/edit.png";
 import deletePNG from "../../../../assets/images/delete.png";
 import SmallLoad from "../../../../components/SmallLoad";
-import AddUserModal from "../../../../components/AddUserModal";
 import ConfirmModal from "../../../../components/ConfirmModal";
+import AddRoleModal from "../../../../components/AddRoleModal";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -194,9 +193,10 @@ const ActionIcon = styled.img`
 `;
 
 function Roles ({addNotification}) {
-  const [addMemberOpen, setAddMemberOpen] = useState(false);
+  const [addRoleOpen, setAddRoleOpen] = useState(false);
   const [editMemberOpen, setEditMemberOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
+  const [selectedPerms, setSelectedPerms] = useState([]);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
@@ -274,12 +274,6 @@ function Roles ({addNotification}) {
     setConfirmationText("Tem certeza que deseja deletar esse cargo?");
   }
 
-  // const handleEditMember = (member, role) => {
-  //   setSelectedRole(role);
-  //   setSelectedMember(member);
-  //   setEditMemberOpen(true);
-  // }
-
   const headerList = [
     { name: "ID", action: () => orderList("ID")},
     { name: "Cargo", action: () => orderList("Cargo")},
@@ -299,7 +293,7 @@ function Roles ({addNotification}) {
 
             <ReloadIcon onClick={fetchRoles} src={ReloadPNG} alt="reload"/>
 
-            <AddButton onClick={() => {}} type="button">Adicionar</AddButton>
+            <AddButton onClick={() => setAddRoleOpen(true)} type="button">Adicionar</AddButton>
         </RolesHeaderRight>
       </RolesHeader>
 
@@ -325,7 +319,7 @@ function Roles ({addNotification}) {
                 <Role key={index}>
                   <RolesListElement>{role.id}</RolesListElement>
                   <RolesListElement>{role.name}</RolesListElement>
-                  <RolesListElement>{role.permissions}</RolesListElement>
+                  <RolesListElement>{role.permissions.join(", ")}</RolesListElement>
                   <RolesListElement>
                     <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmDelete(role.id)} src={deletePNG} alt="Deletar"/>
                     <ActionIcon data-tooltip-id="edit" onClick={() => {}} src={editPNG} alt="Editar"/>
@@ -342,28 +336,17 @@ function Roles ({addNotification}) {
 
       <ConfirmModal isOpen={confirmDeleteOpen} setIsOpen={setConfirmDeleteOpen} text={confirmationText} action={handleDeleteRole} modalLoading={modalLoading}/>
 
-      {/* <AddUserModal
-        setIsOpen={setAddMemberOpen}
-        isOpen={addMemberOpen}
-        title="Adicionar usuário"
-        subtitle="Por favor, preencha os campos abaixo para continuar."
+      <AddRoleModal
+        isOpen={addRoleOpen}
+        setIsOpen={setAddRoleOpen}
+        title={"Adicionar cargo"}
+        subtitle={"Preencha os campos abaixo para adicionar um cargo."}
+        selectedPerms={selectedPerms}
+        setSelectedPerms={setSelectedPerms}
         fetchRoles={fetchRoles}
         addNotification={addNotification}
-        selectedRole={selectedRole}
-        setSelectedRole={setSelectedRole}
       />
 
-      <EditModal
-        setIsOpen={setEditMemberOpen}
-        isOpen={editMemberOpen}
-        title="Editar usuário"
-        subtitle="Por favor, selecione o novo cargo do usuário para continuar."
-        member={selectedMember}
-        fetchRoles={fetchRoles}
-        addNotification={addNotification}
-        selectedRole={selectedRole}
-        setSelectedRole={setSelectedRole}
-      /> */}
     </Container>
   );
 }
