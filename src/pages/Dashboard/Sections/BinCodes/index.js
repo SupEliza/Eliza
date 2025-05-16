@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deleteCode, getCodes, removeFromBin } from "../../../../services/codes";
+import { deleteCode, getCodes, remCodeFromBin } from "../../../../services/codes";
 import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
 import deletePNG from "../../../../assets/images/delete.png";
@@ -313,7 +313,7 @@ function BinCodes ({addNotification}) {
   const handleRemoveFromBin = async () => {
     setModalLoading(true);
 
-    const response = await removeFromBin(codeID);
+    const response = await remCodeFromBin(codeID);
 
     if (response.success === true) {
       fetchCodes();

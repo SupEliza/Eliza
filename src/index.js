@@ -29,6 +29,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
+    background-color: var(--background);
   }
 
   ::-webkit-scrollbar {

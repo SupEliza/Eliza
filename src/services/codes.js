@@ -24,7 +24,7 @@ async function addCode(params){
     }
 }
 
-async function moveToBin(id){
+async function moveCodeToBin(id){
     try {
         const response = await API.post(`/bin/add/${id}`);
         return response.data;
@@ -33,7 +33,7 @@ async function moveToBin(id){
     }
 }
 
-async function removeFromBin(id){
+async function remCodeFromBin(id){
     try {
         const response = await API.post(`/bin/remove/${id}`);
         return response.data;
@@ -51,4 +51,4 @@ async function deleteCode(id){
     }
 }
 
-export { getCodes, moveToBin, deleteCode, removeFromBin, addCode };
+export { getCodes, moveCodeToBin, deleteCode, remCodeFromBin, addCode };

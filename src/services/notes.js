@@ -6,9 +6,9 @@ const API = axios.create({
     withCredentials: true,
 });
 
-async function getNotes(){
+async function getNotes(notesLimit){
     try {
-        const response = await API.get("");
+        const response = await API.get(`/${notesLimit}`);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
@@ -24,5 +24,32 @@ async function getNoteById(id){
     }
 }
 
+async function moveNoteToBin(id){
+    try {
+        const response = await API.post(`/bin/add/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
 
-export { getNotes, getNoteById };
+async function remNoteFromBin(id){
+    try {
+        const response = await API.post(`/bin/remove/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+async function deleteNote(id){
+    try {
+        const response = await API.post(`/bin/delete/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+
+export { getNotes, getNoteById, moveNoteToBin, deleteNote, remNoteFromBin };

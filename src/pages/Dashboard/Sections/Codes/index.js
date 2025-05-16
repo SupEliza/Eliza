@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCodes, moveToBin } from "../../../../services/codes";
+import { getCodes, moveCodeToBin } from "../../../../services/codes";
 import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
 import removePNG from "../../../../assets/images/remove.png";
@@ -322,7 +322,7 @@ function Codes ({addNotification}) {
 
   async function codeDelete(id){
     try {
-      const response = await moveToBin(id);
+      const response = await moveCodeToBin(id);
 
       if(response.success === true){
         addNotification('Código movido para lixeira');

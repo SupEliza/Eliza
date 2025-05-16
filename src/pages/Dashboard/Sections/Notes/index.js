@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getNotes } from "../../../../services/notes";
+import { getNotes, moveNoteToBin } from "../../../../services/notes";
 import { Tooltip } from "react-tooltip";
 import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
@@ -230,7 +230,7 @@ function Notes ({addNotification}) {
         setTotalNotes(response.total);
         const undeletedNotes = response.notes
           .filter((note) => !note.isDeleted)
-          .sort((a, b) => new Date(b.collection_date) - new Date(a.collection_date));
+          .sort((a, b) => new Date(a.collection_date) - new Date(b.collection_date));
   
         setNotesList((prevList) => {
           const newList = append ? [...prevList, ...undeletedNotes] : undeletedNotes;
@@ -243,7 +243,7 @@ function Notes ({addNotification}) {
         setTotalNotes(0);
       }
   
-      setSortOrder({ type: "Coleta", ascending: false });
+      setSortOrder({ type: "Coleta", ascending: true });
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -278,8 +278,8 @@ function Notes ({addNotification}) {
         case "Coleta":
           sortedList.sort((a, b) =>
             isAscending
-              ? new Date(a.created_at) - new Date(b.created_at)
-              : new Date(b.created_at) - new Date(a.created_at)
+              ? new Date(a.collection_date) - new Date(b.collection_date)
+              : new Date(b.collection_date) - new Date(a.collection_date)
           );
           break;
         default:
@@ -308,6 +308,20 @@ function Notes ({addNotification}) {
     { name: "Ações" }
   ];
 
+  async function handleMoveToBin(id) {
+    try {
+      const response = await moveNoteToBin(id);
+
+      if (response.success) {
+        fetchNotes(false);
+      }
+
+      addNotification(response.message);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Container>
       <NotesHeader>
@@ -316,12 +330,9 @@ function Notes ({addNotification}) {
         </Title>
 
         <NotesHeaderRight>
-          {/* <p>Total: {totalNotes}</p> */}
+          <p>Total: {totalNotes}</p>
 
           <ReloadIcon onClick={handleReloadNotes} src={reloadPNG} alt="reload"/>
-
-          {/* <HeaderButton type="button" onClick={() => setAddNoteOpen(true)}>Adicionar</HeaderButton>
-          <HeaderButton type="button" onClick={handleExport}>{exportLoading ? <CircleLoad/> : "Exportar"}</HeaderButton> */}
         </NotesHeaderRight>
       </NotesHeader>
       
@@ -360,7 +371,7 @@ function Notes ({addNotification}) {
                     })}
                   </NotesListElement>
                   <NotesListElement>
-                    <ActionIcon data-tooltip-id="remove" onClick={() => {}} src={removePNG} alt="Deletar"/>
+                    <ActionIcon data-tooltip-id="remove" onClick={() => handleMoveToBin(note.id)} src={removePNG} alt="Mover para lixeira"/>
                     <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/note/${note.id}`, '_blank')}} src={viewPNG} alt="Visualizar"/>
 
                     <Tooltip id="remove" place="top" content="Mover para lixeira"/>
