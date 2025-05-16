@@ -10,7 +10,7 @@ import Users from "./Sections/Users/index";
 import Notes from "./Sections/Notes/index";
 import Notify from "../../components/Notify/index"
 import Logout from "../../utils/logout";
-import Permissions from "./Sections/Permissions";
+import Roles from "./Sections/Roles";
 
 const Container = styled.div`
     display: flex;
@@ -70,7 +70,7 @@ function Dashboard() {
 
   const sections = {
     "Usuários": <Users addNotification={addNotification}/>,
-    "Permissões": <Permissions addNotification={addNotification}/>,
+    "Cargos": <Roles addNotification={addNotification}/>,
     "Notas": <Notes addNotification={addNotification}/>,
     "Baixas": <Codes addNotification={addNotification}/>,
     "Lixeira de Notas": <BinNotes addNotification={addNotification}/>,

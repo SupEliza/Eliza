@@ -6,6 +6,7 @@ import reloadPNG from "../../../../assets/images/reload.png";
 import deletePNG from "../../../../assets/images/delete.png";
 import undeletePNG from "../../../../assets/images/undelete.png";
 import styled from "styled-components";
+import ConfirmModal from "../../../../components/ConfirmModal";
                                                                                                                                                                                                                                                                                                                                                                                                   
 const Container = styled.div`
   display: flex;
@@ -75,22 +76,6 @@ const ReloadIcon = styled.img`
   &:hover{
     transform: rotate(360deg);
   }
-`;
-
-const HeaderButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  background-color: var(--background);
-  color: var(--secondary-color);
-  font-weight: bold;
-  border: none;
-  border-radius: 0.5rem;
-  width: 6rem;
-  height: 3rem;
-  cursor: pointer;
 `;
 
 const NotesListContainer = styled.div`
@@ -193,6 +178,11 @@ const Note = styled.div`
 
 function Notes ({addNotification}) {
   const [loading, setLoading] = useState(false);
+  const [confirmUndeleteOpen, setConfirmUndeleteOpen] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [noteID, setNoteID] = useState("");
+  const [modalLoading, setModalLoading] = useState(false);
+  const [confirmationText, setConfirmationText] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
   const [notesList, setNotesList] = useState([]);
@@ -259,32 +249,50 @@ function Notes ({addNotification}) {
     });
   }
 
-  async function handleDeleteNote(id) {
+  async function handleDeleteNote() {
+    setModalLoading(true);
     try {
-      const response = await deleteNote(id);
+      const response = await deleteNote(noteID);
 
       if (response.success) {
         fetchNotes(false);
       }
 
+      setConfirmDeleteOpen(false);
       addNotification(response.message);
     } catch (error) {
       console.log(error);
     }
+    setModalLoading(false);
   }
 
-  async function handleRemFromBin(id) {
+  async function handleRemFromBin() {
+    setModalLoading(true);
     try {
-      const response = await remNoteFromBin(id);
+      const response = await remNoteFromBin(noteID);
 
       if (response.success) {
         fetchNotes(false);
       }
 
+      setConfirmUndeleteOpen(false);
       addNotification(response.message);
     } catch (error) {
       console.log(error);
     }
+    setModalLoading(false);
+  }
+
+  function openConfirmDelete(id) {
+    setConfirmDeleteOpen(true);
+    setNoteID(id);
+    setConfirmationText("Tem certeza que deseja excluir essa nota?");
+  }
+
+  function openConfirmUndelete(id) {
+    setConfirmUndeleteOpen(true);
+    setNoteID(id);
+    setConfirmationText("Tem certeza que deseja restaurar essa nota?");
   }
 
   const headerList = [
@@ -344,8 +352,8 @@ function Notes ({addNotification}) {
                     })}
                   </NotesListElement>
                   <NotesListElement>
-                    <ActionIcon data-tooltip-id="delete" onClick={() => handleDeleteNote(note.id)} src={deletePNG} alt="Deletar"/>
-                    <ActionIcon data-tooltip-id="remove" onClick={() => handleRemFromBin(note.id)} src={undeletePNG} alt="Recuperar"/>
+                    <ActionIcon data-tooltip-id="delete" onClick={() => openConfirmDelete(note.id)} src={deletePNG} alt="Deletar"/>
+                    <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmUndelete(note.id)} src={undeletePNG} alt="Recuperar"/>
 
                     <Tooltip id="delete" place="top" content="Deletar nota"/>
                     <Tooltip id="remove" place="top" content="Restaurar nota"/>
@@ -356,6 +364,9 @@ function Notes ({addNotification}) {
           : <p>Nenhum registro encontrado.</p>
         }
       </NotesListContainer>
+
+      <ConfirmModal isOpen={confirmDeleteOpen} setIsOpen={setConfirmDeleteOpen} text={confirmationText} action={handleDeleteNote} modalLoading={modalLoading}/>
+      <ConfirmModal isOpen={confirmUndeleteOpen} setIsOpen={setConfirmUndeleteOpen} text={confirmationText} action={handleRemFromBin} modalLoading={modalLoading}/>
     </Container>
   );
 }

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({    
-    baseURL: "https://elizaapi.onrender.com/users",
-    // baseURL: "http://localhost:8080/users",
+    // baseURL: "https://elizaapi.onrender.com/users",
+    baseURL: "http://localhost:8080/users",
     withCredentials: true,
 });
 
@@ -42,9 +42,9 @@ async function deleteUser(id){
     }
 }
 
-async function updateGroup(params){
+async function setRole(params){
     try {
-        const response = await API.post("/set-group", params);
+        const response = await API.post("/set-role", params);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
@@ -78,4 +78,4 @@ async function refreshToken(uuid) {
     }
 }
 
-export { login, userAuth, refreshToken, userLogout, getUsers, updateGroup, register, deleteUser };
+export { login, userAuth, refreshToken, userLogout, getUsers, setRole, register, deleteUser };

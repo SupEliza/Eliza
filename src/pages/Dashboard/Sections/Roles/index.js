@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { deleteUser, getUsers } from "../../../../services/users";
+import { Tooltip } from "react-tooltip";
+import { deleteRole, getRoles } from "../../../../services/roles";
 import ReloadPNG from "../../../../assets/images/reload.png";
 import EditModal from "../../../../components/EditUserModal"
 import styled from "styled-components";
@@ -8,7 +9,6 @@ import deletePNG from "../../../../assets/images/delete.png";
 import SmallLoad from "../../../../components/SmallLoad";
 import AddUserModal from "../../../../components/AddUserModal";
 import ConfirmModal from "../../../../components/ConfirmModal";
-import { Tooltip } from "react-tooltip";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -19,7 +19,7 @@ const Container = styled.div`
   min-height: 100%;
 `;
 
-const UsersHeader = styled.div`
+const RolesHeader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,7 +51,7 @@ const Title = styled.div`
   }
 `
 
-const UsersHeaderRight = styled.div`
+const RolesHeaderRight = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,7 +80,7 @@ const ReloadIcon = styled.img`
   }
 `;
 
-const UsersListContainer = styled.div`
+const RolesListContainer = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -110,7 +110,7 @@ const AddButton = styled.button`
   cursor: pointer;
 `;
 
-const UsersListHeader = styled.div`
+const RolesListHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -125,7 +125,7 @@ const UsersListHeader = styled.div`
   width: 100%;
 `;
 
-const UsersListElement = styled.div`
+const RolesListElement = styled.div`
   display: ${({ type, isMobile }) => (type === "ID" ? (isMobile ? "none" : "flex") : "flex")};
   gap: .2rem;
   flex-direction: row;
@@ -171,7 +171,7 @@ const UserPointer = styled.p`
   cursor: pointer;
 `;
 
-const User = styled.div`
+const Role = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -193,42 +193,39 @@ const ActionIcon = styled.img`
   }
 `;
 
-function Users ({addNotification}) {
+function Roles ({addNotification}) {
   const [addMemberOpen, setAddMemberOpen] = useState(false);
   const [editMemberOpen, setEditMemberOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState("");
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
-  const [selectedMember, setSelectedMember] = useState("");
-  const [confirmationIsOpen, setConfirmationIsOpen] = useState(false);
-  const [confirmationText, setConfirmationText] = useState("");
-  const [deleteUserID, setDeleteUserID] = useState("");
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
-  const [usersList, setUsersList] = useState([]);
+  const [confirmationText, setConfirmationText] = useState("");
+  const [roleID, setRoleID] = useState("");
+  const [rolesList, setRolesList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  async function fetchUsers() {
+  async function fetchRoles() {
+    setLoading(true);
     try {
-        setLoading(true);
-        const response = await getUsers();
+        const response = await getRoles();
         
-        if (response.success === true) {
-          const sortedList = response.users.sort((a,b) => a.id - b.id);
+        if (response.success) {
+          const sortedList = response.roles.sort((a,b) => a.id - b.id);
           setSortOrder({ type: "ID", ascending: true })
-          setUsersList(sortedList);
+          setRolesList(sortedList);
         }
-
-        setLoading(false);
     } catch (error) {
         console.error(error);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
-    fetchUsers();
+    fetchRoles();
   }, []);
 
   function orderList(type) {
-    setUsersList((prevList) => {
+    setRolesList((prevList) => {
       let sortedList = [...prevList];
       const isAscending = sortOrder.type === type ? !sortOrder.ascending : true;
 
@@ -240,14 +237,9 @@ function Users ({addNotification}) {
               : b.id - a.id
           );
           break;
-        case "Nome":
-          sortedList.sort((a, b) =>
-            isAscending ? a.username.localeCompare(b.username) : b.username.localeCompare(a.username)
-          );
-          break;
         case "Cargo":
           sortedList.sort((a, b) =>
-            isAscending ? a.user_role.localeCompare(b.user_role) : b.user_role.localeCompare(a.user_role)
+            isAscending ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
           );
           break;
         default:
@@ -259,60 +251,62 @@ function Users ({addNotification}) {
     });
   }
 
-  const openConfirmModal = (id) => {
-    setConfirmationIsOpen(true);
-    setDeleteUserID(id);
-    setConfirmationText("Tem certeza que deseja excluir esse usuário?");
-  }
-
-  const handleDeleteMember = async () => {
+  async function handleDeleteRole() {
     setModalLoading(true);
+    try {
+      const response = await deleteRole(roleID);
 
-    const response = await deleteUser(deleteUserID)
+      if (response.success) {
+        fetchRoles();
+      }
 
-    if (response.success === true) {
-      fetchUsers();
+      setConfirmDeleteOpen(false);
+      addNotification(response.message);
+    } catch (error) {
+      console.log(error);
     }
-
-    setDeleteUserID("");
     setModalLoading(false);
-    setConfirmationIsOpen(false);
-    addNotification(response.message);
   }
 
-  const handleEditMember = (member, role) => {
-    setSelectedRole(role);
-    setSelectedMember(member);
-    setEditMemberOpen(true);
+  function openConfirmDelete(id) {
+    setConfirmDeleteOpen(true);
+    setRoleID(id);
+    setConfirmationText("Tem certeza que deseja deletar esse cargo?");
   }
+
+  // const handleEditMember = (member, role) => {
+  //   setSelectedRole(role);
+  //   setSelectedMember(member);
+  //   setEditMemberOpen(true);
+  // }
 
   const headerList = [
     { name: "ID", action: () => orderList("ID")},
-    { name: "Nome", action: () => orderList("Nome")},
     { name: "Cargo", action: () => orderList("Cargo")},
+    { name: "Permissões"},
     { name: "Ações"}
   ];
 
   return (
     <Container>
-      <UsersHeader>
+      <RolesHeader>
         <Title>
-          Usuários
+          Cargos
         </Title>
 
-        <UsersHeaderRight>
-            <p>Total: {usersList.length}</p>
+        <RolesHeaderRight>
+            <p>Total: {rolesList.length}</p>
 
-            <ReloadIcon onClick={fetchUsers} src={ReloadPNG} alt="reload"/>
+            <ReloadIcon onClick={fetchRoles} src={ReloadPNG} alt="reload"/>
 
-            <AddButton onClick={() => setAddMemberOpen(true)} type="button">Adicionar</AddButton>
-        </UsersHeaderRight>
-      </UsersHeader>
+            <AddButton onClick={() => {}} type="button">Adicionar</AddButton>
+        </RolesHeaderRight>
+      </RolesHeader>
 
-      <UsersListContainer>
-        <UsersListHeader>
+      <RolesListContainer>
+        <RolesListHeader>
           {headerList.map((header) => (
-            <UsersListElement key={header.name} isHeader>
+            <RolesListElement key={header.name} isHeader>
               {header.action ? (
                 <UserPointer onClick={header.action}>
                   {header.name} {sortOrder.type === header.name && (sortOrder.ascending ? "▲" : "▼")}
@@ -320,40 +314,40 @@ function Users ({addNotification}) {
               ) : (
                 header.name
               )}
-            </UsersListElement>
+            </RolesListElement>
           ))}
-        </UsersListHeader>
+        </RolesListHeader>
 
       {loading ? <SmallLoad/> : 
-          usersList.length !== 0 ?
+          rolesList.length !== 0 ?
             <UserList>
-              {usersList.map((user) => (
-                <User key={user.id}>
-                  <UsersListElement>{user.id}</UsersListElement>
-                  <UsersListElement>{user.username}</UsersListElement>
-                  <UsersListElement>{user.user_role}</UsersListElement>
-                  <UsersListElement>
-                    <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmModal(user.id)} src={deletePNG} alt="Deletar"/>
-                    <ActionIcon data-tooltip-id="edit" onClick={() => handleEditMember(user.username, user.user_role)} src={editPNG} alt="Editar"/>
+              {rolesList.map((role, index) => (
+                <Role key={index}>
+                  <RolesListElement>{role.id}</RolesListElement>
+                  <RolesListElement>{role.name}</RolesListElement>
+                  <RolesListElement>{role.permissions}</RolesListElement>
+                  <RolesListElement>
+                    <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmDelete(role.id)} src={deletePNG} alt="Deletar"/>
+                    <ActionIcon data-tooltip-id="edit" onClick={() => {}} src={editPNG} alt="Editar"/>
 
-                    <Tooltip id="remove" place="top" content="Remover usuário"/>
-                    <Tooltip id="edit" place="top" content="Editar cargo do usuário"/>
-                  </UsersListElement>
-                </User>
+                    <Tooltip id="remove" place="top" content="Excluir cargo"/>
+                    <Tooltip id="edit" place="top" content="Editar permissões"/>
+                  </RolesListElement>
+                </Role>
               ))}
             </UserList>
           : <p>Nenhum registro encontrado.</p>
         }
-      </UsersListContainer>
+      </RolesListContainer>
 
-      <ConfirmModal isOpen={confirmationIsOpen} setIsOpen={setConfirmationIsOpen} text={confirmationText} action={handleDeleteMember} modalLoading={modalLoading}/>
+      <ConfirmModal isOpen={confirmDeleteOpen} setIsOpen={setConfirmDeleteOpen} text={confirmationText} action={handleDeleteRole} modalLoading={modalLoading}/>
 
-      <AddUserModal
+      {/* <AddUserModal
         setIsOpen={setAddMemberOpen}
         isOpen={addMemberOpen}
         title="Adicionar usuário"
         subtitle="Por favor, preencha os campos abaixo para continuar."
-        fetchUsers={fetchUsers}
+        fetchRoles={fetchRoles}
         addNotification={addNotification}
         selectedRole={selectedRole}
         setSelectedRole={setSelectedRole}
@@ -365,13 +359,13 @@ function Users ({addNotification}) {
         title="Editar usuário"
         subtitle="Por favor, selecione o novo cargo do usuário para continuar."
         member={selectedMember}
-        fetchUsers={fetchUsers}
+        fetchRoles={fetchRoles}
         addNotification={addNotification}
         selectedRole={selectedRole}
         setSelectedRole={setSelectedRole}
-      />
+      /> */}
     </Container>
   );
 }
 
-export default Users
+export default Roles

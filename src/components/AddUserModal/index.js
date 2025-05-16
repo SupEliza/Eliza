@@ -1,12 +1,13 @@
-import styled from "styled-components"
-import { getGroups } from "../../services/groups";
 import { useEffect, useState } from "react"
+import { register } from "../../services/users";
+import { getRoles } from "../../services/roles";
+import styled from "styled-components"
 import FormButton from "../Inputs/Button";
 import APIResponse from "../ApiResponse";
 import TextInput from "../Inputs/TextInput";
 import CircleLoad from "../CircleLoad";
 import InputPass from "../Inputs/PasswordInput";
-import { register } from "../../services/users";
+
 
 const Container = styled.div`
     position: fixed;
@@ -169,7 +170,7 @@ const Button = styled.div`
 `;
 
 
-function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSelectedGroup, fetchUsers, addNotification}){
+function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedRole, setSelectedRole, fetchUsers, addNotification}){
     const [apiResponse, setApiResponse] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -177,14 +178,14 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
-    const [permissions, setPermissions] = useState([]);
+    const [roles, setRoles] = useState([]);
 
-    async function fetchGroups() {
+    async function fetchRoles() {
         try {
-            const response = await getGroups();
+            const response = await getRoles();
 
             if (response.success === true) {
-                setPermissions(response.groups);
+                setRoles(response.roles);
             }
 
         } catch (error) {
@@ -193,13 +194,13 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
     }
 
     useEffect(() => {
-        fetchGroups();
+        fetchRoles();
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!selectedGroup || !username || !password) {
+        if (!selectedRole || !username || !password) {
             setApiResponseColor("red");
             setApiResponse("Por favor, preencha todos os campos.");
             return;
@@ -209,7 +210,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
             setLoading(true);
             setButtonDisable(true);
 
-            const response = await register({ username, password, group: selectedGroup });
+            const response = await register({ username, password, role: selectedRole });
 
             if (response.success === true) {
                 addNotification(response.message);
@@ -231,7 +232,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
         setUsername("");
         setPassword("");
         setShowPass(false);
-        setSelectedGroup("");
+        setSelectedRole("");
         setApiResponseColor("");
         setApiResponse("");
         setIsOpen(false);
@@ -264,11 +265,11 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedGroup, setSel
                             <p>Cargo</p>
                         </InputLabel>
 
-                        <SelectInput value={selectedGroup} onChange={(e) => {setSelectedGroup(e.target.value)}}>
+                        <SelectInput value={selectedRole} onChange={(e) => {setSelectedRole(e.target.value)}}>
                             <option value={""}>Selecione</option>
 
-                            {permissions.map((group) => (
-                                <option key={group.name} value={group.name}>{group.name}</option>
+                            {roles.map((role) => (
+                                <option key={role.name} value={role.name}>{role.name}</option>
                             ))}
                         </SelectInput>
                     </InputContent>

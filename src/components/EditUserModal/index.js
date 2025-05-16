@@ -1,10 +1,11 @@
-import styled from "styled-components"
+import { getRoles } from "../../services/roles";
+import { setRole } from "../../services/users";
 import { useEffect, useState } from "react"
+import styled from "styled-components"
 import FormButton from "../Inputs/Button";
 import APIResponse from "../ApiResponse";
-import { getGroups } from "../../services/groups";
-import { updateGroup } from "../../services/users";
 import CircleLoad from "../CircleLoad";
+
 
 const Container = styled.div`
     position: fixed;
@@ -179,19 +180,19 @@ const Button = styled.div`
 `;
 
 
-function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, setSelectedGroup, fetchUsers, addNotification}){
+function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedRole, setSelectedRole, fetchUsers, addNotification}){
     const [apiResponse, setApiResponse] = useState("");
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
-    const [groups, setGroups] = useState([]);
+    const [roles, setRoles] = useState([]);
 
-    async function fetchGroups() {
+    async function fetchroles() {
         try {
-            const response = await getGroups();
+            const response = await getRoles();
 
             if (response.success === true) {
-                setGroups(response.groups);
+                setRoles(response.roles);
             }
 
         } catch (error) {
@@ -200,13 +201,13 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
     }
 
     useEffect(() => {
-        fetchGroups();
+        fetchroles();
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!selectedGroup) {
+        if (!selectedRole) {
             setApiResponseColor("red");
             setApiResponse("Por favor, selecione uma permissão.");
             return;
@@ -215,7 +216,7 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
         try {
             setLoading(true);
             setButtonDisable(true);
-            const response = await updateGroup({ username: member, newGroup: selectedGroup });
+            const response = await setRole({ username: member, newRole: selectedRole });
 
             if (response.success === true) {
                 addNotification(response.message);
@@ -234,7 +235,7 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
     }
 
     const handleCancel = () => {
-        setSelectedGroup("");
+        setSelectedRole("");
         setApiResponseColor("");
         setApiResponse("");
         setIsOpen(false);
@@ -268,11 +269,11 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedGroup, s
                             <p>Cargo</p>
                         </InputLabel>
 
-                        <SelectInput value={selectedGroup} onChange={(e) => {setSelectedGroup(e.target.value)}}>
+                        <SelectInput value={selectedRole} onChange={(e) => {setSelectedRole(e.target.value)}}>
                             <option value={""}>Selecione</option>
 
-                            {groups.map((group) => (
-                                <option key={group.name} value={group.name}>{group.name}</option>
+                            {roles.map((role) => (
+                                <option key={role.name} value={role.name}>{role.name}</option>
                             ))}
                         </SelectInput>
                     </InputContent>

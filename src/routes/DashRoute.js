@@ -10,7 +10,7 @@ function DashRoute({ children }) {
 
     if (!user) return <Navigate to="/login" replace />;
 
-    if (user.user_group !== "Admin") return <Navigate to="/unauthorized" replace />;
+    if (user.user_role !== "Admin") return <Navigate to="/unauthorized" replace />;
         
     return children;
 }

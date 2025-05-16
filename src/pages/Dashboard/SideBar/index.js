@@ -44,7 +44,7 @@ const Logo = styled.img`
 
 const SideBarDefaultList = [
     { name: "Usuários", svg: "Users" },
-    { name: "Permissões", svg: "Permissions" },
+    { name: "Cargos", svg: "Roles" },
     { name: "Notas", svg: "Notes" },
     { name: "Baixas", svg: "Codes" },
 ];
