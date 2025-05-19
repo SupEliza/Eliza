@@ -61,26 +61,17 @@ function Dashboard() {
     }
   }, []);
 
-  function addNotification(message) {
-    setNotifications((prev) => [
-      ...prev,
-      { id: Date.now(), text: message }
-    ]);
-  }
-
   const sections = {
-    "Usuários": <Users addNotification={addNotification}/>,
-    "Cargos": <Roles addNotification={addNotification}/>,
-    "Notas": <Notes addNotification={addNotification}/>,
-    "Baixas": <Codes addNotification={addNotification}/>,
-    "Lixeira de Notas": <BinNotes addNotification={addNotification}/>,
-    "Lixeira de Baixas": <BinCodes addNotification={addNotification}/>,
+    "Usuários": <Users/>,
+    "Cargos": <Roles/>,
+    "Notas": <Notes/>,
+    "Baixas": <Codes/>,
+    "Lixeira de Notas": <BinNotes/>,
+    "Lixeira de Baixas": <BinCodes/>,
   }   
 
   return (
     <Container>
-      <Notify notifications={notifications} setNotifications={setNotifications}/>
-
       <ConfirmModal modalLoading={modalLoading} text={confirmationText} isOpen={confirmationIsOpen} setIsOpen={setConfirmationIsOpen} action={handleLogout}/>
 
       <SideBar setSideBar={setActiveSideBar} setConfirmationText={setConfirmationText} setConfirmation={setConfirmationIsOpen} selectedSection={selectedSection} setSelectedSection={setSelectedSection} isActive={activeSideBar}/>

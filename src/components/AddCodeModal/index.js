@@ -5,6 +5,7 @@ import APIResponse from "../ApiResponse";
 import TextInput from "../Inputs/TextInput";
 import CircleLoad from "../CircleLoad";
 import { addCode } from "../../services/codes";
+import { useNotify } from "../../hooks/Notify/notifyContext";
 
 const Container = styled.div`
     position: fixed;
@@ -54,6 +55,16 @@ const ModalContainer = styled.div`
     }
 `
 
+const ModalContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    height: 100%;
+    width: 100%;
+`
+
 const Texts = styled.div`
     display: flex;
     flex-direction: column;
@@ -84,9 +95,14 @@ const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: .5rem;
     width: 100%;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     @media screen and (min-height: 580px){
         gap: 1rem;
@@ -149,13 +165,14 @@ const Button = styled.div`
 `;
 
 
-function AddCodeModal({isOpen, setIsOpen, title, subtitle, addNotification, fetchCodes}){
+function AddCodeModal({isOpen, setIsOpen, title, subtitle, fetchCodes}){
     const [apiResponse, setApiResponse] = useState("");
     const [ean, setEan] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
+    const { addNotification } = useNotify();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -200,41 +217,42 @@ function AddCodeModal({isOpen, setIsOpen, title, subtitle, addNotification, fetc
         <Container isOpen={isOpen}>
 
             <ModalContainer isOpen={isOpen}>
+                <ModalContent>
+                    <Texts>
+                        <Title>{title}</Title>
+                        <Subtitle>{subtitle}</Subtitle>
+                    </Texts>
 
-                <Texts>
-                    <Title>{title}</Title>
-                    <Subtitle>{subtitle}</Subtitle>
-                </Texts>
+                    <FormContainer onSubmit={handleSubmit}>
+                        <InputContent>
+                            <InputLabel>
+                                <EditUsername>
+                                    <p>EAN</p>
 
-                <FormContainer onSubmit={handleSubmit}>
-                    <InputContent>
-                        <InputLabel>
-                            <EditUsername>
-                                <p>EAN</p>
+                                    <TextInput inputValue={ean} setValue={setEan} type={"text"} placeholder={"Digite o EAN que deseja adicionar"}/>
+                                </EditUsername>
+                            </InputLabel>
+                        </InputContent>
 
-                                <TextInput inputValue={ean} setValue={setEan} type={"text"} placeholder={"Digite o EAN que deseja adicionar"}/>
-                            </EditUsername>
-                        </InputLabel>
-                    </InputContent>
+                        <InputContent>
+                            <InputLabel>
+                                <p>Quantidade</p>
+                            </InputLabel>
 
-                    <InputContent>
-                        <InputLabel>
-                            <p>Quantidade</p>
-                        </InputLabel>
+                            <TextInput inputValue={quantity} setValue={setQuantity} type={"number"} placeholder={"Digite a quantidade que deseja adicionar"}/>
 
-                        <TextInput inputValue={quantity} setValue={setQuantity} type={"number"} placeholder={"Digite a quantidade que deseja adicionar"}/>
+                        </InputContent>
 
-                    </InputContent>
+                        <ButtonsContainer>
+                            <FormButton disable={buttonDisable} type={"submit"} content={"Continuar"}/>
+                            <Button disable={buttonDisable} onClick={handleCancel}>Cancelar</Button>
+                        </ButtonsContainer>
 
-                    <ButtonsContainer>
-                        <FormButton disable={buttonDisable} type={"submit"} content={"Continuar"}/>
-                        <Button disable={buttonDisable} onClick={handleCancel}>Cancelar</Button>
-                    </ButtonsContainer>
-
-                    {loading ? <CircleLoad/> :
-                        <APIResponse apiResponse={apiResponse} apiResponseColor={apiResponseColor}/>
-                    }
-                </FormContainer>
+                        {loading ? <CircleLoad/> :
+                            <APIResponse apiResponse={apiResponse} apiResponseColor={apiResponseColor}/>
+                        }
+                    </FormContainer>
+                </ModalContent>
             </ModalContainer>
         </Container>
     )

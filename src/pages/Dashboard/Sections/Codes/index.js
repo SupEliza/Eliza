@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { Tooltip } from "react-tooltip";
 import CircleLoad from "../../../../components/CircleLoad";
 import AddCodeModal from "../../../../components/AddCodeModal";
+import { useNotify } from "../../../../hooks/Notify/notifyContext";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -208,7 +209,7 @@ const LoadMoreButton = styled.button`
   cursor: pointer;
 `;
 
-function Codes ({addNotification}) {
+function Codes () {
   const [loading, setLoading] = useState(false);
   const [addCodeOpen, setAddCodeOpen] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
@@ -217,6 +218,7 @@ function Codes ({addNotification}) {
   const [totalCodes, setTotalCodes] = useState(0);
   const [codesLimit, setCodesLimit] = useState(10);
   const [codesList, setCodesList] = useState([]);
+  const { addNotification } = useNotify();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -260,7 +262,7 @@ function Codes ({addNotification}) {
   const handleExport = async () => {
     setExportLoading(true);
     if (codesList.length === 0){ 
-      alert("Nenhum código registrado!");
+      addNotification("Nenhum código registrado!");
       return;
     }
 
@@ -427,7 +429,6 @@ function Codes ({addNotification}) {
         isOpen={addCodeOpen}
         title="Adicionar Código"
         subtitle="Por favor, preencha os campos abaixo para continuar."
-        addNotification={addNotification}
         fetchCodes={fetchCodes}
       />
     </Container>

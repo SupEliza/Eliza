@@ -5,6 +5,7 @@ import styled from "styled-components"
 import FormButton from "../Inputs/Button";
 import APIResponse from "../ApiResponse";
 import CircleLoad from "../CircleLoad";
+import { useNotify } from "../../hooks/Notify/notifyContext";
 
 
 const Container = styled.div`
@@ -55,6 +56,16 @@ const ModalContainer = styled.div`
     }
 `
 
+const ModalContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    height: 100%;
+    width: 100%;
+`
+
 const Texts = styled.div`
     display: flex;
     flex-direction: column;
@@ -85,9 +96,14 @@ const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: .5rem;
     width: 100%;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     @media screen and (min-height: 580px){
         gap: 1rem;
@@ -180,12 +196,13 @@ const Button = styled.div`
 `;
 
 
-function EditUserModal({isOpen, setIsOpen, title, subtitle, member, selectedRole, setSelectedRole, fetchUsers, addNotification}){
+function EditUserModal({isOpen, setIsOpen, title, subtitle, member, selectedRole, setSelectedRole, fetchUsers}){
     const [apiResponse, setApiResponse] = useState("");
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
     const [roles, setRoles] = useState([]);
+    const { addNotification } = useNotify();
 
     async function fetchroles() {
         try {
@@ -245,48 +262,49 @@ function EditUserModal({isOpen, setIsOpen, title, subtitle, member, selectedRole
         <Container isOpen={isOpen}>
 
             <ModalContainer isOpen={isOpen}>
+                <ModalContent>
+                    <Texts>
+                        <Title>{title}</Title>
+                        <Subtitle>{subtitle}</Subtitle>
+                    </Texts>
 
-                <Texts>
-                    <Title>{title}</Title>
-                    <Subtitle>{subtitle}</Subtitle>
-                </Texts>
+                    <FormContainer onSubmit={handleSubmit}>
+                        <InputContent>
+                            <InputLabel>
+                                <EditUsername>
+                                    <p>Usuário</p>
 
-                <FormContainer onSubmit={handleSubmit}>
-                    <InputContent>
-                        <InputLabel>
-                            <EditUsername>
-                                <p>Usuário</p>
+                                    <Username>
+                                        <p>{member}</p>
+                                    </Username>
+                                </EditUsername>
+                            </InputLabel>
+                        </InputContent>
 
-                                <Username>
-                                    <p>{member}</p>
-                                </Username>
-                            </EditUsername>
-                        </InputLabel>
-                    </InputContent>
+                        <InputContent>
+                            <InputLabel>
+                                <p>Cargo</p>
+                            </InputLabel>
 
-                    <InputContent>
-                        <InputLabel>
-                            <p>Cargo</p>
-                        </InputLabel>
+                            <SelectInput value={selectedRole} onChange={(e) => {setSelectedRole(e.target.value)}}>
+                                <option value={""}>Selecione</option>
 
-                        <SelectInput value={selectedRole} onChange={(e) => {setSelectedRole(e.target.value)}}>
-                            <option value={""}>Selecione</option>
+                                {roles.map((role) => (
+                                    <option key={role.name} value={role.name}>{role.name}</option>
+                                ))}
+                            </SelectInput>
+                        </InputContent>
 
-                            {roles.map((role) => (
-                                <option key={role.name} value={role.name}>{role.name}</option>
-                            ))}
-                        </SelectInput>
-                    </InputContent>
+                            <ButtonsContainer>
+                                <FormButton disable={buttonDisable} type={"submit"} content={"Continuar"}/>
+                                <Button disable={buttonDisable} onClick={handleCancel}>Cancelar</Button>
+                            </ButtonsContainer>
 
-                        <ButtonsContainer>
-                            <FormButton disable={buttonDisable} type={"submit"} content={"Continuar"}/>
-                            <Button disable={buttonDisable} onClick={handleCancel}>Cancelar</Button>
-                        </ButtonsContainer>
-
-                    {loading ? <CircleLoad/> :
-                        <APIResponse apiResponse={apiResponse} apiResponseColor={apiResponseColor}/>
-                    }
-                </FormContainer>
+                        {loading ? <CircleLoad/> :
+                            <APIResponse apiResponse={apiResponse} apiResponseColor={apiResponseColor}/>
+                        }
+                    </FormContainer>
+                </ModalContent>
             </ModalContainer>
         </Container>
     )

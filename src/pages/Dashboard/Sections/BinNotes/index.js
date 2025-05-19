@@ -7,6 +7,7 @@ import deletePNG from "../../../../assets/images/delete.png";
 import undeletePNG from "../../../../assets/images/undelete.png";
 import styled from "styled-components";
 import ConfirmModal from "../../../../components/ConfirmModal";
+import { useNotify } from "../../../../hooks/Notify/notifyContext";
                                                                                                                                                                                                                                                                                                                                                                                                   
 const Container = styled.div`
   display: flex;
@@ -176,7 +177,7 @@ const Note = styled.div`
   width: 100%;
 `;
 
-function Notes ({addNotification}) {
+function Notes () {
   const [loading, setLoading] = useState(false);
   const [confirmUndeleteOpen, setConfirmUndeleteOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -186,6 +187,7 @@ function Notes ({addNotification}) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
   const [notesList, setNotesList] = useState([]);
+  const { addNotification } = useNotify();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);

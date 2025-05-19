@@ -4,6 +4,7 @@ import styled from "styled-components"
 import FormButton from "../Inputs/Button";
 import APIResponse from "../ApiResponse";
 import CircleLoad from "../CircleLoad";
+import { useNotify } from "../../hooks/Notify/notifyContext";
 
 const Container = styled.div`
     position: fixed;
@@ -53,6 +54,16 @@ const ModalContainer = styled.div`
     }
 `
 
+const ModalContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    height: 100%;
+    width: 100%;
+`
+
 const Texts = styled.div`
     display: flex;
     flex-direction: column;
@@ -83,9 +94,14 @@ const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: .5rem;
     width: 100%;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     @media screen and (min-height: 580px){
         gap: 1rem;
@@ -249,12 +265,13 @@ const Button = styled.div`
 `;
 
 
-function EditRoleModal({isOpen, setIsOpen, title, subtitle, selectedRole, selectedPerms, setSelectedPerms, fetchRoles, addNotification}){
+function EditRoleModal({isOpen, setIsOpen, title, subtitle, selectedRole, selectedPerms, setSelectedPerms, fetchRoles}){
     const [apiResponse, setApiResponse] = useState("");
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
     const [permissions, setPermissions] = useState([]);
+    const { addNotification } = useNotify();
 
     async function fetchPermissions() {
         try {
@@ -316,71 +333,72 @@ function EditRoleModal({isOpen, setIsOpen, title, subtitle, selectedRole, select
     return(
         <Container isOpen={isOpen}>
             <ModalContainer isOpen={isOpen}>
+                <ModalContent>
+                    <Texts>
+                        <Title>{title}</Title>
+                        <Subtitle>{subtitle}</Subtitle>
+                    </Texts>
 
-                <Texts>
-                    <Title>{title}</Title>
-                    <Subtitle>{subtitle}</Subtitle>
-                </Texts>
+                    <FormContainer onSubmit={handleSubmit}>
+                        <InputContent>
+                            <InputLabel>
+                                <RoleNameContainer>
+                                    <p>Cargo</p>
 
-                <FormContainer onSubmit={handleSubmit}>
-                    <InputContent>
-                        <InputLabel>
-                            <RoleNameContainer>
-                                <p>Cargo</p>
+                                    <RoleName>
+                                        <p>{selectedRole}</p>
+                                    </RoleName>
+                                </RoleNameContainer>
+                            </InputLabel>
+                        </InputContent>
 
-                                <RoleName>
-                                    <p>{selectedRole}</p>
-                                </RoleName>
-                            </RoleNameContainer>
-                        </InputLabel>
-                    </InputContent>
+                        <InputContent>
+                            <InputLabel>
+                                <p>Permissões</p>
+                            </InputLabel>
+                            <PermissionsContainer>
+                                {permissions.map((permission) => {
+                                    const isChecked = selectedPerms.includes(permission.name);
 
-                    <InputContent>
-                        <InputLabel>
-                            <p>Permissões</p>
-                        </InputLabel>
-                        <PermissionsContainer>
-                            {permissions.map((permission) => {
-                                const isChecked = selectedPerms.includes(permission.name);
+                                    const handleCheckboxChange = (e) => {
+                                        if (e.target.checked) {
+                                            setSelectedPerms((prev) => [...prev, permission.name]);
+                                        } else {
+                                            setSelectedPerms((prev) => prev.filter((perm) => perm !== permission.name));
+                                        }
+                                        };
 
-                                const handleCheckboxChange = (e) => {
-                                    if (e.target.checked) {
-                                        setSelectedPerms((prev) => [...prev, permission.name]);
-                                    } else {
-                                        setSelectedPerms((prev) => prev.filter((perm) => perm !== permission.name));
-                                    }
-                                    };
+                                    return (
+                                    <Permissions key={permission.name}>
+                                        <CheckboxContainer>
+                                        <input 
+                                            type="checkbox" 
+                                            checked={isChecked}
+                                            onChange={handleCheckboxChange}
+                                        />
+                                        <svg viewBox="0 0 35.6 35.6">
+                                            <circle className="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                            <circle className="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                            <polyline className="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                        </svg>
+                                        </CheckboxContainer>
+                                        <p>{permission.name}</p>
+                                    </Permissions>
+                                    );
+                                })}
+                            </PermissionsContainer>
+                        </InputContent>
 
-                                return (
-                                <Permissions key={permission.name}>
-                                    <CheckboxContainer>
-                                    <input 
-                                        type="checkbox" 
-                                        checked={isChecked}
-                                        onChange={handleCheckboxChange}
-                                    />
-                                    <svg viewBox="0 0 35.6 35.6">
-                                        <circle className="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                        <circle className="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                        <polyline className="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
-                                    </svg>
-                                    </CheckboxContainer>
-                                    <p>{permission.name}</p>
-                                </Permissions>
-                                );
-                            })}
-                        </PermissionsContainer>
-                    </InputContent>
+                        <ButtonsContainer>
+                            <FormButton disable={buttonDisable} type={"submit"} content={"Continuar"}/>
+                            <Button disable={buttonDisable} onClick={handleCancel}>Cancelar</Button>
+                        </ButtonsContainer>
 
-                    <ButtonsContainer>
-                        <FormButton disable={buttonDisable} type={"submit"} content={"Continuar"}/>
-                        <Button disable={buttonDisable} onClick={handleCancel}>Cancelar</Button>
-                    </ButtonsContainer>
-
-                    {loading ? <CircleLoad/> :
-                        <APIResponse apiResponse={apiResponse} apiResponseColor={apiResponseColor}/>
-                    }
-                </FormContainer>
+                        {loading ? <CircleLoad/> :
+                            <APIResponse apiResponse={apiResponse} apiResponseColor={apiResponseColor}/>
+                        }
+                    </FormContainer>
+                </ModalContent>
             </ModalContainer>
         </Container>
     )

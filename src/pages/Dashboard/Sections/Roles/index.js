@@ -10,6 +10,7 @@ import ConfirmModal from "../../../../components/ConfirmModal";
 import AddRoleModal from "../../../../components/AddRoleModal";
 import EditRoleModal from "../../../../components/EditRoleModal";
 import { AuthContext } from "../../../../hooks/Authentication/authContext";
+import { useNotify } from "../../../../hooks/Notify/notifyContext";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -194,8 +195,9 @@ const ActionIcon = styled.img`
   }
 `;
 
-function Roles ({addNotification}) {
+function Roles () {
   const { user } = useContext(AuthContext);
+  const { addNotification } = useNotify();
   const [addRoleOpen, setAddRoleOpen] = useState(false);
   const [editRoleOpen, setEditRoleOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
@@ -359,7 +361,6 @@ function Roles ({addNotification}) {
         selectedPerms={selectedPerms}
         setSelectedPerms={setSelectedPerms}
         fetchRoles={fetchRoles}
-        addNotification={addNotification}
       />
 
       <EditRoleModal
@@ -371,7 +372,6 @@ function Roles ({addNotification}) {
         selectedRole={selectedRole}
         setSelectedPerms={setSelectedPerms}
         fetchRoles={fetchRoles}
-        addNotification={addNotification}
       />
 
     </Container>

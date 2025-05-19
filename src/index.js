@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard/index.js';
 import DashRoute from './routes/DashRoute.js';
 import LoginRoute from './routes/LoginRoute.js';
 import View from './pages/View/index.js';
+import { NotifyProvider } from './hooks/Notify/notifyContext.js';
+import Notify from './components/Notify/index.js';
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -53,36 +55,39 @@ root.render(
     <GlobalStyle />
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/"
-            element={
-              <LoginRoute>
-                <Login/>
-              </LoginRoute>
-            }
-          />
-          <Route path="/login"
-            element={
-              <LoginRoute>
-                <Login/>
-              </LoginRoute>
-            }
-          />
-          <Route path="/dashboard" 
-            element={
-              <DashRoute>
-                <Dashboard/>
-              </DashRoute>
-            }
-          />
-          <Route path="/dashboard/view/note/:noteID" 
-            element={
-              <DashRoute>
-                <View/>
-              </DashRoute>
-            }
-          />
-        </Routes>
+        <NotifyProvider>
+          <Notify/>
+          <Routes>
+            <Route path="/"
+              element={
+                <LoginRoute>
+                  <Login/>
+                </LoginRoute>
+              }
+            />
+            <Route path="/login"
+              element={
+                <LoginRoute>
+                  <Login/>
+                </LoginRoute>
+              }
+            />
+            <Route path="/dashboard" 
+              element={
+                <DashRoute>
+                  <Dashboard/>
+                </DashRoute>
+              }
+            />
+            <Route path="/dashboard/view/note/:noteID" 
+              element={
+                <DashRoute>
+                  <View/>
+                </DashRoute>
+              }
+            />
+          </Routes>
+        </NotifyProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

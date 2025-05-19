@@ -7,6 +7,7 @@ import APIResponse from "../ApiResponse";
 import TextInput from "../Inputs/TextInput";
 import CircleLoad from "../CircleLoad";
 import InputPass from "../Inputs/PasswordInput";
+import { useNotify } from "../../hooks/Notify/notifyContext";
 
 
 const Container = styled.div`
@@ -32,7 +33,6 @@ const ModalContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
     border-radius: 1rem;
     overflow: hidden;
     height: 80vh;
@@ -55,6 +55,16 @@ const ModalContainer = styled.div`
         width: 30vw;
         height: 60vh;
     }
+`
+
+const ModalContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    height: 100%;
+    width: 100%;
 `
 
 const Texts = styled.div`
@@ -87,9 +97,14 @@ const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: .5rem;
     width: 100%;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     @media screen and (min-height: 580px){
         gap: 1rem;
@@ -170,7 +185,7 @@ const Button = styled.div`
 `;
 
 
-function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedRole, setSelectedRole, fetchUsers, addNotification}){
+function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedRole, setSelectedRole, fetchUsers}){
     const [apiResponse, setApiResponse] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -179,6 +194,7 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedRole, setSele
     const [apiResponseColor, setApiResponseColor] = useState("");
     const [buttonDisable, setButtonDisable] = useState(false);
     const [roles, setRoles] = useState([]);
+    const { addNotification } = useNotify();
 
     async function fetchRoles() {
         try {
@@ -242,47 +258,48 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedRole, setSele
         <Container isOpen={isOpen}>
 
             <ModalContainer isOpen={isOpen}>
+                <ModalContent>
+                    <Texts>
+                        <Title>{title}</Title>
+                        <Subtitle>{subtitle}</Subtitle>
+                    </Texts>
 
-                <Texts>
-                    <Title>{title}</Title>
-                    <Subtitle>{subtitle}</Subtitle>
-                </Texts>
+                    <FormContainer onSubmit={handleSubmit}>
+                        <InputContent>
+                            <InputLabel>
+                                <EditUsername>
+                                    <p>Usuário</p>
 
-                <FormContainer onSubmit={handleSubmit}>
-                    <InputContent>
-                        <InputLabel>
-                            <EditUsername>
-                                <p>Usuário</p>
+                                    <TextInput inputValue={username} setValue={setUsername} type={"text"} placeholder={"Digite o nome do usuário"}/>
+                                    <InputPass showPass={showPass} setShowPass={setShowPass} placeholder={"Digite a senha do usuário"} password={password} setPassword={setPassword}/>
+                                </EditUsername>
+                            </InputLabel>
+                        </InputContent>
 
-                                <TextInput inputValue={username} setValue={setUsername} type={"text"} placeholder={"Digite o nome do usuário"}/>
-                                <InputPass showPass={showPass} setShowPass={setShowPass} placeholder={"Digite a senha do usuário"} password={password} setPassword={setPassword}/>
-                            </EditUsername>
-                        </InputLabel>
-                    </InputContent>
+                        <InputContent>
+                            <InputLabel>
+                                <p>Cargo</p>
+                            </InputLabel>
 
-                    <InputContent>
-                        <InputLabel>
-                            <p>Cargo</p>
-                        </InputLabel>
+                            <SelectInput value={selectedRole} onChange={(e) => {setSelectedRole(e.target.value)}}>
+                                <option value={""}>Selecione</option>
 
-                        <SelectInput value={selectedRole} onChange={(e) => {setSelectedRole(e.target.value)}}>
-                            <option value={""}>Selecione</option>
+                                {roles.map((role) => (
+                                    <option key={role.name} value={role.name}>{role.name}</option>
+                                ))}
+                            </SelectInput>
+                        </InputContent>
 
-                            {roles.map((role) => (
-                                <option key={role.name} value={role.name}>{role.name}</option>
-                            ))}
-                        </SelectInput>
-                    </InputContent>
+                        <ButtonsContainer>
+                            <FormButton disable={buttonDisable} type={"submit"} content={"Continuar"}/>
+                            <Button disable={buttonDisable} onClick={handleCancel}>Cancelar</Button>
+                        </ButtonsContainer>
 
-                    <ButtonsContainer>
-                        <FormButton disable={buttonDisable} type={"submit"} content={"Continuar"}/>
-                        <Button disable={buttonDisable} onClick={handleCancel}>Cancelar</Button>
-                    </ButtonsContainer>
-
-                    {loading ? <CircleLoad/> :
-                        <APIResponse apiResponse={apiResponse} apiResponseColor={apiResponseColor}/>
-                    }
-                </FormContainer>
+                        {loading ? <CircleLoad/> :
+                            <APIResponse apiResponse={apiResponse} apiResponseColor={apiResponseColor}/>
+                        }
+                    </FormContainer>
+                </ModalContent>
             </ModalContainer>
         </Container>
     )

@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getNoteById } from "../../services/notes";
+import { useNavigate, useParams } from "react-router-dom";
+import { getNoteById, moveNoteToBin } from "../../services/notes";
+import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
+import { ReactComponent as ExportSVG } from "../../assets/svg/export.svg";
+import { Tooltip } from "react-tooltip";
+import { useNotify } from "../../hooks/Notify/notifyContext";
 import styled from "styled-components";
 import SmallLoad from "../../components/SmallLoad";
+
 
 const Container = styled.div`
     display: flex;
@@ -74,21 +79,33 @@ const CardContentContainer = styled.div`
     }
 `   
 
-const TitleContentContainer = styled.div`
+const HeaderContainer = styled.div`
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     padding: .8rem;
     width: 100%;
     border-radius: 1rem 1rem 0 0;
     box-sizing: border-box;
     background-color: var(--background);
+
+    & svg{
+        fill: white;
+        transition: all 0.3s ease-in-out;
+
+        &:hover{
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+    }
 `
 
 const MainTitle = styled.h1`
     font-family: 'Nunito Sans', sans-serif;
+    text-align: center;
     font-size: 1.5rem;
+    width: 100%;
     color: white;
 `;
 
@@ -103,7 +120,7 @@ const InformationContentContainer = styled.section`
     width: 100%;
 `;
 
-const SubtitleContentContainer = styled.div`
+const SubHeaderContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -179,6 +196,8 @@ function View() {
     const [note, setNote] = useState({});
     const [noteItens, setNoteItens] = useState([]);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const { addNotification } = useNotify();
     const { noteID } = useParams();
 
     async function fetchNoteById() {
@@ -213,6 +232,35 @@ function View() {
         fetchNoteById();
     }, []);
 
+    async function handleMoveToBin(id) {
+    try {
+        const response = await moveNoteToBin(id);
+
+        if (response.success) {
+            navigate("/dashboard");
+        }
+
+        addNotification(response.message);
+    } catch (error) {
+        console.log(error);
+    }
+    }
+
+    const handleExport = async () => {
+        if (noteItens.length === 0){ 
+          alert("Nenhum item encontrado!");
+          return;
+        }
+
+        const txt = noteItens.map((item) => `${item.codigo};${item.quantidade}`).join("\n");
+        const blob = new Blob([txt], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `NF ${note.company} - #${noteID}.txt`;
+        link.click();
+      }
+
     return loading ? (
         <Container>
             <SmallLoad/> 
@@ -227,16 +275,16 @@ function View() {
 
 
                     <CardContentContainer>
-                        <TitleContentContainer>
+                        <HeaderContainer>
                             <MainTitle>Relação de Nota - #{noteID}</MainTitle>
-                        </TitleContentContainer>
+                        </HeaderContainer>
 
                         <InformationContentContainer>
-                            <SubtitleContentContainer>
+                            <SubHeaderContainer>
                                 <Subtitle>
                                     Informações
                                 </Subtitle>
-                            </SubtitleContentContainer>
+                            </SubHeaderContainer>
 
                             <ItemList>
                                 <Item>
@@ -278,16 +326,21 @@ function View() {
                     </CardContentContainer>
 
                     <CardContentContainer>
-                        <TitleContentContainer>
+                        <HeaderContainer>
+                            <ExportSVG data-tooltip-id="export" onClick={handleExport}/>
                             <MainTitle>Itens</MainTitle>
-                        </TitleContentContainer>
+                            <CheckSVG data-tooltip-id="check" onClick={() => handleMoveToBin(noteID)}/>
+
+                            <Tooltip id="export" place="top" content="Exportar itens"/>
+                            <Tooltip id="check" place="top" content="Marcar como concluída"/>
+                        </HeaderContainer>
 
                         <InformationContentContainer>
-                            <SubtitleContentContainer>
+                            <SubHeaderContainer>
                                 <Subtitle>
                                     Total de itens: {noteItens.length}
                                 </Subtitle>
-                            </SubtitleContentContainer>
+                            </SubHeaderContainer>
                             <ItemList>
                                 {noteItens.map((item, index) => (
                                     <Item key={index}>

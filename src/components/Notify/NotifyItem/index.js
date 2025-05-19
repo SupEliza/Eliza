@@ -24,7 +24,7 @@ const ProgressBar = styled.div`
     height: 4px;
     border-radius: 0 0.5rem 0 0.5rem;
     width: ${({ progress }) => progress}%;
-    background-color: var(--primary-color);
+    background-color: var(--background);
     transition: width 0.1s linear;
 `;
 

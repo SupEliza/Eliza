@@ -7,6 +7,7 @@ import undeletePNG from "../../../../assets/images/undelete.png";
 import styled from "styled-components";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import { Tooltip } from "react-tooltip";
+import { useNotify } from "../../../../hooks/Notify/notifyContext";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -191,7 +192,7 @@ const Code = styled.div`
   width: 100%;
 `;
 
-function BinCodes ({addNotification}) {
+function BinCodes () {
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
@@ -201,6 +202,7 @@ function BinCodes ({addNotification}) {
   const [modalLoading, setModalLoading] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [codesList, setCodesList] = useState([]);
+  const { addNotification } = useNotify();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -230,7 +232,7 @@ function BinCodes ({addNotification}) {
 
   function handleExport() {
     if (codesList.length === 0) {
-      alert("Nenhum código registrado!")
+      addNotification("Nenhum código registrado!")
       return;
     };
 

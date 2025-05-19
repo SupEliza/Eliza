@@ -10,6 +10,7 @@ import AddUserModal from "../../../../components/AddUserModal";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import { Tooltip } from "react-tooltip";
 import { AuthContext } from "../../../../hooks/Authentication/authContext";
+import { useNotify } from "../../../../hooks/Notify/notifyContext";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -194,8 +195,9 @@ const ActionIcon = styled.img`
   }
 `;
 
-function Users ({addNotification}) {
+function Users () {
   const { user } = useContext(AuthContext)
+  const { addNotification } = useNotify();
   const [addMemberOpen, setAddMemberOpen] = useState(false);
   const [editMemberOpen, setEditMemberOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
@@ -361,7 +363,6 @@ function Users ({addNotification}) {
         title="Adicionar usuário"
         subtitle="Por favor, preencha os campos abaixo para continuar."
         fetchUsers={fetchUsers}
-        addNotification={addNotification}
         selectedRole={selectedRole}
         setSelectedRole={setSelectedRole}
       />
@@ -373,7 +374,6 @@ function Users ({addNotification}) {
         subtitle="Por favor, selecione o novo cargo do usuário para continuar."
         member={selectedMember}
         fetchUsers={fetchUsers}
-        addNotification={addNotification}
         selectedRole={selectedRole}
         setSelectedRole={setSelectedRole}
       />
