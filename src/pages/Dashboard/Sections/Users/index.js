@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { deleteUser, getUsers } from "../../../../services/users";
 import ReloadPNG from "../../../../assets/images/reload.png";
-import EditModal from "../../../../components/EditUserModal"
+import EditUserModal from "../../../../components/EditUserModal"
 import styled from "styled-components";
 import editPNG from "../../../../assets/images/edit.png";
 import deletePNG from "../../../../assets/images/delete.png";
@@ -9,6 +9,7 @@ import SmallLoad from "../../../../components/SmallLoad";
 import AddUserModal from "../../../../components/AddUserModal";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import { Tooltip } from "react-tooltip";
+import { AuthContext } from "../../../../hooks/Authentication/authContext";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -194,6 +195,7 @@ const ActionIcon = styled.img`
 `;
 
 function Users ({addNotification}) {
+  const { user } = useContext(AuthContext)
   const [addMemberOpen, setAddMemberOpen] = useState(false);
   const [editMemberOpen, setEditMemberOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
@@ -281,6 +283,11 @@ function Users ({addNotification}) {
   }
 
   const handleEditMember = (member, role) => {
+    if (user.user_role !== 'SuperAdmin' && role === "Admin" || role === "SuperAdmin") {
+      addNotification("Você não pode editar um usuário com cargo igual ou superior ao seu.");
+      return;
+    }
+
     setSelectedRole(role);
     setSelectedMember(member);
     setEditMemberOpen(true);
@@ -359,7 +366,7 @@ function Users ({addNotification}) {
         setSelectedRole={setSelectedRole}
       />
 
-      <EditModal
+      <EditUserModal
         setIsOpen={setEditMemberOpen}
         isOpen={editMemberOpen}
         title="Editar usuário"

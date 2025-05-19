@@ -42,9 +42,9 @@ async function deleteUser(id){
     }
 }
 
-async function setRole(params){
+async function editUserRole(params){
     try {
-        const response = await API.post("/set-role", params);
+        const response = await API.post("/edit-role", params);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
@@ -78,4 +78,4 @@ async function refreshToken(uuid) {
     }
 }
 
-export { login, userAuth, refreshToken, userLogout, getUsers, setRole, register, deleteUser };
+export { login, userAuth, refreshToken, userLogout, getUsers, editUserRole, register, deleteUser };

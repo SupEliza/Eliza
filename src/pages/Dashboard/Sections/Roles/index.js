@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { deleteRole, getRoles } from "../../../../services/roles";
 import ReloadPNG from "../../../../assets/images/reload.png";
@@ -8,6 +8,8 @@ import deletePNG from "../../../../assets/images/delete.png";
 import SmallLoad from "../../../../components/SmallLoad";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import AddRoleModal from "../../../../components/AddRoleModal";
+import EditRoleModal from "../../../../components/EditRoleModal";
+import { AuthContext } from "../../../../hooks/Authentication/authContext";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -193,9 +195,11 @@ const ActionIcon = styled.img`
 `;
 
 function Roles ({addNotification}) {
+  const { user } = useContext(AuthContext);
   const [addRoleOpen, setAddRoleOpen] = useState(false);
-  const [editMemberOpen, setEditMemberOpen] = useState(false);
+  const [editRoleOpen, setEditRoleOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
+  const [selectedRole, setSelectedRole] = useState("");
   const [selectedPerms, setSelectedPerms] = useState([]);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
@@ -274,6 +278,17 @@ function Roles ({addNotification}) {
     setConfirmationText("Tem certeza que deseja deletar esse cargo?");
   }
 
+  function handleEditRole(role, permissions){
+    if (user.user_role !== 'SuperAdmin' && role === "Admin" || role === "SuperAdmin") {
+      addNotification("Você não pode editar esse cargo.");
+      return;
+    }
+
+    setSelectedPerms(permissions);
+    setSelectedRole(role);
+    setEditRoleOpen(true);
+  }
+
   const headerList = [
     { name: "ID", action: () => orderList("ID")},
     { name: "Cargo", action: () => orderList("Cargo")},
@@ -322,7 +337,7 @@ function Roles ({addNotification}) {
                   <RolesListElement>{role.permissions.join(", ")}</RolesListElement>
                   <RolesListElement>
                     <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmDelete(role.id)} src={deletePNG} alt="Deletar"/>
-                    <ActionIcon data-tooltip-id="edit" onClick={() => {}} src={editPNG} alt="Editar"/>
+                    <ActionIcon data-tooltip-id="edit" onClick={() => handleEditRole(role.name, role.permissions)} src={editPNG} alt="Editar"/>
 
                     <Tooltip id="remove" place="top" content="Excluir cargo"/>
                     <Tooltip id="edit" place="top" content="Editar permissões"/>
@@ -342,6 +357,18 @@ function Roles ({addNotification}) {
         title={"Adicionar cargo"}
         subtitle={"Preencha os campos abaixo para adicionar um cargo."}
         selectedPerms={selectedPerms}
+        setSelectedPerms={setSelectedPerms}
+        fetchRoles={fetchRoles}
+        addNotification={addNotification}
+      />
+
+      <EditRoleModal
+        isOpen={editRoleOpen}
+        setIsOpen={setEditRoleOpen}
+        title={"Editar cargo"}
+        subtitle={"Escolha as novas permissões do cargo."}
+        selectedPerms={selectedPerms}
+        selectedRole={selectedRole}
         setSelectedPerms={setSelectedPerms}
         fetchRoles={fetchRoles}
         addNotification={addNotification}

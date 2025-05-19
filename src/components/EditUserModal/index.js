@@ -1,5 +1,5 @@
 import { getRoles } from "../../services/roles";
-import { setRole } from "../../services/users";
+import { editUserRole } from "../../services/users";
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import FormButton from "../Inputs/Button";
@@ -180,7 +180,7 @@ const Button = styled.div`
 `;
 
 
-function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedRole, setSelectedRole, fetchUsers, addNotification}){
+function EditUserModal({isOpen, setIsOpen, title, subtitle, member, selectedRole, setSelectedRole, fetchUsers, addNotification}){
     const [apiResponse, setApiResponse] = useState("");
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
@@ -216,7 +216,7 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedRole, se
         try {
             setLoading(true);
             setButtonDisable(true);
-            const response = await setRole({ username: member, newRole: selectedRole });
+            const response = await editUserRole({ username: member, newRole: selectedRole });
 
             if (response.success === true) {
                 addNotification(response.message);
@@ -292,4 +292,4 @@ function EditModal({isOpen, setIsOpen, title, subtitle, member, selectedRole, se
     )
 }
 
-export default EditModal
+export default EditUserModal

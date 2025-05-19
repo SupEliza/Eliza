@@ -24,6 +24,15 @@ async function addRole(newRoleName, permissions){
     }
 }
 
+async function editRole(roleName, newPermissions){
+    try {
+        const response = await API.post("/edit", { roleName, newPermissions });
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
 async function deleteRole(id){
     try {
         const response = await API.post(`/delete/${id}`);
@@ -42,4 +51,4 @@ async function getPermissions(){
     }
 }
 
-export { getRoles, deleteRole, getPermissions, addRole };
+export { getRoles, deleteRole, getPermissions, addRole, editRole };

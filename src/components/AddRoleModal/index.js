@@ -125,8 +125,10 @@ const EditName = styled.div`
 `
 
 const PermissionsContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     box-sizing: border-box;
     border-radius: .5rem;
@@ -139,7 +141,6 @@ const PermissionsContainer = styled.div`
 const Permissions = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
     gap: .5rem;
     font-weight: 600;
@@ -286,18 +287,19 @@ function AddRoleModal({isOpen, setIsOpen, title, subtitle, selectedPerms, setSel
             }
 
             if (response.success === true) {
-                setApiResponseColor("var(--primary-color)");
+                addNotification(response.message);
                 handleCancel();
                 fetchRoles();
             } else {
                 setApiResponseColor("red");
+                setApiResponse(response.message);
             }
 
-            addNotification(response.message);
             setButtonDisable(false);
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            setApiResponseColor("red");
+            setApiResponse(error.message || "Ocorreu um erro ao adicionar o cargo.");
         }
     }
 

@@ -9,8 +9,6 @@ function DashRoute({ children }) {
     if (loading) return <FullLoad />
 
     if (!user) return <Navigate to="/login" replace />;
-
-    if (user.user_role !== "Admin") return <Navigate to="/unauthorized" replace />;
         
     return children;
 }
