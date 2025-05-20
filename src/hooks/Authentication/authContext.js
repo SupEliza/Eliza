@@ -3,31 +3,39 @@ import { refreshToken, userAuth } from "../../services/users";
 
 export const AuthContext = createContext();
 
+let isRefreshing = false;
+
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     async function refreshAccessToken() {
+        if (isRefreshing) {
+            return;
+        }
+
+        isRefreshing = true;
+
         try {
             const uuid = localStorage.getItem("user_uuid");
-            
+
             if (!uuid) {
                 setUser(null);
                 return;
             }
 
-            const response = await refreshToken({uuid});
+            const response = await refreshToken({ uuid });
 
             if (response.success === false) {
                 setUser(null);
                 return;
             }
 
-            await new Promise(resolve => setTimeout(resolve, 100));
-
             await checkAuth();
         } catch (error) {
             setUser(null);
+        } finally {
+            isRefreshing = false;
         }
     }
 
@@ -35,21 +43,26 @@ export function AuthProvider({ children }) {
         try {
             const response = await userAuth();
 
-            if(response.success === false) {
+            if (response.success === false) {
                 await refreshAccessToken();
                 return;
             }
 
-            if(!response || response.success !== true || !response.user || !response.user.username || !response.user.user_role) {
+            if (
+                !response ||
+                response.success !== true ||
+                !response.user ||
+                !response.user.username ||
+                !response.user.user_role
+            ) {
                 setUser(null);
                 return;
             }
 
             setUser(prevUser => ({
-                ...prevUser, 
+                ...prevUser,
                 ...response.user
             }));
-
         } catch (error) {
             setUser(null);
         } finally {
@@ -66,7 +79,9 @@ export function AuthProvider({ children }) {
             refreshAccessToken();
         }, 15 * 60 * 1000);
 
-        return () => clearInterval(intervalId);
+        return () => {
+            clearInterval(intervalId);
+        };
     }, []);
 
     return (
