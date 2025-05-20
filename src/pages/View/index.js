@@ -267,7 +267,7 @@ function View() {
         <Container>
             <SmallLoad/> 
         </Container>
-    ) : noteItens.length > 0 ? (
+    ) : noteItens.length > 0 && note ? (
             <Container>
                 <PageTitle>
                     SUPERMERCADOS ELIZA
