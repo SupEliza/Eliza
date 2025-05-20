@@ -196,9 +196,9 @@ function View() {
     const [note, setNote] = useState({});
     const [noteItens, setNoteItens] = useState([]);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
     const { addNotification } = useNotify();
     const { noteID } = useParams();
+    const navigate = useNavigate();
 
     async function fetchNoteById() {
         setLoading(true);
@@ -248,7 +248,7 @@ function View() {
         setLoading(false);
     }
 
-    const handleExport = async () => {
+    function handleExport() {
         if (noteItens.length === 0){ 
           addNotification("Nenhum item encontrado!");
           return;
@@ -261,7 +261,15 @@ function View() {
         link.href = url;
         link.download = `NF ${note.company} - #${noteID}.txt`;
         link.click();
-      }
+    }
+
+    function getTotalQuantity(){
+        let total = 0;
+        noteItens.forEach((item) => {
+            total += item.quantidade;
+        });
+        return total;
+    }
 
     return loading ? (
         <Container>
@@ -340,7 +348,7 @@ function View() {
                         <InformationContentContainer>
                             <SubHeaderContainer>
                                 <Subtitle>
-                                    Total de itens: {noteItens.length}
+                                    Quantidade total: {getTotalQuantity()}
                                 </Subtitle>
                             </SubHeaderContainer>
                             <ItemList>
