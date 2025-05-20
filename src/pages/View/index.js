@@ -267,7 +267,7 @@ function View() {
         <Container>
             <SmallLoad/> 
         </Container>
-    ) : noteItens.length > 0 && note ? (
+    ) : note.company && note.collection_date ? (
             <Container>
                 <PageTitle>
                     SUPERMERCADOS ELIZA
