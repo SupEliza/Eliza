@@ -13,6 +13,7 @@ const NotifyContent = styled.div`
     padding: 1rem;
     width: 15rem;
     position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     transform: ${({ active }) => (active ? "translateX(0)" : "translateX(120%)")};
     transition: transform 0.5s ease-in-out;
 `;
@@ -24,7 +25,7 @@ const ProgressBar = styled.div`
     height: 4px;
     border-radius: 0 0.5rem 0 0.5rem;
     width: ${({ progress }) => progress}%;
-    background-color: var(--background);
+    background-color: var(--primary-color);
     transition: width 0.1s linear;
 `;
 

@@ -212,8 +212,6 @@ function View() {
                 setNote(response.note);
                 setNoteItens(response.note.itens);
 
-                console.log(note.length)
-
                 document.title = `View NF | ${response.note.company}`;
             }
         } catch (error) {
@@ -224,7 +222,7 @@ function View() {
 
     function copyToClipboard(text){
         navigator.clipboard.writeText(text);
-        alert("Código copiado");
+        addNotification("Código copiado");
     }
 
     useEffect(() => {
@@ -233,22 +231,26 @@ function View() {
     }, []);
 
     async function handleMoveToBin(id) {
-    try {
-        const response = await moveNoteToBin(id);
+        setLoading(true);
+        try {
+            const response = await moveNoteToBin(id);
 
-        if (response.success) {
-            navigate("/dashboard");
+            if (response.success) {
+                navigate("/dashboard");
+                addNotification(response.message);
+                return;
+            }
+
+            addNotification(response.message);
+        } catch (error) {
+            addNotification(error.message || "Erro ao mover para lixeira");
         }
-
-        addNotification(response.message);
-    } catch (error) {
-        console.log(error);
-    }
+        setLoading(false);
     }
 
     const handleExport = async () => {
         if (noteItens.length === 0){ 
-          alert("Nenhum item encontrado!");
+          addNotification("Nenhum item encontrado!");
           return;
         }
 

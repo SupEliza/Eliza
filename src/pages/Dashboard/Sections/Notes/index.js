@@ -7,6 +7,7 @@ import viewPNG from "../../../../assets/images/view.png";
 import removePNG from "../../../../assets/images/remove.png";
 import styled from "styled-components";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
+import { useNavigate } from "react-router-dom";
                                                                                                                                                                                                                                                                                                                                                                                                   
 const Container = styled.div`
   display: flex;
@@ -215,6 +216,7 @@ function Notes () {
   const [totalNotes, setTotalNotes] = useState(0);
   const [notesLimit, setNotesLimit] = useState(10);
   const [notesList, setNotesList] = useState([]);
+  const navigate = useNavigate();
   const { addNotification } = useNotify();
 
   useEffect(() => {
@@ -374,7 +376,7 @@ function Notes () {
                   </NotesListElement>
                   <NotesListElement>
                     <ActionIcon data-tooltip-id="remove" onClick={() => handleMoveToBin(note.id)} src={removePNG} alt="Mover para lixeira"/>
-                    <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/note/${note.id}`, '_blank')}} src={viewPNG} alt="Visualizar"/>
+                    <ActionIcon data-tooltip-id="view" onClick={() => {navigate(`/dashboard/view/note/${note.id}`)}} src={viewPNG} alt="Visualizar"/>
 
                     <Tooltip id="remove" place="top" content="Mover para lixeira"/>
                     <Tooltip id="view" place="top" content="Visualizar nota"/>
