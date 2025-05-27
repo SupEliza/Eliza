@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
-import { getCodes, moveCodeToBin } from "../../../../services/codes";
+import { useContext, useEffect, useState } from "react";
+import { cleanCodes, getCodes, moveCodeToBin } from "../../../../services/codes";
+import { AuthContext } from "../../../../hooks/Authentication/authContext";
+import { Tooltip } from "react-tooltip";
+import { useNotify } from "../../../../hooks/Notify/notifyContext";
 import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
 import removePNG from "../../../../assets/images/remove.png";
 import styled from "styled-components";
-import { Tooltip } from "react-tooltip";
 import CircleLoad from "../../../../components/CircleLoad";
 import AddCodeModal from "../../../../components/AddCodeModal";
-import { useNotify } from "../../../../hooks/Notify/notifyContext";
+import ConfirmModal from "../../../../components/ConfirmModal";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -210,9 +212,13 @@ const LoadMoreButton = styled.button`
 `;
 
 function Codes () {
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [addCodeOpen, setAddCodeOpen] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
+  const [confirmationText, setConfirmationText] = useState("");
+  const [confirmIsOpen, setConfirmIsOpen] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
   const [totalCodes, setTotalCodes] = useState(0);
@@ -342,6 +348,40 @@ function Codes () {
     fetchCodes(false);
   }
 
+  function openConfirmModal() {
+    if(codesList.length === 0){
+      addNotification('Nenhum código registrado!');
+      return;
+    }
+
+    if(user.user_role !== 'SuperAdmin'){
+      addNotification('Você não tem permissão.');
+      return;
+    }
+
+    setConfirmIsOpen(true);
+    setConfirmationText("Tem certeza que deseja limpar todos os códigos?");
+  }
+
+  async function handleCleanCodes() {
+    setModalLoading(true);
+    try {
+      const response = await cleanCodes();
+
+      if(response.success === true){
+        addNotification('Todos os códigos foram limpos!');
+        fetchCodes();
+      }
+
+      setConfirmationText("");
+      setConfirmIsOpen(false);
+    } catch (error) {
+      addNotification('Erro ao limpar códigos');
+      console.log(error);
+    }
+    setModalLoading(false);
+  }
+
   function handleLoadMore() {
     setCodesLimit((prev) => prev + 10);
     fetchCodes(true);
@@ -368,6 +408,7 @@ function Codes () {
           <ReloadIcon onClick={handleReloadCodes} src={reloadPNG} alt="reload"/>
 
           <HeaderButton type="button" onClick={() => setAddCodeOpen(true)}>Adicionar</HeaderButton>
+          <HeaderButton type="button" onClick={() => openConfirmModal()}>Limpar</HeaderButton>
           <HeaderButton type="button" onClick={handleExport}>{exportLoading ? <CircleLoad/> : "Exportar"}</HeaderButton>
         </CodesHeaderRight>
       </CodesHeader>
@@ -423,6 +464,8 @@ function Codes () {
           : <p>Nenhum registro encontrado.</p>
         }
       </CodesListContainer>
+
+      <ConfirmModal isOpen={confirmIsOpen} setIsOpen={setConfirmIsOpen} text={confirmationText} action={handleCleanCodes} modalLoading={modalLoading}/>
 
       <AddCodeModal
         setIsOpen={setAddCodeOpen}

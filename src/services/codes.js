@@ -51,4 +51,13 @@ async function deleteCode(id){
     }
 }
 
-export { getCodes, moveCodeToBin, deleteCode, remCodeFromBin, addCode };
+async function cleanCodes(){
+    try {
+        const response = await API.post(`/clean`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+export { getCodes, moveCodeToBin, deleteCode, remCodeFromBin, addCode, cleanCodes };
