@@ -259,7 +259,7 @@ function View() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `NF ${note.company} - #${noteID}.txt`;
+        link.download = `Relação NF ${note.company} - ${new Date().toLocaleDateString()}.txt`;
         link.click();
     }
 

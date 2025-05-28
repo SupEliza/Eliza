@@ -283,7 +283,7 @@ function Codes () {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "códigos.txt";
+    link.download = `Baixas - ${new Date().toLocaleDateString()}.txt`;
     link.click();
     setExportLoading(false);
   }
