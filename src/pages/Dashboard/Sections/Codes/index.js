@@ -369,10 +369,10 @@ function Codes () {
       const response = await cleanCodes();
 
       if(response.success === true){
-        addNotification('Todos os códigos foram limpos!');
         fetchCodes();
       }
 
+      addNotification(response.message);
       setConfirmationText("");
       setConfirmIsOpen(false);
     } catch (error) {
