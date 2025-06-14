@@ -376,7 +376,7 @@ function Notes () {
                   </NotesListElement>
                   <NotesListElement>
                     <ActionIcon data-tooltip-id="remove" onClick={() => handleMoveToBin(note.id)} src={removePNG} alt="Mover para lixeira"/>
-                    <ActionIcon data-tooltip-id="view" onClick={() => {navigate(`/dashboard/view/note/${note.id}`)}} src={viewPNG} alt="Visualizar"/>
+                    <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/view/${note.id}`, "_blank")}} src={viewPNG} alt="Visualizar"/>
 
                     <Tooltip id="remove" place="top" content="Mover para lixeira"/>
                     <Tooltip id="view" place="top" content="Visualizar nota"/>
