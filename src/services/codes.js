@@ -44,7 +44,7 @@ async function remCodeFromBin(id){
 
 async function deleteCode(id){
     try {
-        const response = await API.post(`/bin/delete/${id}`);
+        const response = await API.delete(`/bin/delete/${id}`);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
