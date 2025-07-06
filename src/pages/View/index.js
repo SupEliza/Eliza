@@ -254,7 +254,7 @@ function View() {
           return;
         }
 
-        const txt = noteItens.map((item, index) => `${item.ean};${item.quantidade}`).join("\n\n");
+        const txt = noteItens.map((item, index) => `${item.ean};${item.quantidade}`).join("\n");
         const blob = new Blob([txt], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
