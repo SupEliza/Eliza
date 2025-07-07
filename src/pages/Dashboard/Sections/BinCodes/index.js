@@ -236,7 +236,7 @@ function BinCodes () {
       return;
     };
 
-    const txt = codesList.map((code) => `EAN ${index}: ${code.ean}\nQTD: ${code.quantity}`).join("\n\n");
+    const txt = codesList.map((code, index) => `EAN ${index}: ${code.ean}\nQTD: ${code.quantity}`).join("\n\n");
     const blob = new Blob([txt], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
