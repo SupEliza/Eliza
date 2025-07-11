@@ -254,7 +254,7 @@ function View() {
           return;
         }
 
-        const txt = noteItens.map((item, index) => `EAN ${index}: ${item.codigo}\nQTD: ${item.quantidade}`).join("\n\n");
+        const txt = noteItens.map((item, index) => `EAN ${index + 1}: ${item.codigo}\nQTD: ${item.quantidade}`).join("\n\n");
         const blob = new Blob([txt], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -355,7 +355,7 @@ function View() {
                                 {noteItens.map((item, index) => (
                                     <Item key={index}>
                                         <ItemElement>
-                                            <InfoText color="black">Código:</InfoText>
+                                            <InfoText color="black">EAN {index + 1}:</InfoText>
                                             <InfoText style={{ cursor: "pointer" }} onClick={() => copyToClipboard(item.codigo)}>
                                                 {item.codigo}
                                             </InfoText>
