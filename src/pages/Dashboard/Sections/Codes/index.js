@@ -354,7 +354,7 @@ function Codes () {
       return;
     }
 
-    if(user.user_role !== 'SuperAdmin'){
+    if(user.user_role !== 'Manager'){
       addNotification('Você não tem permissão.');
       return;
     }

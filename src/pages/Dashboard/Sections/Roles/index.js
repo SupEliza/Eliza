@@ -281,7 +281,7 @@ function Roles () {
   }
 
   function handleEditRole(role, permissions){
-    if (user.user_role !== 'SuperAdmin' && role === "Admin" || role === "SuperAdmin") {
+    if (user.user_role !== 'Manager' && role === "Admin" || role === "Manager") {
       addNotification("Você não pode editar esse cargo.");
       return;
     }
