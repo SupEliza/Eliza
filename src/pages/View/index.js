@@ -54,7 +54,7 @@ const PageTitle = styled.div`
     font-weight: bold;
     box-sizing: border-box;
     color: white;
-    background-color: var(--background);
+    background-color: ${(props) => props.isDeleted ? 'red' : 'var(--background)'};
     padding: .8rem;
     width: 100%;
 
@@ -88,7 +88,7 @@ const HeaderContainer = styled.div`
     width: 100%;
     border-radius: 1rem 1rem 0 0;
     box-sizing: border-box;
-    background-color: var(--background);
+    background-color: ${(props) => props.isDeleted ? 'red' : 'var(--background)'};
 
     & svg{
         fill: white;
@@ -277,15 +277,15 @@ function View() {
         </Container>
     ) : note.company && note.collection_date ? (
             <Container>
-                <PageTitle>
-                    SUPERMERCADOS ELIZA
+                <PageTitle isDeleted={note.isDeleted}> 
+                    {note.isDeleted ? "VISUALIZAÇÃO DE NOTA EXCLUÍDA" : "SUPERMERCADOS ELIZA"}
                 </PageTitle>
 
                 <ContentContainer>
 
 
                     <CardContentContainer>
-                        <HeaderContainer>
+                        <HeaderContainer isDeleted={note.isDeleted}>
                             <MainTitle>Relação de Nota - #{noteID}</MainTitle>
                         </HeaderContainer>
 
@@ -336,10 +336,10 @@ function View() {
                     </CardContentContainer>
 
                     <CardContentContainer>
-                        <HeaderContainer>
+                        <HeaderContainer isDeleted={note.isDeleted}>
                             <ExportSVG data-tooltip-id="export" onClick={handleExport}/>
                             <MainTitle>Itens</MainTitle>
-                            <CheckSVG data-tooltip-id="check" onClick={() => handleMoveToBin(noteID)}/>
+                            <CheckSVG style={{ display: note.isDeleted ? "none" : "unset" }} data-tooltip-id="check" onClick={() => handleMoveToBin(noteID)}/>
 
                             <Tooltip id="export" place="top" content="Exportar itens"/>
                             <Tooltip id="check" place="top" content="Marcar como concluída"/>

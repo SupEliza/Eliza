@@ -5,6 +5,7 @@ import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
 import deletePNG from "../../../../assets/images/delete.png";
 import undeletePNG from "../../../../assets/images/undelete.png";
+import viewPNG from "../../../../assets/images/view.png";
 import styled from "styled-components";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
@@ -356,9 +357,11 @@ function Notes () {
                   <NotesListElement>
                     <ActionIcon data-tooltip-id="delete" onClick={() => openConfirmDelete(note.id)} src={deletePNG} alt="Deletar"/>
                     <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmUndelete(note.id)} src={undeletePNG} alt="Recuperar"/>
+                    <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/note/${note.id}`, "_blank")}} src={viewPNG} alt="Visualizar"/>
 
                     <Tooltip id="delete" place="top" content="Deletar nota"/>
                     <Tooltip id="remove" place="top" content="Restaurar nota"/>
+                    <Tooltip id="view" place="top" content="Visualizar nota"/>
                   </NotesListElement>
                 </Note>
               ))}

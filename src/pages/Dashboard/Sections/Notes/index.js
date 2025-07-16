@@ -79,22 +79,6 @@ const ReloadIcon = styled.img`
   }
 `;
 
-const HeaderButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  background-color: var(--background);
-  color: var(--secondary-color);
-  font-weight: bold;
-  border: none;
-  border-radius: 0.5rem;
-  width: 6rem;
-  height: 3rem;
-  cursor: pointer;
-`;
-
 const NotesListContainer = styled.div`
   display: flex;
   flex-direction: column;
