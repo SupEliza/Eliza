@@ -276,7 +276,7 @@ function Login() {
                 }, 2000);
             } else{
                 setApiResponseColor("red");
-                setApiResponse(response.message);
+                setApiResponse(response.message || "Ocorreu um erro ao fazer login.");
             }
 
             setTimeout(() => {
@@ -285,7 +285,7 @@ function Login() {
             }, 2500);
         } catch (error) {
             setApiResponseColor("red");
-            setApiResponse(error.message);
+            setApiResponse(error.message || "Ocorreu um erro ao fazer login.");
         }
     };
 
