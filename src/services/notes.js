@@ -15,6 +15,15 @@ async function getNotes(notesLimit){
     }
 }
 
+async function getDeletedNotes(notesLimit){
+    try {
+        const response = await API.get(`/deleted/${notesLimit}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
 async function getNoteById(id){
     try {
         const response = await API.get(`/by-id/${id}`);
@@ -52,4 +61,4 @@ async function deleteNote(id){
 }
 
 
-export { getNotes, getNoteById, moveNoteToBin, deleteNote, remNoteFromBin };
+export { getNotes, getNoteById, moveNoteToBin, deleteNote, remNoteFromBin, getDeletedNotes };

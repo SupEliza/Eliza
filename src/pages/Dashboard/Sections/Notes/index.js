@@ -7,7 +7,6 @@ import viewPNG from "../../../../assets/images/view.png";
 import removePNG from "../../../../assets/images/remove.png";
 import styled from "styled-components";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
-import { useNavigate } from "react-router-dom";
                                                                                                                                                                                                                                                                                                                                                                                                   
 const Container = styled.div`
   display: flex;
@@ -200,7 +199,6 @@ function Notes () {
   const [totalNotes, setTotalNotes] = useState(0);
   const [notesLimit, setNotesLimit] = useState(10);
   const [notesList, setNotesList] = useState([]);
-  const navigate = useNavigate();
   const { addNotification } = useNotify();
 
   useEffect(() => {

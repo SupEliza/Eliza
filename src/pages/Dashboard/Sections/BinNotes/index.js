@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deleteNote, getNotes, remNoteFromBin } from "../../../../services/notes";
+import { deleteNote, getDeletedNotes, remNoteFromBin } from "../../../../services/notes";
 import { Tooltip } from "react-tooltip";
 import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
@@ -178,6 +178,22 @@ const Note = styled.div`
   width: 100%;
 `;
 
+const LoadMoreButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: var(--background);
+  color: var(--secondary-color);
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  margin: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+`;
+
 function Notes () {
   const [loading, setLoading] = useState(false);
   const [confirmUndeleteOpen, setConfirmUndeleteOpen] = useState(false);
@@ -188,6 +204,8 @@ function Notes () {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
   const [notesList, setNotesList] = useState([]);
+  const [totalNotes, setTotalNotes] = useState(0);
+  const [notesLimit, setNotesLimit] = useState(10);
   const { addNotification } = useNotify();
 
   useEffect(() => {
@@ -196,16 +214,29 @@ function Notes () {
     return () => window.removeEventListener("resize", handleResize);
   }, [isMobile]);
 
-  async function fetchNotes() {
+  async function fetchNotes(append = false) {
     try {
       setLoading(true);
-      const response = await getNotes(0);
-      
-      if (response.success === true) {
-        const deletedNotes = response.notes.filter((note) => note.isDeleted).sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
-        setNotesList(deletedNotes);
+      const response = await getDeletedNotes(notesLimit);
+  
+      if (response.success) {
+        setTotalNotes(response.total);
+        const undeletedNotes = response.notes
+          .filter((note) => note.isDeleted)
+          .sort((a, b) => new Date(a.collection_date) - new Date(b.collection_date));
+  
+        setNotesList((prevList) => {
+          const newList = append ? [...prevList, ...undeletedNotes] : undeletedNotes;
+          return newList.filter((note, index, self) =>
+            index === self.findIndex((c) => c.id === note.id)
+          );
+        });
+      } else{
+        setNotesList([]);
+        setTotalNotes(0);
       }
-      setSortOrder({ type: "Data", ascending: false })
+  
+      setSortOrder({ type: "Data", ascending: true });
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -298,6 +329,16 @@ function Notes () {
     setConfirmationText("Tem certeza que deseja restaurar essa nota?");
   }
 
+  function handleReloadNotes() {
+    setNotesLimit(10);
+    fetchNotes(false);
+  }
+
+  function handleLoadMore() {
+    setNotesLimit((prev) => prev + 10);
+    fetchNotes(true);
+  }
+
   const headerList = [
     { name: "Empresa", action: () => orderList("Empresa") },
     { name: "Itens", action: () => orderList("Itens") },
@@ -314,9 +355,9 @@ function Notes () {
         </Title>
 
         <NotesHeaderRight>
-          <p>Total: {notesList.length}</p>
+          <p>Total: {totalNotes}</p>
 
-          <ReloadIcon onClick={fetchNotes} src={reloadPNG} alt="reload"/>
+          <ReloadIcon onClick={handleReloadNotes} src={reloadPNG} alt="reload"/>
         </NotesHeaderRight>
       </NotesHeader>
       
@@ -365,6 +406,11 @@ function Notes () {
                   </NotesListElement>
                 </Note>
               ))}
+                {notesLimit < totalNotes && (
+                  <NotesListElement>
+                    <LoadMoreButton onClick={handleLoadMore}>Carregar mais</LoadMoreButton>
+                  </NotesListElement>
+                )}
             </NotesList>
           : <p>Nenhum registro encontrado.</p>
         }
