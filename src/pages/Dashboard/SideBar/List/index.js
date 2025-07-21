@@ -5,6 +5,7 @@ import { ReactComponent as UsersSVG } from "../../../../assets/svg/users.svg";
 import { ReactComponent as NotesSVG } from "../../../../assets/svg/notes.svg";
 import { ReactComponent as RolesSVG } from "../../../../assets/svg/roles.svg";
 import { ReactComponent as BinSVG } from "../../../../assets/svg/bin.svg";
+import { ReactComponent as TransfersSVG } from "../../../../assets/svg/transfers.svg";
 import { ReactComponent as LogoutSVG } from "../../../../assets/svg/logout.svg";
 
 const SideBarItemsContainer = styled.div`
@@ -76,6 +77,7 @@ const sideBarIcons = {
     Bin: BinSVG,
     Users: UsersSVG,
     Notes: NotesSVG,
+    Transfers: TransfersSVG,
     Roles: RolesSVG,
     Logout: LogoutSVG,
 };

@@ -8,7 +8,7 @@ import BinCodes from "./Sections/BinCodes/index";
 import BinNotes from "./Sections/BinNotes/index";
 import Users from "./Sections/Users/index";
 import Notes from "./Sections/Notes/index";
-import Notify from "../../components/Notify/index"
+import Transfers from "./Sections/Transfers/index";
 import Logout from "../../utils/logout";
 import Roles from "./Sections/Roles";
 
@@ -65,6 +65,7 @@ function Dashboard() {
     "Usuários": <Users/>,
     "Cargos": <Roles/>,
     "Notas": <Notes/>,
+    "Transferências": <Transfers/>,
     "Baixas": <Codes/>,
     "Lixeira de Notas": <BinNotes/>,
     "Lixeira de Baixas": <BinCodes/>,

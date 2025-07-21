@@ -387,6 +387,12 @@ function Codes () {
     fetchCodes(true);
   }
 
+  function capitalizeFirstLetter(str) {
+    if (!str) return "";
+    str = str.toLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   const headerList = [
     { name: "EAN", action: () => orderList("EAN") },
     { name: "QTD", action: () => orderList("QTD") },
@@ -440,7 +446,7 @@ function Codes () {
                     </CodePointer>
                   </CodeListElement>
                   <CodeListElement>{code.quantity}</CodeListElement>
-                  <CodeListElement>{code.user_add}</CodeListElement>
+                  <CodeListElement>{capitalizeFirstLetter(code.user_add)}</CodeListElement>
                   <CodeListElement>
                     {new Date(code.created_at).toLocaleString("pt-BR", {
                       timeZone: "America/Sao_Paulo",

@@ -182,7 +182,8 @@ const Item = styled.div`
     box-sizing: border-box;
     border-radius: 0.5rem;
     padding: 1rem;
-    background-color: rgba(245, 246, 250, 1);
+    background-color: ${(props) => props.backgroundColor || "rgba(245, 246, 250, 1)"};
+    transition: all 0.3s ease-in-out;
 `;
 
 const ItemElement = styled.div`
@@ -198,6 +199,7 @@ function View() {
     const [loading, setLoading] = useState(false);
     const { addNotification } = useNotify();
     const { noteID } = useParams();
+    const [copyCodes, setCopyCodes] = useState([]);
     const navigate = useNavigate();
 
     async function fetchNoteById() {
@@ -220,7 +222,8 @@ function View() {
         setLoading(false);
     }
 
-    function copyToClipboard(text){
+    function copyToClipboard(text, index){
+        setCopyCodes([...copyCodes, index]);
         navigator.clipboard.writeText(text);
         addNotification("Código copiado");
     }
@@ -353,10 +356,10 @@ function View() {
                             </SubHeaderContainer>
                             <ItemList>
                                 {noteItens.map((item, index) => (
-                                    <Item key={index}>
+                                    <Item key={index} backgroundColor={copyCodes.includes(index) ? "rgba(71, 255, 141, 1)" : "" }>
                                         <ItemElement>
                                             <InfoText color="black">EAN {index + 1}:</InfoText>
-                                            <InfoText style={{ cursor: "pointer" }} onClick={() => copyToClipboard(item.codigo)}>
+                                            <InfoText style={{ cursor: "pointer" }} onClick={() => copyToClipboard(item.codigo, index)}>
                                                 {item.codigo}
                                             </InfoText>
                                         </ItemElement>
