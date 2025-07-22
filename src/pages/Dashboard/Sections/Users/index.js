@@ -263,6 +263,12 @@ function Users () {
     });
   }
 
+  function capitalizeFirstLetter(str) {
+    if (!str) return "";
+    str = str.toLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   const openConfirmModal = (id) => {
     setConfirmationIsOpen(true);
     setDeleteUserID(id);
@@ -339,7 +345,7 @@ function Users () {
               {usersList.map((user) => (
                 <User key={user.id}>
                   <UsersListElement>{user.id}</UsersListElement>
-                  <UsersListElement>{user.username}</UsersListElement>
+                  <UsersListElement>{capitalizeFirstLetter(user.username)}</UsersListElement>
                   <UsersListElement>{user.user_role}</UsersListElement>
                   <UsersListElement>
                     <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmModal(user.id)} src={deletePNG} alt="Deletar"/>
