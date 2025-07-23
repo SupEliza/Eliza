@@ -51,8 +51,9 @@ const SideBarDefaultList = [
 ];
 
 const SideBarSettingsList = [
-    { name: "Lixeira de Notas", svg: "Bin" },
-    { name: "Lixeira de Baixas", svg: "Bin" },
+    { name: "Lixeira Transf.", svg: "Bin" },
+    { name: "Lixeira Notas", svg: "Bin" },
+    { name: "Lixeira Baixas", svg: "Bin" },
     { name: "Sair", svg: "Logout" }
 ];
 

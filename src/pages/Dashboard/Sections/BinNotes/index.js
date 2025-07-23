@@ -224,7 +224,7 @@ function Notes () {
         const undeletedNotes = response.notes
           .filter((note) => note.isDeleted)
           .sort((a, b) => new Date(a.collection_date) - new Date(b.collection_date));
-  
+
         setNotesList((prevList) => {
           const newList = append ? [...prevList, ...undeletedNotes] : undeletedNotes;
           return newList.filter((note, index, self) =>
@@ -236,7 +236,7 @@ function Notes () {
         setTotalNotes(0);
       }
   
-      setSortOrder({ type: "Data", ascending: true });
+      setSortOrder({ type: "Data/Hora", ascending: true });
       setLoading(false);
     } catch (error) {
       console.error(error);

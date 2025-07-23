@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getTransfers } from "../../../../services/transfers";
+import { getDeletedTransfers } from "../../../../services/transfers";
 import ReloadPNG from "../../../../assets/images/reload.png";
 import { Tooltip } from "react-tooltip";
 import SmallLoad from "../../../../components/SmallLoad";
+import deletePNG from "../../../../assets/images/delete.png";
+import undeletePNG from "../../../../assets/images/undelete.png";
 import viewPNG from "../../../../assets/images/view.png";
-import removePNG from "../../../../assets/images/remove.png";
 
 const Container = styled.div`
   display: flex;
@@ -216,16 +217,16 @@ function Transfers(){
     async function fetchTransfers(append = false) {
         try {
         setLoading(true);
-        const response = await getTransfers(transfersLimit);
+        const response = await getDeletedTransfers(transfersLimit);
     
         if (response.success) {
             setTotalTransfers(response.total);
-            const undeletedTransfers = response.transfers
-            .filter((transfer) => !transfer.isDeleted)
+            const deletedTransfers = response.transfers
+            .filter((transfer) => transfer.isDeleted)
             .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     
             setTransfersList((prevList) => {
-            const newList = append ? [...prevList, ...undeletedTransfers] : undeletedTransfers;
+            const newList = append ? [...prevList, ...deletedTransfers] : deletedTransfers;
             return newList.filter((code, index, self) =>
                 index === self.findIndex((c) => c.id === code.id)
             );
@@ -282,11 +283,6 @@ function Transfers(){
       fetchTransfers(true);
     }
 
-    function handleReloadTransfers() {
-      setTransfersLimit(10);
-      fetchTransfers(false);
-    }
-
     const headerList = [
         { name: "Usuário", action: () => orderList("Usuário")},
         { name: "Data/Hora", action: () => orderList("Data/Hora")},
@@ -298,13 +294,13 @@ function Transfers(){
         <Container>
           <TransferHeader>
             <Title>
-              Transferências
+              Lixeira de Transferências
             </Title>
     
             <TransferHeaderRight>
                 <p>Total: {totalTransfers}</p>
     
-                <ReloadIcon onClick={handleReloadTransfers} src={ReloadPNG} alt="reload"/>
+                <ReloadIcon onClick={fetchTransfers} src={ReloadPNG} alt="reload"/>
             </TransferHeaderRight>
           </TransferHeader>
     
@@ -338,10 +334,12 @@ function Transfers(){
                       </TransferListElement>
                       <TransferListElement>{transfer.items.length}</TransferListElement>
                       <TransferListElement>
-                        <ActionIcon data-tooltip-id="remove" src={removePNG} alt="Mover para lixeira"/>
+                        <ActionIcon data-tooltip-id="delete" src={deletePNG} alt="Deletar"/>
+                        <ActionIcon data-tooltip-id="remove" src={undeletePNG} alt="Recuperar"/>
                         <ActionIcon data-tooltip-id="view" src={viewPNG} alt="Visualizar"/>
 
-                        <Tooltip id="remove" place="top" content="Mover para lixeira"/>
+                        <Tooltip id="delete" place="top" content="Deletar transferência"/>
+                        <Tooltip id="remove" place="top" content="Restaurar transferência"/>
                         <Tooltip id="view" place="top" content="Visualizar transferência"/>
                       </TransferListElement>
                     </User>

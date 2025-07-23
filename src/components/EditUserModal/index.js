@@ -241,8 +241,8 @@ function EditUserModal({isOpen, setIsOpen, title, subtitle, member, selectedRole
                 fetchUsers();
             }
             else {
-                setApiResponseColor("red");
-                setApiResponse(response.message);
+                addNotification(response.message);
+                handleCancel();
             }
             setButtonDisable(false);
             setLoading(false);

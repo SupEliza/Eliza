@@ -264,7 +264,7 @@ function Codes () {
   useEffect(() => {
     document.title = "Eliza | Baixas";
     fetchCodes();
-  }, []);  
+  }, [codesLimit]);  
 
   const handleExport = async () => {
     setExportLoading(true);
