@@ -237,8 +237,9 @@ function Notes () {
   }
   
   useEffect(() => {
+    document.title = "Eliza | Notas";
     fetchNotes();
-  }, [notesLimit]);
+  }, []);
 
   function orderList(type) {
     setNotesList((prevList) => {

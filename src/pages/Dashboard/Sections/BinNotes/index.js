@@ -244,6 +244,7 @@ function Notes () {
   }
   
   useEffect(() => {
+    document.title = "Eliza | Dashboard";
     fetchNotes();
   }, []);
 

@@ -227,6 +227,7 @@ function Transfers(){
     }
 
     useEffect(() => {
+        document.title = "Eliza | Transferências";
         fetchTransfers();
     }, [])
 

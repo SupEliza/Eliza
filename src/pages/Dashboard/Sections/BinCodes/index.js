@@ -227,6 +227,7 @@ function BinCodes () {
   }
   
   useEffect(() => {
+    document.title = "Eliza | Dashboard";
     fetchCodes();
   }, []);
 

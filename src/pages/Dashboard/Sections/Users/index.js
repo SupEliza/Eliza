@@ -228,6 +228,7 @@ function Users () {
   }
 
   useEffect(() => {
+    document.title = "Eliza | Usuários";
     fetchUsers();
   }, []);
 

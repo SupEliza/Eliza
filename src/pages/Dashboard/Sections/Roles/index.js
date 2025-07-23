@@ -227,6 +227,7 @@ function Roles () {
   }
 
   useEffect(() => {
+    document.title = "Eliza | Cargos";
     fetchRoles();
   }, []);
 
