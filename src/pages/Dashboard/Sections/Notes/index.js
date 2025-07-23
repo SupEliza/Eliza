@@ -251,14 +251,14 @@ function Notes () {
             isAscending ? a.company.localeCompare(b.company) : b.company.localeCompare(a.company)
           );
           break;
-        case "Data":
+        case "Data/Hora":
           sortedList.sort((a, b) =>
             isAscending
               ? new Date(a.created_at) - new Date(b.created_at)
               : new Date(b.created_at) - new Date(a.created_at)
           );
           break;
-        case "Itens":
+        case "T. Itens":
           sortedList.sort((a, b) => (isAscending ? a.itens.length - b.itens.length : b.itens.length - a.itens.length));
           break;
         case "Coleta":
@@ -288,8 +288,8 @@ function Notes () {
 
   const headerList = [
     { name: "Empresa", action: () => orderList("Empresa") },
-    { name: "Itens", action: () => orderList("Itens") },
-    { name: "Data", action: () => orderList("Data") },
+    { name: "T. Itens", action: () => orderList("T. Itens") },
+    { name: "Data/Hora", action: () => orderList("Data/Hora") },
     { name: "Coleta", action: () => orderList("Coleta") },
     { name: "Ações" }
   ];
@@ -348,6 +348,7 @@ function Notes () {
                     {new Date(note.created_at).toLocaleString("pt-BR", {
                         timeZone: "America/Sao_Paulo",
                         dateStyle: "short",
+                        timeStyle: "short"
                     })}
                   </NotesListElement>
                   <NotesListElement>
