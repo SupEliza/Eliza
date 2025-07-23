@@ -292,7 +292,7 @@ function Users () {
   }
 
   const handleEditMember = (member, role) => {
-    if (user.user_role !== 'Manager' && role === "Admin" || role === "Manager") {
+    if (user.user_role !== 'Moderador' && role === "Admin" || role === "Moderador") {
       addNotification("Você não pode editar um usuário com cargo igual ou superior ao seu.");
       return;
     }
