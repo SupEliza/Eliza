@@ -92,21 +92,6 @@ const TransferListContainer = styled.div`
   border: 1px solid rgba(11, 35, 97, 0.3);
 `;
 
-const AddButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  background-color: var(--background);
-  color: var(--secondary-color);
-  font-weight: bold;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  cursor: pointer;
-`;
-
 const TransferListHeader = styled.div`
   display: flex;
   flex-direction: row;
@@ -339,7 +324,7 @@ function Transfers(){
                       <TransferListElement>{transfer.items.length}</TransferListElement>
                       <TransferListElement>
                         <ActionIcon data-tooltip-id="remove" src={removePNG} alt="Mover para lixeira"/>
-                        <ActionIcon data-tooltip-id="view" src={viewPNG} alt="Visualizar"/>
+                        <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/transfer/${transfer.id}`, "_blank")}} src={viewPNG} alt="Visualizar"/>
 
                         <Tooltip id="remove" place="top" content="Mover para lixeira"/>
                         <Tooltip id="view" place="top" content="Visualizar transferência"/>

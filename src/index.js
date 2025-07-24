@@ -7,7 +7,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard/index.js';
 import DashRoute from './routes/DashRoute.js';
 import LoginRoute from './routes/LoginRoute.js';
-import View from './pages/View/index.js';
+import ViewNote from './pages/ViewNote/index.js';
+import ViewTransfer from './pages/ViewTransfer/index.js';
 import { NotifyProvider } from './hooks/Notify/notifyContext.js';
 import Notify from './components/Notify/index.js';
 
@@ -82,7 +83,14 @@ root.render(
             <Route path="/dashboard/view/note/:noteID" 
               element={
                 <DashRoute>
-                  <View/>
+                  <ViewNote/>
+                </DashRoute>
+              }
+            />
+            <Route path="/dashboard/view/transfer/:transferID" 
+              element={
+                <DashRoute>
+                  <ViewTransfer/>
                 </DashRoute>
               }
             />

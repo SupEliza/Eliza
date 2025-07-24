@@ -14,6 +14,16 @@ async function getTransfers(limit){
         return error.response?.data || error.message;
     }
 }
+
+async function getTransfersById(id){
+    try {
+        const response = await API.get(`/by-id/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
 async function getDeletedTransfers(limit){
     try {
         const response = await API.get(`/deleted/${limit}`);
@@ -24,4 +34,4 @@ async function getDeletedTransfers(limit){
 }
 
 
-export { getTransfers, getDeletedTransfers };
+export { getTransfers, getDeletedTransfers, getTransfersById };
