@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { gettransferById, getTransfersById, movetransferToBin } from "../../services/transfers";
+import { getTransfersById } from "../../services/transfers";
 import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
 import { ReactComponent as ExportSVG } from "../../assets/svg/export.svg";
 import { Tooltip } from "react-tooltip";
