@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getTransfers } from "../../../../services/transfers";
+import { getTransfers, moveTransferToBin } from "../../../../services/transfers";
 import ReloadPNG from "../../../../assets/images/reload.png";
 import { Tooltip } from "react-tooltip";
 import SmallLoad from "../../../../components/SmallLoad";
@@ -272,6 +272,20 @@ function Transfers(){
       fetchTransfers(false);
     }
 
+    async function handleMoveToBin(id) {
+      try {
+        const response = await moveTransferToBin(id);
+  
+        if (response.success) {
+          fetchNotes(false);
+        }
+  
+        addNotification(response.message);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     const headerList = [
         { name: "Usuário", action: () => orderList("Usuário")},
         { name: "Data/Hora", action: () => orderList("Data/Hora")},
@@ -323,7 +337,7 @@ function Transfers(){
                       </TransferListElement>
                       <TransferListElement>{transfer.items.length}</TransferListElement>
                       <TransferListElement>
-                        <ActionIcon data-tooltip-id="remove" src={removePNG} alt="Mover para lixeira"/>
+                        <ActionIcon data-tooltip-id="remove" onClick={() => handleMoveToBin(transfer.id)} src={removePNG} alt="Mover para lixeira"/>
                         <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/transfer/${transfer.id}`, "_blank")}} src={viewPNG} alt="Visualizar"/>
 
                         <Tooltip id="remove" place="top" content="Mover para lixeira"/>

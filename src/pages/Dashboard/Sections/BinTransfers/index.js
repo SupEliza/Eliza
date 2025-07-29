@@ -336,7 +336,7 @@ function Transfers(){
                       <TransferListElement>
                         <ActionIcon data-tooltip-id="delete" src={deletePNG} alt="Deletar"/>
                         <ActionIcon data-tooltip-id="remove" src={undeletePNG} alt="Recuperar"/>
-                        <ActionIcon data-tooltip-id="view" src={viewPNG} alt="Visualizar"/>
+                        <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/transfer/${transfer.id}`, "_blank")}} src={viewPNG} alt="Visualizar"/>
 
                         <Tooltip id="delete" place="top" content="Deletar transferência"/>
                         <Tooltip id="remove" place="top" content="Restaurar transferência"/>

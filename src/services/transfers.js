@@ -33,5 +33,13 @@ async function getDeletedTransfers(limit){
     }
 }
 
+async function moveTransferToBin(id){
+    try {
+        const response = await API.get(`/bin/add/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
 
-export { getTransfers, getDeletedTransfers, getTransfersById };
+export { getTransfers, getDeletedTransfers, getTransfersById, moveTransferToBin };
