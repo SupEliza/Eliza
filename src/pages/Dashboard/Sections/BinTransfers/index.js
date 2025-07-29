@@ -286,13 +286,13 @@ function Transfers(){
 
     function openConfirmDelete(id) {
       setConfirmDeleteOpen(true);
-      setNoteID(id);
+      setTransferID(id);
       setConfirmationText("Tem certeza que deseja excluir essa transferência?");
     }
 
     function openConfirmUndelete(id) {
       setConfirmUndeleteOpen(true);
-      setNoteID(id);
+      setTransferID(id);
       setConfirmationText("Tem certeza que deseja restaurar essa transferência?");
     }
 
@@ -307,7 +307,7 @@ function Transfers(){
         const response = await remTransferFromBin(transferID);
   
         if (response.success) {
-          fetchNotes(false);
+          fetchTransfers(false);
         }
   
         setConfirmUndeleteOpen(false);
@@ -324,7 +324,7 @@ function Transfers(){
         const response = await deleteTransfer(transferID);
   
         if (response.success) {
-          fetchNotes(false);
+          fetchTransfers(false);
         }
   
         setConfirmDeleteOpen(false);
