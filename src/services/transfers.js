@@ -35,7 +35,7 @@ async function getDeletedTransfers(limit){
 
 async function moveTransferToBin(id){
     try {
-        const response = await API.get(`/bin/add/${id}`);
+        const response = await API.post(`/bin/add/${id}`);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
