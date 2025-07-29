@@ -44,7 +44,7 @@ async function moveTransferToBin(id){
 
 async function remTransferFromBin(id){
     try {
-        const response = await API.get(`/bin/remove/${id}`);
+        const response = await API.post(`/bin/remove/${id}`);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
