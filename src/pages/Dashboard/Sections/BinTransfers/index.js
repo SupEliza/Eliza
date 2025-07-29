@@ -313,7 +313,7 @@ function Transfers(){
         }
   
         setConfirmUndeleteOpen(false);
-        addNotification(response.message);
+        addNotification(response.message || "Erro ao restaurar");
       } catch (error) {
         console.log(error);
       }
@@ -330,7 +330,7 @@ function Transfers(){
         }
   
         setConfirmDeleteOpen(false);
-        addNotification(response.message);
+        addNotification(response.message || "Erro ao excluir");
       } catch (error) {
         console.log(error);
       }

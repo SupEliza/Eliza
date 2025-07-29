@@ -282,7 +282,7 @@ function Transfers(){
           fetchTransfers(false);
         }
   
-        addNotification(response.message);
+        addNotification(response.message || "Erro ao mover para o lixo");
       } catch (error) {
         console.log(error);
       }
