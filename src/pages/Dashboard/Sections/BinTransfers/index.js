@@ -8,6 +8,7 @@ import deletePNG from "../../../../assets/images/delete.png";
 import undeletePNG from "../../../../assets/images/undelete.png";
 import viewPNG from "../../../../assets/images/view.png";
 import ConfirmModal from "../../../../components/ConfirmModal";
+import { useNotify } from "../../../../hooks/Notify/notifyContext";
 
 const Container = styled.div`
   display: flex;
@@ -219,6 +220,7 @@ function Transfers(){
     const [transferID, setTransferID] = useState("");
     const [modalLoading, setModalLoading] = useState(false);
     const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
+      const { addNotification } = useNotify();
 
     async function fetchTransfers(append = false) {
         try {

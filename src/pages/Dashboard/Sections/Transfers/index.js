@@ -6,6 +6,7 @@ import { Tooltip } from "react-tooltip";
 import SmallLoad from "../../../../components/SmallLoad";
 import viewPNG from "../../../../assets/images/view.png";
 import removePNG from "../../../../assets/images/remove.png";
+import { useNotify } from "../../../../hooks/Notify/notifyContext";
 
 const Container = styled.div`
   display: flex;
@@ -197,6 +198,7 @@ function Transfers(){
     const [totalTransfers, setTotalTransfers] = useState(0);
     const [transfersLimit, setTransfersLimit] = useState(10);
     const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
+    const { addNotification } = useNotify();
 
     async function fetchTransfers(append = false) {
         try {
@@ -277,7 +279,7 @@ function Transfers(){
         const response = await moveTransferToBin(id);
   
         if (response.success) {
-          fetchNotes(false);
+          fetchTransfers(false);
         }
   
         addNotification(response.message);
