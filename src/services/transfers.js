@@ -42,4 +42,22 @@ async function moveTransferToBin(id){
     }
 }
 
-export { getTransfers, getDeletedTransfers, getTransfersById, moveTransferToBin };
+async function remTransferFromBin(id){
+    try {
+        const response = await API.get(`/bin/remove/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+async function deleteTransfer(id){
+    try {
+        const response = await API.post(`/bin/delete/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+export { getTransfers, getDeletedTransfers, getTransfersById, moveTransferToBin, remTransferFromBin, deleteTransfer };

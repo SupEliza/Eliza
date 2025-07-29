@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getDeletedTransfers } from "../../../../services/transfers";
+import { deleteTransfer, getDeletedTransfers, remTransferFromBin } from "../../../../services/transfers";
 import ReloadPNG from "../../../../assets/images/reload.png";
 import { Tooltip } from "react-tooltip";
 import SmallLoad from "../../../../components/SmallLoad";
 import deletePNG from "../../../../assets/images/delete.png";
 import undeletePNG from "../../../../assets/images/undelete.png";
 import viewPNG from "../../../../assets/images/view.png";
+import ConfirmModal from "../../../../components/ConfirmModal";
 
 const Container = styled.div`
   display: flex;
@@ -212,6 +213,11 @@ function Transfers(){
     const [loading, setLoading] = useState(false);
     const [totalTransfers, setTotalTransfers] = useState(0);
     const [transfersLimit, setTransfersLimit] = useState(10);
+    const [confirmationText, setConfirmationText] = useState("");
+    const [confirmUndeleteOpen, setConfirmUndeleteOpen] = useState(false);
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [transferID, setTransferID] = useState("");
+    const [modalLoading, setModalLoading] = useState(false);
     const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
 
     async function fetchTransfers(append = false) {
@@ -278,9 +284,55 @@ function Transfers(){
         });
     }
 
+    function openConfirmDelete(id) {
+      setConfirmDeleteOpen(true);
+      setNoteID(id);
+      setConfirmationText("Tem certeza que deseja excluir essa transferência?");
+    }
+
+    function openConfirmUndelete(id) {
+      setConfirmUndeleteOpen(true);
+      setNoteID(id);
+      setConfirmationText("Tem certeza que deseja restaurar essa transferência?");
+    }
+
     function handleLoadMore() {
       setTransfersLimit((prev) => prev + 10);
       fetchTransfers(true);
+    }
+
+    async function handleRemFromBin() {
+      setModalLoading(true);
+      try {
+        const response = await remTransferFromBin(transferID);
+  
+        if (response.success) {
+          fetchNotes(false);
+        }
+  
+        setConfirmUndeleteOpen(false);
+        addNotification(response.message);
+      } catch (error) {
+        console.log(error);
+      }
+      setModalLoading(false);
+    }
+
+    async function handleDeleteTransfer() {
+      setModalLoading(true);
+      try {
+        const response = await deleteTransfer(transferID);
+  
+        if (response.success) {
+          fetchNotes(false);
+        }
+  
+        setConfirmDeleteOpen(false);
+        addNotification(response.message);
+      } catch (error) {
+        console.log(error);
+      }
+      setModalLoading(false);
     }
 
     const headerList = [
@@ -334,8 +386,8 @@ function Transfers(){
                       </TransferListElement>
                       <TransferListElement>{transfer.items.length}</TransferListElement>
                       <TransferListElement>
-                        <ActionIcon data-tooltip-id="delete" src={deletePNG} alt="Deletar"/>
-                        <ActionIcon data-tooltip-id="remove" src={undeletePNG} alt="Recuperar"/>
+                        <ActionIcon data-tooltip-id="delete" onClick={() => openConfirmDelete(transfer.id)} src={deletePNG} alt="Deletar"/>
+                        <ActionIcon data-tooltip-id="remove" onClick={() => openConfirmUndelete(transfer.id)} src={undeletePNG} alt="Recuperar"/>
                         <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/transfer/${transfer.id}`, "_blank")}} src={viewPNG} alt="Visualizar"/>
 
                         <Tooltip id="delete" place="top" content="Deletar transferência"/>
@@ -353,6 +405,9 @@ function Transfers(){
               : <p>Nenhum registro encontrado.</p>
             }
           </TransferListContainer>    
+
+          <ConfirmModal isOpen={confirmDeleteOpen} setIsOpen={setConfirmDeleteOpen} text={confirmationText} action={handleDeleteTransfer} modalLoading={modalLoading}/>
+          <ConfirmModal isOpen={confirmUndeleteOpen} setIsOpen={setConfirmUndeleteOpen} text={confirmationText} action={handleRemFromBin} modalLoading={modalLoading}/>
         </Container>
     );
 }
