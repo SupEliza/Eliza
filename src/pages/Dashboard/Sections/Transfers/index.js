@@ -279,6 +279,7 @@ function Transfers(){
         const response = await moveTransferToBin(id);
   
         if (response.success) {
+          setTransfersLimit(10);
           fetchTransfers(false);
         }
   

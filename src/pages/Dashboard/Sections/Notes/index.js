@@ -300,6 +300,7 @@ function Notes () {
       const response = await moveNoteToBin(id);
 
       if (response.success) {
+        setNotesLimit(10);
         fetchNotes(false);
       }
 

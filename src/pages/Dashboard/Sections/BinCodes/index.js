@@ -340,6 +340,7 @@ function BinCodes () {
     const response = await deleteCode(codeID)
 
     if (response.success === true) {
+      setCodesLimit(10);
       fetchCodes();
     }
 

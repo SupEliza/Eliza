@@ -290,6 +290,7 @@ function Notes () {
       const response = await deleteNote(noteID);
 
       if (response.success) {
+        setNotesLimit(10);
         fetchNotes(false);
       }
 

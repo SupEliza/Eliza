@@ -335,6 +335,7 @@ function Codes () {
 
       if(response.success === true){
         addNotification('Código movido para lixeira');
+        setCodesLimit(10);
         fetchCodes();
       }else{
         addNotification('Erro ao deletar código');

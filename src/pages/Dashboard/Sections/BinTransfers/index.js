@@ -326,6 +326,7 @@ function Transfers(){
         const response = await deleteTransfer(transferID);
   
         if (response.success) {
+          setTransfersLimit(10);
           fetchTransfers(false);
         }
   
