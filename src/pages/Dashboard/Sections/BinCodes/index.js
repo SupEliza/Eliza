@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deleteCode, getCodes, remCodeFromBin } from "../../../../services/codes";
+import { deleteCode, getCodes, getDeletedCodes, remCodeFromBin } from "../../../../services/codes";
 import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
 import deletePNG from "../../../../assets/images/delete.png";
@@ -192,6 +192,22 @@ const Code = styled.div`
   width: 100%;
 `;
 
+const LoadMoreButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: var(--background);
+  color: var(--secondary-color);
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  margin: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+`;
+
 function BinCodes () {
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -199,6 +215,8 @@ function BinCodes () {
   const [confirmUndeleteOpen, setConfirmUndeleteOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [codeID, setCodeID] = useState("");
+  const [codesLimit, setCodesLimit] = useState(10);
+  const [totalCodes, setTotalCodes] = useState(0);
   const [modalLoading, setModalLoading] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [codesList, setCodesList] = useState([]);
@@ -210,16 +228,29 @@ function BinCodes () {
     return () => window.removeEventListener("resize", handleResize);
   }, [isMobile]);
 
-  async function fetchCodes() {
+  async function fetchCodes(append = false) {
     try {
       setLoading(true);
-      const response = await getCodes(0);
-      
-      if (response.success === true) {
-        const undeletedCodes = response.codes.filter((code) => code.isDeleted).sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
-        setCodesList(undeletedCodes);
+      const response = await getDeletedCodes(codesLimit);
+  
+      if (response.success) {
+        setTotalCodes(response.total);
+        const undeletedCodes = response.codes
+          .filter((code) => code.isDeleted)
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  
+        setCodesList((prevList) => {
+          const newList = append ? [...prevList, ...undeletedCodes] : undeletedCodes;
+          return newList.filter((code, index, self) =>
+            index === self.findIndex((c) => c.id === code.id)
+          );
+        });
+      } else{
+        setCodesList([]);
+        setTotalCodes(0);
       }
-      setSortOrder({ type: "Data/Hora", ascending: false })
+  
+      setSortOrder({ type: "Data/Hora", ascending: false });
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -229,7 +260,7 @@ function BinCodes () {
   useEffect(() => {
     document.title = "Eliza | Dashboard";
     fetchCodes();
-  }, []);
+  }, [codesLimit]);
 
   function handleExport() {
     if (codesList.length === 0) {
@@ -298,6 +329,11 @@ function BinCodes () {
     setConfirmationText("Tem certeza que deseja restaurar esse código?");
   }
 
+  function handleLoadMore() {
+    setCodesLimit((prev) => prev + 10);
+    fetchCodes(true);
+  }
+
   const handleDeleteCode = async () => {
     setModalLoading(true);
 
@@ -344,7 +380,7 @@ function BinCodes () {
         </Title>
 
         <CodesHeaderRight>
-          <p>Total: {codesList.length}</p>
+          <p>Total: {totalCodes}</p>
 
           <ReloadIcon onClick={fetchCodes} src={reloadPNG} alt="reload"/>
 
@@ -396,6 +432,12 @@ function BinCodes () {
                   </CodeListElement>
                 </Code>
               ))}
+
+              {codesLimit < totalCodes && (
+                <CodeListElement>
+                  <LoadMoreButton onClick={handleLoadMore}>Carregar mais</LoadMoreButton>
+                </CodeListElement>
+              )}
             </CodeList>
           : <p>Nenhum registro encontrado.</p>
         }

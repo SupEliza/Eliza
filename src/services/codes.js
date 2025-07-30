@@ -15,6 +15,15 @@ async function getCodes(limit){
     }
 }
 
+async function getDeletedCodes(limit){
+    try {
+        const response = await API.get(`/deleted/${limit}`);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
 async function addCode(params){
     try {
         const response = await API.post("/add", params);
@@ -60,4 +69,4 @@ async function cleanCodes(){
     }
 }
 
-export { getCodes, moveCodeToBin, deleteCode, remCodeFromBin, addCode, cleanCodes };
+export { getCodes, moveCodeToBin, deleteCode, remCodeFromBin, addCode, cleanCodes, getDeletedCodes };
