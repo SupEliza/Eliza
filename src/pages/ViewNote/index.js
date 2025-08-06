@@ -356,10 +356,10 @@ function ViewNote() {
                             </SubHeaderContainer>
                             <ItemList>
                                 {noteItens.map((item, index) => (
-                                    <Item key={index} backgroundColor={copyCodes.includes(index) ? "rgba(71, 255, 141, 1)" : "" }>
+                                    <Item style={{ cursor: "pointer" }} onClick={() => copyToClipboard(item.codigo, index)} key={index} backgroundColor={copyCodes.includes(index) ? "rgba(71, 255, 141, 1)" : "" }>
                                         <ItemElement>
                                             <InfoText color="black">EAN {index + 1}:</InfoText>
-                                            <InfoText style={{ cursor: "pointer" }} onClick={() => copyToClipboard(item.codigo, index)}>
+                                            <InfoText>
                                                 {item.codigo}
                                             </InfoText>
                                         </ItemElement>
