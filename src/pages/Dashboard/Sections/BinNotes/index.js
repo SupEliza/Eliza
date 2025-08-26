@@ -267,7 +267,7 @@ function Notes () {
           );
           break;
         case "T. Itens":
-          sortedList.sort((a, b) => (isAscending ? a.itens.length - b.itens.length : b.itens.length - a.itens.length));
+          sortedList.sort((a, b) => (isAscending ? a.items.length - b.items.length : b.items.length - a.items.length));
           break;
         case "Coleta":
           sortedList.sort((a, b) =>
@@ -343,7 +343,7 @@ function Notes () {
 
   const headerList = [
     { name: "Empresa", action: () => orderList("Empresa") },
-    { name: "T. Itens", action: () => orderList("T. Itens") },
+    { name: "T. items", action: () => orderList("T. items") },
     { name: "Data/Hora", action: () => orderList("Data/Hora") },
     { name: "Coleta", action: () => orderList("Coleta") },
     { name: "Ações" }
@@ -384,7 +384,7 @@ function Notes () {
               {notesList.map((note) => (
                 <Note key={`${note.id}-${note.created_at}`}>
                   <NotesListElement>{note.company}</NotesListElement>
-                  <NotesListElement>{note.itens.length}</NotesListElement>
+                  <NotesListElement>{note.items.length}</NotesListElement>
                   <NotesListElement>
                     {new Date(note.created_at).toLocaleString("pt-BR", {
                         timeZone: "America/Sao_Paulo",

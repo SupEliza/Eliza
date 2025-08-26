@@ -4,14 +4,12 @@ import SideBar from "./SideBar";
 import TopBar from "./TopBar";
 import ConfirmModal from "../../components/ConfirmModal/index";
 import Codes from "./Sections/Codes/index";
-import BinCodes from "./Sections/BinCodes/index";
-import BinNotes from "./Sections/BinNotes/index";
-import BinTransfers from "./Sections/BinTransfers/index";
 import Users from "./Sections/Users/index";
 import Notes from "./Sections/Notes/index";
 import Transfers from "./Sections/Transfers/index";
 import Logout from "../../utils/logout";
 import Roles from "./Sections/Roles";
+import Bin from "./Sections/Bin";
 
 const Container = styled.div`
     display: flex;
@@ -67,9 +65,7 @@ function Dashboard() {
     "Notas": <Notes/>,
     "Transferências": <Transfers/>,
     "Baixas": <Codes/>,
-    "Lixeira Transf.": <BinTransfers/>,
-    "Lixeira Notas": <BinNotes/>,
-    "Lixeira Baixas": <BinCodes/>,
+    "Lixeira": <Bin/>
   }   
 
   return (
