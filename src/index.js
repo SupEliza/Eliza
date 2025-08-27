@@ -33,6 +33,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     background-color: var(--background);
+    overflow: hidden;
   }
 
   ::-webkit-scrollbar {

@@ -289,7 +289,7 @@ function Notes () {
 
   const headerList = [
     { name: "Empresa", action: () => orderList("Empresa") },
-    { name: "T. Itens", action: () => orderList("T. items") },
+    { name: "T. Itens", action: () => orderList("T. Itens") },
     { name: "Data/Hora", action: () => orderList("Data/Hora") },
     { name: "Coleta", action: () => orderList("Coleta") },
     { name: "Ações" }
@@ -314,7 +314,7 @@ function Notes () {
     <Container>
       <NotesHeader>
         <Title>
-          Controle de Notas
+          Notas
         </Title>
 
         <NotesHeaderRight>

@@ -407,7 +407,7 @@ function Codes () {
     <Container>
       <CodesHeader>
         <Title>
-          Controle de Baixas
+          Baixas
         </Title>
 
         <CodesHeaderRight>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import SideBarList from "./List";
-import logo from "../../../assets/images/eliza2.jpeg";
+import logo from "../../../assets/images/eliza2.png";
 import { useEffect, useState, useRef } from "react";
 
 const SideBarContainer = styled.div`
@@ -8,7 +8,7 @@ const SideBarContainer = styled.div`
     flex-direction: column;
     width: ${({ isActive, isMobile }) => (isActive ? (isMobile ? "15rem" : "20rem") : "0")};
     transform: ${({ isActive, isMobile }) => (isActive ? "translateX(0)" : isMobile ? "translateX(-15rem)" : "translateX(-20rem)")};
-    position: relative;
+    position: ${({ isMobile }) => (isMobile ? "absolute" : "relative")};
     max-height: 100%;
     box-shadow: ${({ isMobile }) => (isMobile ? "0 0 10px rgba(0, 0, 0, 0.3)" : "none")};
     z-index: 100;
@@ -34,12 +34,13 @@ const SideBarIcon = styled.div`
     flex-direction: row;
     justify-content: center;    
     align-items: center;
+    padding: 1rem 0;
     width: 100%;
     background-color: var(--background);
 `;
 
 const Logo = styled.img`
-    width: 10rem;
+    width: 8rem;
 `;
 
 const SideBarDefaultList = [

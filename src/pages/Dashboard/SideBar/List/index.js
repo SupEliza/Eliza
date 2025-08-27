@@ -47,7 +47,7 @@ const SideBarItemButton = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 1.5rem;
+    height: .8rem;
     width: 65%;
     padding: 1.2rem;
     gap: 1rem;
