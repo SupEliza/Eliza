@@ -1,6 +1,6 @@
 function logout() {
     localStorage.removeItem("user_uuid");
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem("token");
     window.location.href = "/login";
 }
 
