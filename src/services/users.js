@@ -60,15 +60,6 @@ async function editUserRole(params){
     }
 }
 
-async function userLogout(uuid) {
-    try {
-        const response = await API.post(`/logout/${uuid}`);
-        return response.data;
-    } catch (error) {
-        return error.response?.data || error.message;
-    }
-}
-
 async function userAuth() {
     try {
         const response = await API.get("/auth");
@@ -87,4 +78,4 @@ async function refreshToken(uuid) {
     }
 }
 
-export { login, userAuth, refreshToken, userLogout, getUsers, editUserRole, register, deleteUser };
+export { login, userAuth, refreshToken, getUsers, editUserRole, register, deleteUser };

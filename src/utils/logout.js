@@ -1,32 +1,7 @@
-import { userLogout } from "../services/users";
+function logout() {
+    localStorage.removeItem("user_uuid");
+    localStorage.removeItem("accessToken");
+    window.location.href = "/login";
+}
 
-async function Logout(setModalLoading){
-    try {
-        setModalLoading(true);
-        const uuid = localStorage.getItem("user_uuid");
-
-        if (!uuid) {
-            console.error("Usuário não encontrado.");
-            return;
-        }
-
-        const response = await userLogout(uuid);
-
-        if (response.success === false) {
-            console.error("Logout failed:", response.message);
-            return;
-        }
-
-        localStorage.removeItem('currentSection')
-        localStorage.removeItem('user_uuid');
-        window.location.reload();
-
-        setTimeout(() => {
-            setModalLoading(false);
-        }, 500);
-    } catch (error) {
-        console.error("Error logging out:", error);
-    }
-};
-
-export default Logout;
+export default logout;
