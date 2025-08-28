@@ -265,11 +265,9 @@ function Login() {
                 setApiResponseColor("var(--primary-color)");
                 setApiResponse(response.message);
 
-                // 🔹 Salva token e uuid no localStorage
-                localStorage.setItem("token", response.accessToken);
+                localStorage.setItem("token", response.token);
                 localStorage.setItem("user_uuid", response.uuid);
 
-                // 🔹 Atualiza o contexto
                 setUser({
                     username: response.username,
                     user_role: response.user_role,
