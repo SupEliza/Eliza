@@ -32,7 +32,7 @@ const ModalContainer = styled.div`
     justify-content: center;
     border-radius: 1rem;
     overflow: hidden;
-    height: 60vh;
+    height: 65vh;
     width: 75vw;
     padding: 2rem;
     background-color: var(--secondary-color);
@@ -139,18 +139,25 @@ const ButtonsContainer = styled.div`
 const Button = styled.div`
     display: flex;
     justify-content: center;
-    height: 3.5rem;
+    height: 2.8rem;
     align-items: center;
     width: 82%;
     box-sizing: border-box;
     border-radius: .5rem;
     color: black;
     opacity: ${props => props.disable ? 0.5 : 0.8};
+    font-size: 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     pointer-events: ${props => props.disable ? 'none' : 'auto'};
     cursor: ${props => props.disable ? 'not-allowed' : 'pointer'};
     transition: all 0.3s ease-in-out;
+
+    @media screen and (min-width: 768px) {
+        height: 3.5rem;
+        font-size: 1.25rem;
+    }
 `;
+
 
 
 function AddCodeModal({isOpen, setIsOpen, title, fetchCodes}){
