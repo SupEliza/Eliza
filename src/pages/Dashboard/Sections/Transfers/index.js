@@ -7,6 +7,7 @@ import SmallLoad from "../../../../components/SmallLoad";
 import viewPNG from "../../../../assets/images/view.png";
 import removePNG from "../../../../assets/images/remove.png";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
+import CircleLoad from "../../../../components/CircleLoad";
 
 const Container = styled.div`
   display: flex;
@@ -55,6 +56,7 @@ const TransferHeaderRight = styled.div`
   align-items: center;
   justify-content: center;
   gap: .5rem;
+  height: 100%; 
   width: 100%;
 
   @media screen and (min-width: 350px){
@@ -67,6 +69,18 @@ const TransferHeaderRight = styled.div`
     width: unset;
   }
 `;
+
+const TotalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--total-background);
+  border-radius: 1rem;
+  color: white;
+  height: 100%;
+  width: 4rem;
+`
 
 const ReloadIcon = styled.img`
   width: 3rem;
@@ -305,9 +319,11 @@ function Transfers(){
             </Title>
     
             <TransferHeaderRight>
-                <p>Total: {totalTransfers}</p>
-    
                 <ReloadIcon onClick={handleReloadTransfers} src={ReloadPNG} alt="reload"/>
+
+              <TotalContainer>
+                {loading ? <CircleLoad color='white'/> : totalTransfers}
+              </TotalContainer>
             </TransferHeaderRight>
           </TransferHeader>
     

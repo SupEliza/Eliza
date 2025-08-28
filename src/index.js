@@ -15,6 +15,7 @@ import Notify from './components/Notify/index.js';
 const GlobalStyle = createGlobalStyle`
   :root {
     --background: #0b2361;
+    --total-background: #e43636ff;
     --primary-color: #4763E4;
     --secondary-color: rgb(255, 255, 255);
     --text-color: rgb(32,34,36);

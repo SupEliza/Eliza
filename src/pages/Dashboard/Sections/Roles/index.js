@@ -11,6 +11,7 @@ import AddRoleModal from "../../../../components/AddRoleModal";
 import EditRoleModal from "../../../../components/EditRoleModal";
 import { AuthContext } from "../../../../hooks/Authentication/authContext";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
+import CircleLoad from "../../../../components/CircleLoad";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -59,6 +60,7 @@ const RolesHeaderRight = styled.div`
   align-items: center;
   justify-content: center;
   gap: .5rem;
+  height: 100%; 
   width: 100%;
 
   @media screen and (min-width: 350px){
@@ -71,6 +73,18 @@ const RolesHeaderRight = styled.div`
     width: unset;
   }
 `;
+
+const TotalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--total-background);
+  border-radius: 1rem;
+  color: white;
+  height: 100%;
+  width: 4rem;
+`
 
 const ReloadIcon = styled.img`
   width: 3rem;
@@ -307,11 +321,13 @@ function Roles () {
         </Title>
 
         <RolesHeaderRight>
-            <p>Total: {rolesList.length}</p>
-
             <ReloadIcon onClick={fetchRoles} src={ReloadPNG} alt="reload"/>
 
             <AddButton onClick={() => setAddRoleOpen(true)} type="button">Adicionar</AddButton>
+
+            <TotalContainer>
+              {loading ? <CircleLoad color='white'/> : rolesList.length}
+            </TotalContainer>
         </RolesHeaderRight>
       </RolesHeader>
 

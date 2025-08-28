@@ -58,6 +58,7 @@ const CodesHeaderRight = styled.div`
   align-items: center;
   justify-content: center;
   gap: .5rem;
+  height: 100%;
   width: 100%;
 
   @media screen and (min-width: 350px){
@@ -70,6 +71,18 @@ const CodesHeaderRight = styled.div`
     width: unset;
   }
 `;
+
+const TotalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--total-background);
+  border-radius: 1rem;
+  color: white;
+  height: 100%;
+  width: 4rem;
+`
 
 const ReloadIcon = styled.img`
   width: 3rem;
@@ -412,13 +425,15 @@ function Codes () {
         </Title>
 
         <CodesHeaderRight>
-          <p>Total: {totalCodes}</p>
 
           <ReloadIcon onClick={handleReloadCodes} src={reloadPNG} alt="reload"/>
 
           <HeaderButton type="button" onClick={() => setAddCodeOpen(true)}>Adicionar</HeaderButton>
           <HeaderButton type="button" onClick={() => openConfirmModal()}>Limpar</HeaderButton>
           <HeaderButton type="button" onClick={handleExport}>{exportLoading ? <CircleLoad/> : "Exportar"}</HeaderButton>
+            <TotalContainer>
+              {loading ? <CircleLoad color='white'/> : totalCodes}
+            </TotalContainer>
         </CodesHeaderRight>
       </CodesHeader>
       
