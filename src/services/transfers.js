@@ -3,7 +3,16 @@ import axios from "axios";
 const API = axios.create({    
     baseURL: "https://elizaapi.onrender.com/transfers",
     // baseURL: "http://localhost:8080/transfers",
-    withCredentials: true,
+});
+
+API.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
 });
 
 async function getTransfers(limit){

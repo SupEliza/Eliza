@@ -9,7 +9,6 @@ const SideBarContainer = styled.div`
     width: ${({ isActive, isMobile }) => (isActive ? (isMobile ? "15rem" : "20rem") : "0")};
     transform: ${({ isActive, isMobile }) => (isActive ? "translateX(0)" : isMobile ? "translateX(-15rem)" : "translateX(-20rem)")};
     position: ${({ isMobile }) => (isMobile ? "absolute" : "relative")};
-    height: 100%;
     box-shadow: ${({ isMobile }) => (isMobile ? "0 0 10px rgba(0, 0, 0, 0.3)" : "none")};
     z-index: 100;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;

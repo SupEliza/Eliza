@@ -9,26 +9,35 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // 🔹 Sempre pega o token salvo
+    function getToken() {
+        return localStorage.getItem("token");
+    }
+
     async function refreshAccessToken() {
-        if (isRefreshing) {
-            return;
-        }
+        if (isRefreshing) return;
 
         isRefreshing = true;
 
         try {
             const uuid = localStorage.getItem("user_uuid");
+            const token = getToken();
 
-            if (!uuid) {
+            if (!uuid || !token) {
                 setUser(null);
                 return;
             }
 
-            const response = await refreshToken({ uuid });
+            const response = await refreshToken({ uuid, token });
 
-            if (response.success === false) {
+            if (!response || response.success === false) {
                 setUser(null);
                 return;
+            }
+
+            // se backend devolver um novo token
+            if (response.token) {
+                localStorage.setItem("token", response.token);
             }
 
             await checkAuth();
@@ -41,28 +50,23 @@ export function AuthProvider({ children }) {
 
     async function checkAuth() {
         try {
-            const response = await userAuth();
+            const token = getToken();
+            if (!token) {
+                setUser(null);
+                setLoading(false);
+                return;
+            }
 
-            if (response.success === false) {
+            const response = await userAuth(token);
+
+            if (!response || response.success !== true || !response.user) {
                 await refreshAccessToken();
                 return;
             }
 
-            if (
-                !response ||
-                response.success !== true ||
-                !response.user ||
-                !response.user.username ||
-                !response.user.user_role
-            ) {
-                setUser(null);
-                return;
-            }
-
-            setUser(prevUser => ({
-                ...prevUser,
+            setUser({
                 ...response.user
-            }));
+            });
         } catch (error) {
             setUser(null);
         } finally {
@@ -74,14 +78,13 @@ export function AuthProvider({ children }) {
         checkAuth();
     }, []);
 
+    // 🔹 faz refresh periódico
     useEffect(() => {
         const intervalId = setInterval(() => {
             refreshAccessToken();
-        }, 12 * 60 * 1000);
+        }, 12 * 60 * 1000); // 12 minutos
 
-        return () => {
-            clearInterval(intervalId);
-        };
+        return () => clearInterval(intervalId);
     }, []);
 
     return (

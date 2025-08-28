@@ -1,9 +1,18 @@
 import axios from "axios";
 
-const API = axios.create({    
+const API = axios.create({
     baseURL: "https://elizaapi.onrender.com/codes",
-    // baseURL: "http://localhost:8080/codes",
-    withCredentials: true,
+});
+
+// Interceptor para adicionar o token Bearer automaticamente
+API.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
 });
 
 async function getCodes(limit){
