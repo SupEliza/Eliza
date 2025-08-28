@@ -8,7 +8,7 @@ function DashRoute({ children }) {
 
     if (loading) return <FullLoad />
 
-    // if (!user) return <Navigate to="/login" replace />;
+    if (!user) return <Navigate to="/login" replace />;
         
     return children;
 }
