@@ -189,6 +189,7 @@ const LoadMoreButton = styled.button`
   border-radius: 0.5rem;
   margin: 1rem;
   padding: 1rem;
+  min-width: 8rem;
   cursor: pointer;
 `;
 
