@@ -212,7 +212,7 @@ function ViewNote() {
                 throw new Error(response.message);
             } else {
                 setNote(response.note);
-                setNoteItens(response.note.itens);
+                setNoteItens(response.note.items || []);
 
                 document.title = `View NF | ${response.note.company}`;
             }
@@ -268,7 +268,7 @@ function ViewNote() {
 
     function getTotalQuantity(){
         let total = 0;
-        noteItens.forEach((item) => {
+        (noteItens ?? []).forEach(item => {
             total += item.quantidade;
         });
         return total;
@@ -340,7 +340,9 @@ function ViewNote() {
 
                     <CardContentContainer>
                         <HeaderContainer isDeleted={note.isDeleted}>
-                            <ExportSVG data-tooltip-id="export" onClick={handleExport}/>
+                            {!note.isDeleted && noteItens.length > 0 && (
+                                <ExportSVG data-tooltip-id="export" onClick={handleExport}/>
+                            )}
                             <MainTitle>Itens</MainTitle>
                             <CheckSVG style={{ display: note.isDeleted ? "none" : "unset" }} data-tooltip-id="check" onClick={() => handleMoveToBin(noteID)}/>
 
