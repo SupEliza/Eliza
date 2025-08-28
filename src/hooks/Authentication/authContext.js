@@ -35,7 +35,6 @@ export function AuthProvider({ children }) {
                 return;
             }
 
-            // se backend devolver um novo token
             if (response.token) {
                 localStorage.setItem("token", response.token);
             }
@@ -78,11 +77,10 @@ export function AuthProvider({ children }) {
         checkAuth();
     }, []);
 
-    // 🔹 faz refresh periódico
     useEffect(() => {
         const intervalId = setInterval(() => {
             refreshAccessToken();
-        }, 12 * 60 * 1000); // 12 minutos
+        }, 10 * 60 * 1000);
 
         return () => clearInterval(intervalId);
     }, []);

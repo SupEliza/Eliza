@@ -4,7 +4,6 @@ const API = axios.create({
     baseURL: "https://elizaapi.onrender.com/codes",
 });
 
-// Interceptor para adicionar o token Bearer automaticamente
 API.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     if (token) {
