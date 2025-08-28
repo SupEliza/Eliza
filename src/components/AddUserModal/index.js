@@ -35,7 +35,7 @@ const ModalContainer = styled.div`
     justify-content: center;
     border-radius: 1rem;
     overflow: hidden;
-    height: 80vh;
+    height: 60vh;
     width: 75vw;
     padding: 2rem;
     background-color: var(--secondary-color);
@@ -80,17 +80,6 @@ const Title = styled.h1`
     font-family: "Nunito Sans";
     font-size: 2rem;
     font-weight: 700;
-`
-
-const Subtitle = styled.p`
-    color: var(--login-text-color);
-    font-family: "Nunito Sans";
-    text-align: center;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    letter-spacing: -0.064px;
 `
 
 const FormContainer = styled.form`
@@ -185,7 +174,7 @@ const Button = styled.div`
 `;
 
 
-function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedRole, setSelectedRole, fetchUsers}){
+function AddUserModal({isOpen, setIsOpen, title, selectedRole, setSelectedRole, fetchUsers}){
     const [apiResponse, setApiResponse] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");

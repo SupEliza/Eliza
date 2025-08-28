@@ -368,7 +368,6 @@ function Users () {
         setIsOpen={setAddMemberOpen}
         isOpen={addMemberOpen}
         title="Adicionar usuário"
-        subtitle="Por favor, preencha os campos abaixo para continuar."
         fetchUsers={fetchUsers}
         selectedRole={selectedRole}
         setSelectedRole={setSelectedRole}
@@ -378,7 +377,6 @@ function Users () {
         setIsOpen={setEditMemberOpen}
         isOpen={editMemberOpen}
         title="Editar usuário"
-        subtitle="Por favor, selecione o novo cargo do usuário para continuar."
         member={selectedMember}
         fetchUsers={fetchUsers}
         selectedRole={selectedRole}

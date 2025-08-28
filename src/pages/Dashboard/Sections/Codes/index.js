@@ -479,7 +479,6 @@ function Codes () {
         setIsOpen={setAddCodeOpen}
         isOpen={addCodeOpen}
         title="Adicionar Código"
-        subtitle="Por favor, preencha os campos abaixo para continuar."
         fetchCodes={fetchCodes}
       />
     </Container>

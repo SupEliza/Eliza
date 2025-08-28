@@ -358,7 +358,6 @@ function Roles () {
         isOpen={addRoleOpen}
         setIsOpen={setAddRoleOpen}
         title={"Adicionar cargo"}
-        subtitle={"Preencha os campos abaixo para adicionar um cargo."}
         selectedPerms={selectedPerms}
         setSelectedPerms={setSelectedPerms}
         fetchRoles={fetchRoles}
@@ -368,7 +367,6 @@ function Roles () {
         isOpen={editRoleOpen}
         setIsOpen={setEditRoleOpen}
         title={"Editar cargo"}
-        subtitle={"Escolha as novas permissões do cargo."}
         selectedPerms={selectedPerms}
         selectedRole={selectedRole}
         setSelectedPerms={setSelectedPerms}

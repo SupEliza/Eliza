@@ -31,12 +31,11 @@ const ModalContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
     border-radius: 1rem;
     overflow: hidden;
-    height: 80vh;
-    width: 70vw;
-    padding: 3rem;
+    height: 60vh;
+    width: 75vw;
+    padding: 2rem;
     background-color: var(--secondary-color);
     font-family: "Nunito Sans", sans-serif;
     transform: ${(props) => (props.isOpen ? "scale(1)" : "scale(0.9)")};
@@ -61,7 +60,7 @@ const ModalContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
+    gap: 2rem;
     height: 100%;
     width: 100%;
 `
@@ -79,17 +78,6 @@ const Title = styled.h1`
     font-family: "Nunito Sans";
     font-size: 2rem;
     font-weight: 700;
-`
-
-const Subtitle = styled.p`
-    color: var(--login-text-color);
-    font-family: "Nunito Sans";
-    text-align: center;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    letter-spacing: -0.064px;
 `
 
 const FormContainer = styled.form`
@@ -196,7 +184,7 @@ const Button = styled.div`
 `;
 
 
-function EditUserModal({isOpen, setIsOpen, title, subtitle, member, selectedRole, setSelectedRole, fetchUsers}){
+function EditUserModal({isOpen, setIsOpen, title, member, selectedRole, setSelectedRole, fetchUsers}){
     const [apiResponse, setApiResponse] = useState("");
     const [loading, setLoading] = useState(false);
     const [apiResponseColor, setApiResponseColor] = useState("");
@@ -265,7 +253,6 @@ function EditUserModal({isOpen, setIsOpen, title, subtitle, member, selectedRole
                 <ModalContent>
                     <Texts>
                         <Title>{title}</Title>
-                        <Subtitle>{subtitle}</Subtitle>
                     </Texts>
 
                     <FormContainer onSubmit={handleSubmit}>
