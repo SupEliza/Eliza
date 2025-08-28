@@ -30,12 +30,11 @@ const ModalContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
     border-radius: 1rem;
     overflow: hidden;
     height: 80vh;
-    width: 70vw;
-    padding: 3rem;
+    width: 75vw;
+    padding: 2rem;
     background-color: var(--secondary-color);
     font-family: "Nunito Sans", sans-serif;
     transform: ${(props) => (props.isOpen ? "scale(1)" : "scale(0.9)")};
@@ -60,7 +59,7 @@ const ModalContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
+    gap: 2rem;
     height: 100%;
     width: 100%;
 `
@@ -229,7 +228,7 @@ function AddCodeModal({isOpen, setIsOpen, title, subtitle, fetchCodes}){
                                 <EditUsername>
                                     <p>EAN</p>
 
-                                    <TextInput inputValue={ean} setValue={setEan} type={"text"} placeholder={"Digite o EAN que deseja adicionar"}/>
+                                    <TextInput inputValue={ean} setValue={setEan} type={"text"} placeholder={"Digite o EAN"}/>
                                 </EditUsername>
                             </InputLabel>
                         </InputContent>
@@ -239,7 +238,7 @@ function AddCodeModal({isOpen, setIsOpen, title, subtitle, fetchCodes}){
                                 <p>Quantidade</p>
                             </InputLabel>
 
-                            <TextInput inputValue={quantity} setValue={setQuantity} type={"number"} placeholder={"Digite a quantidade que deseja adicionar"}/>
+                            <TextInput inputValue={quantity} setValue={setQuantity} type={"number"} placeholder={"Digite a quantidade"}/>
 
                         </InputContent>
 

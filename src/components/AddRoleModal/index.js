@@ -30,12 +30,11 @@ const ModalContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
     border-radius: 1rem;
     overflow: hidden;
     height: 80vh;
-    width: 70vw;
-    padding: 3rem;
+    width: 75vw;
+    padding: 2rem;
     background-color: var(--secondary-color);
     font-family: "Nunito Sans", sans-serif;
     transform: ${(props) => (props.isOpen ? "scale(1)" : "scale(0.9)")};
@@ -60,7 +59,7 @@ const ModalContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
+    gap: 2rem;
     height: 100%;
     width: 100%;
 `
@@ -141,10 +140,10 @@ const EditName = styled.div`
 `
 
 const PermissionsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
     align-items: center;
+    grid-template-columns: 1fr;
+    gap: .5rem;
     width: 100%;
     box-sizing: border-box;
     border-radius: .5rem;
@@ -152,6 +151,14 @@ const PermissionsContainer = styled.div`
     color: var(--login-text-color);
     padding: 1rem;
     background: #F1F4F9;
+
+    @media screen and (min-width: 365px){
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (min-width: 750px){
+        grid-template-columns: repeat(4, 1fr);
+    }
 `
 
 const Permissions = styled.div`

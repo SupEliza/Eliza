@@ -3,7 +3,7 @@ import styled from "styled-components";
 const PasswordContainer = styled.div`
     display: flex;
     flex-direction: row;
-    padding: 1rem;
+    padding: .8rem;
     width: 100%;
     box-sizing: border-box;
     border-radius: .5rem;

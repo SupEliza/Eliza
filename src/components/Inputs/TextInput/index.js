@@ -8,7 +8,7 @@ const Input = styled.input`
     color: var(--login-text-color);
     font-family: "Nunito Sans";
     font-size: 1.125rem;
-    padding: 1rem;
+    padding: .8rem;
     background: #F1F4F9;
 
     &:focus-visible{

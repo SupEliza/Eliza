@@ -36,8 +36,8 @@ const ModalContainer = styled.div`
     border-radius: 1rem;
     overflow: hidden;
     height: 80vh;
-    width: 70vw;
-    padding: 3rem;
+    width: 75vw;
+    padding: 2rem;
     background-color: var(--secondary-color);
     font-family: "Nunito Sans", sans-serif;
     transform: ${(props) => (props.isOpen ? "scale(1)" : "scale(0.9)")};
@@ -62,7 +62,7 @@ const ModalContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
+    gap: 2rem;
     height: 100%;
     width: 100%;
 `
@@ -261,7 +261,6 @@ function AddUserModal({isOpen, setIsOpen, title, subtitle, selectedRole, setSele
                 <ModalContent>
                     <Texts>
                         <Title>{title}</Title>
-                        <Subtitle>{subtitle}</Subtitle>
                     </Texts>
 
                     <FormContainer onSubmit={handleSubmit}>
