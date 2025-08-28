@@ -11,6 +11,7 @@ const SideBarContainer = styled.div`
     position: ${({ isMobile }) => (isMobile ? "absolute" : "relative")};
     box-shadow: ${({ isMobile }) => (isMobile ? "0 0 10px rgba(0, 0, 0, 0.3)" : "none")};
     z-index: 100;
+    height: 100%;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
     background-color: rgba(255, 255, 255, 1);
     overflow-y: auto;
