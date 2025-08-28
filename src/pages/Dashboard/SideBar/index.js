@@ -9,7 +9,7 @@ const SideBarContainer = styled.div`
     width: ${({ isActive, isMobile }) => (isActive ? (isMobile ? "15rem" : "20rem") : "0")};
     transform: ${({ isActive, isMobile }) => (isActive ? "translateX(0)" : isMobile ? "translateX(-15rem)" : "translateX(-20rem)")};
     position: ${({ isMobile }) => (isMobile ? "absolute" : "relative")};
-    max-height: 100%;
+    height: 100%;
     box-shadow: ${({ isMobile }) => (isMobile ? "0 0 10px rgba(0, 0, 0, 0.3)" : "none")};
     z-index: 100;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
@@ -27,6 +27,22 @@ const IconContainer = styled.div`
     justify-content: center;
     gap: 1rem;
     align-items: center;
+`;
+
+const SlideSideBar = styled.div`
+    display: ${({ isMobile }) => (isMobile ? "flex" : "none")};
+    position: absolute;
+    left: 10px;
+    justify-content: center;
+    align-items: center;
+
+    & svg {
+        fill: white;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const SideBarIcon = styled.div`
@@ -92,6 +108,12 @@ function SideBar({ isActive, selectedSection, setSelectedSection, setConfirmatio
     return (
         <SideBarContainer ref={sidebarRef} isMobile={isMobile} isActive={isActive} aria-hidden={!isActive}>
             <IconContainer>
+                <SlideSideBar isMobile={isMobile} onClick={() => setSideBar(prev => !prev)}>
+                    <svg width="25" height="20" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0.75 0.5625H17.25V1.9375H0.75V0.5625ZM0.75 6.0625H17.25V7.4375H0.75V6.0625ZM0.75 11.5625H17.25V12.9375H0.75V11.5625Z"/>
+                    </svg>
+                </SlideSideBar>
+
                 <SideBarIcon>
                     <Logo src={logo} alt="Eliza Logo"/>
                 </SideBarIcon>
