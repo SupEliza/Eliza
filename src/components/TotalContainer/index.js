@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import CircleLoad from "../CircleLoad"
 
-const TotalContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,9 +15,9 @@ const TotalContainer = styled.div`
 
 function TotalContainer({loading, total}){
     return (
-        <TotalContainer>
+        <Container>
             {loading ? <CircleLoad color='white'/> : total}
-        </TotalContainer>
+        </Container>
     )
 }
 

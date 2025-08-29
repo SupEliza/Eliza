@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const TopBarContainer = styled.div`
@@ -42,6 +43,12 @@ const TopBarRight = styled.div`
 `
 
 function TopBar({setSideBar}) {
+    const [selectedSection, setSelectedSection] = useState("");
+
+    useEffect(() => {
+        setSelectedSection(localStorage.getItem("currentSection"));
+    }, [localStorage.getItem("currentSection")]);
+
     return(
         <TopBarContainer>
             <TopBarLeft>
@@ -53,7 +60,7 @@ function TopBar({setSideBar}) {
             </TopBarLeft>
 
             <TopBarRight>
-                SUPERMERCADOS ELIZA
+                {selectedSection.toUpperCase()}
             </TopBarRight>
         </TopBarContainer>
     );
