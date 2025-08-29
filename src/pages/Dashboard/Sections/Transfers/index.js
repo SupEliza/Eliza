@@ -7,7 +7,6 @@ import SmallLoad from "../../../../components/SmallLoad";
 import viewPNG from "../../../../assets/images/view.png";
 import removePNG from "../../../../assets/images/remove.png";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
-import CircleLoad from "../../../../components/CircleLoad";
 
 const Container = styled.div`
   display: flex;
@@ -321,9 +320,7 @@ function Transfers(){
             <TransferHeaderRight>
                 <ReloadIcon onClick={handleReloadTransfers} src={ReloadPNG} alt="reload"/>
 
-              <TotalContainer>
-                {loading ? <CircleLoad color='white'/> : totalTransfers}
-              </TotalContainer>
+                <TotalContainer loading={loading} total={totalTransfers} />
             </TransferHeaderRight>
           </TransferHeader>
     

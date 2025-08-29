@@ -11,7 +11,6 @@ import AddRoleModal from "../../../../components/AddRoleModal";
 import EditRoleModal from "../../../../components/EditRoleModal";
 import { AuthContext } from "../../../../hooks/Authentication/authContext";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
-import CircleLoad from "../../../../components/CircleLoad";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -325,9 +324,7 @@ function Roles () {
 
             <AddButton onClick={() => setAddRoleOpen(true)} type="button">Adicionar</AddButton>
 
-            <TotalContainer>
-              {loading ? <CircleLoad color='white'/> : rolesList.length}
-            </TotalContainer>
+            <TotalContainer loading={loading} total={rolesList.length} />
         </RolesHeaderRight>
       </RolesHeader>
 

@@ -11,7 +11,7 @@ import ConfirmModal from "../../../../components/ConfirmModal";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
 import { deleteCode, getDeletedCodes, remCodeFromBin } from "../../../../services/codes";
 import { deleteNote, getDeletedNotes, remNoteFromBin } from "../../../../services/notes";
-import CircleLoad from "../../../../components/CircleLoad";
+import TotalContainer from "../../../../components/TotalContainer";
 
 const Container = styled.div`
   display: flex;
@@ -73,18 +73,6 @@ const HeaderRight = styled.div`
     width: unset;
   }
 `;
-
-const TotalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--total-background);
-  border-radius: 1rem;
-  color: white;
-  height: 100%;
-  width: 4rem;
-`
 
 const ReloadIcon = styled.img`
   width: 3rem;
@@ -485,9 +473,8 @@ function Bin(){
             <option>Notas</option>
           </select>
           <ReloadIcon onClick={() => fetchInfos(binType)} src={ReloadPNG} alt="reload"/>
-            <TotalContainer>
-              {loading ? <CircleLoad color='white'/> : totalItems}
-            </TotalContainer>
+
+          <TotalContainer loading={loading} total={totalItems} />
         </HeaderRight>
       </Header>
 

@@ -7,8 +7,7 @@ import viewPNG from "../../../../assets/images/view.png";
 import removePNG from "../../../../assets/images/remove.png";
 import styled from "styled-components";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
-import CircleLoad from "../../../../components/CircleLoad";
-                                                                                                                                                                                                                                                                                                                                                                                                  
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -335,9 +334,7 @@ function Notes () {
         <NotesHeaderRight>
           <ReloadIcon onClick={handleReloadNotes} src={reloadPNG} alt="reload"/>
 
-            <TotalContainer>
-              {loading ? <CircleLoad color='white'/> : totalNotes}
-            </TotalContainer>
+          <TotalContainer loading={loading} total={totalNotes} />
         </NotesHeaderRight>
       </NotesHeader>
       

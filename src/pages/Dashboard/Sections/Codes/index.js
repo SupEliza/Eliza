@@ -431,9 +431,8 @@ function Codes () {
           <HeaderButton type="button" onClick={() => setAddCodeOpen(true)}>Adicionar</HeaderButton>
           <HeaderButton type="button" onClick={() => openConfirmModal()}>Limpar</HeaderButton>
           <HeaderButton type="button" onClick={handleExport}>{exportLoading ? <CircleLoad/> : "Exportar"}</HeaderButton>
-            <TotalContainer>
-              {loading ? <CircleLoad color='white'/> : totalCodes}
-            </TotalContainer>
+
+          <TotalContainer loading={loading} total={totalCodes} />
         </CodesHeaderRight>
       </CodesHeader>
       

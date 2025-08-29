@@ -11,7 +11,6 @@ import ConfirmModal from "../../../../components/ConfirmModal";
 import { Tooltip } from "react-tooltip";
 import { AuthContext } from "../../../../hooks/Authentication/authContext";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
-import CircleLoad from "../../../../components/CircleLoad";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -335,9 +334,7 @@ function Users () {
 
             <AddButton onClick={() => setAddMemberOpen(true)} type="button">Adicionar</AddButton>
 
-            <TotalContainer>
-              {loading ? <CircleLoad color='white'/> : usersList.length}
-            </TotalContainer>
+            <TotalContainer loading={loading} total={usersList.length} />
         </UsersHeaderRight>
       </UsersHeader>
 
