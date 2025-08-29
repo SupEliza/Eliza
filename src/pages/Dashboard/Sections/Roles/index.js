@@ -24,7 +24,7 @@ const Container = styled.div`
 
 const RolesHeader = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -34,24 +34,15 @@ const RolesHeader = styled.div`
   @media screen and (min-width: 550px){
     gap: 0;
     padding: 0 1.2rem;
-    flex-direction: row;
   }
 `;
 
-const Title = styled.div`
+const HeaderLeft = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   box-sizing: border-box;
-  border-radius: 1rem;
-  font-family: "Nunito Sans";
-  font-weight: bold;
-  color: black;
-  font-size: 1.6rem;
-
-  @media screen and (min-width: 768px){
-    font-size: 2rem;
-  }
+  height: 100%;
 `
 
 const RolesHeaderRight = styled.div`
@@ -61,7 +52,6 @@ const RolesHeaderRight = styled.div`
   justify-content: center;
   gap: .5rem;
   height: 100%; 
-  width: 100%;
 
   @media screen and (min-width: 350px){
     flex-direction: row;
@@ -304,16 +294,13 @@ function Roles () {
   return (
     <Container>
       <RolesHeader>
-        <Title>
-          Cargos
-        </Title>
+        <HeaderLeft>
+          <TotalContainer loading={loading} total={rolesList.length} />
+        </HeaderLeft>
 
         <RolesHeaderRight>
-            <ReloadIcon onClick={fetchRoles} src={ReloadPNG} alt="reload"/>
-
             <AddButton onClick={() => setAddRoleOpen(true)} type="button">Adicionar</AddButton>
-
-            <TotalContainer loading={loading} total={rolesList.length} />
+            <ReloadIcon onClick={fetchRoles} src={ReloadPNG} alt="reload"/>
         </RolesHeaderRight>
       </RolesHeader>
 

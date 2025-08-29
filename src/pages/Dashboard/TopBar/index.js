@@ -33,12 +33,12 @@ const TopBarRight = styled.div`
     justify-content: center;
     align-items: center;
     font-family: "Nunito Sans";
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: bold;
     width: 100%;
 
     @media screen and (min-width: 768px){
-        font-size: 1.5rem;
+        font-size: 1.8rem;
   }
 `
 

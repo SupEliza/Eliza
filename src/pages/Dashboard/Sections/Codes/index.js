@@ -7,11 +7,12 @@ import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
 import removePNG from "../../../../assets/images/remove.png";
 import styled from "styled-components";
-import CircleLoad from "../../../../components/CircleLoad";
 import AddCodeModal from "../../../../components/AddCodeModal";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import TotalContainer from "../../../../components/TotalContainer";
-
+import { ReactComponent as ExportSVG } from "../../../../assets/svg/export.svg";
+import { ReactComponent as AddSVG } from "../../../../assets/svg/add.svg";
+import { ReactComponent as ClearSVG } from "../../../../assets/svg/clear.svg";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -24,7 +25,7 @@ const Container = styled.div`
 
 const CodesHeader = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -34,24 +35,15 @@ const CodesHeader = styled.div`
   @media screen and (min-width: 550px){
     gap: 0;
     padding: 0 1.2rem;
-    flex-direction: row;
   }
 `;
 
-const Title = styled.div`
+const HeaderLeft = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   box-sizing: border-box;
-  border-radius: 1rem;
-  font-family: "Nunito Sans";
-  font-weight: bold;
-  color: black;
-  font-size: 1.6rem;
-
-  @media screen and (min-width: 768px){
-    font-size: 2rem;
-  }
+  height: 100%;
 `
 
 const CodesHeaderRight = styled.div`
@@ -61,7 +53,13 @@ const CodesHeaderRight = styled.div`
   justify-content: center;
   gap: .5rem;
   height: 100%;
-  width: 100%;
+
+  & svg { 
+      height: 100%;
+      width: 3rem;
+      cursor: pointer;
+      fill: var(--background);
+  }
 
   @media screen and (min-width: 350px){
     flex-direction: row;
@@ -410,19 +408,16 @@ function Codes () {
   return (
     <Container>
       <CodesHeader>
-        <Title>
-          Baixas
-        </Title>
+        <HeaderLeft>
+          <TotalContainer loading={loading} total={totalCodes} />
+        </HeaderLeft>
 
         <CodesHeaderRight>
+          <ClearSVG onClick={() => openConfirmModal()} alt="clear"/>
+          <AddSVG onClick={() => setAddCodeOpen(true)} alt="add"/>
+          <ExportSVG onClick={handleExport} alt="export"/>
 
           <ReloadIcon onClick={handleReloadCodes} src={reloadPNG} alt="reload"/>
-
-          <HeaderButton type="button" onClick={() => setAddCodeOpen(true)}>Adicionar</HeaderButton>
-          <HeaderButton type="button" onClick={() => openConfirmModal()}>Limpar</HeaderButton>
-          <HeaderButton type="button" onClick={handleExport}>{exportLoading ? <CircleLoad/> : "Exportar"}</HeaderButton>
-
-          <TotalContainer loading={loading} total={totalCodes} />
         </CodesHeaderRight>
       </CodesHeader>
       
