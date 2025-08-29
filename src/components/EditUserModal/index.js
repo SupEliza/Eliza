@@ -33,7 +33,7 @@ const ModalContainer = styled.div`
     justify-content: center;
     border-radius: 1rem;
     overflow: hidden;
-    height: 65vh;
+    max-height: 70vh;
     width: 75vw;
     padding: 2rem;
     background-color: var(--secondary-color);
