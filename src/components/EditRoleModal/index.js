@@ -140,10 +140,10 @@ const RoleName = styled.div`
 `
 
 const PermissionsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
     align-items: center;
+    grid-template-columns: 1fr;
+    gap: .5rem;
     width: 100%;
     box-sizing: border-box;
     border-radius: .5rem;
@@ -151,6 +151,14 @@ const PermissionsContainer = styled.div`
     color: var(--login-text-color);
     padding: 1rem;
     background: #F1F4F9;
+
+    @media screen and (min-width: 365px){
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (min-width: 750px){
+        grid-template-columns: repeat(4, 1fr);
+    }
 `
 
 const Permissions = styled.div`
