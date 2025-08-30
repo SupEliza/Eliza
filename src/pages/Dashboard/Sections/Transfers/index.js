@@ -296,7 +296,9 @@ function Transfers(){
             </HeaderLeft>
     
             <TransferHeaderRight>
-                <ReloadIcon onClick={handleReloadTransfers} src={ReloadPNG} alt="reload"/>
+                <ReloadIcon onClick={handleReloadTransfers} src={ReloadPNG} data-tooltip-id="reload"/>
+
+                <Tooltip id="reload" place="top" content="Recarregar lista"/>
             </TransferHeaderRight>
           </TransferHeader>
     

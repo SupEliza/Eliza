@@ -415,11 +415,12 @@ function Codes () {
           <AddSVG onClick={() => setAddCodeOpen(true)} data-tooltip-id="add"/>
           <ExportSVG onClick={handleExport} data-tooltip-id="export"/>
           <ClearSVG onClick={() => openConfirmModal()} data-tooltip-id="clear"/>
-          <ReloadIcon onClick={handleReloadCodes} src={reloadPNG} alt="reload"/>
+          <ReloadIcon onClick={handleReloadCodes} src={reloadPNG} data-tooltip-id="reload"/>
 
           <Tooltip id="add" place="top" content="Adicionar código"/>
           <Tooltip id="clear" place="top" content="Limpar todos os códigos"/>
           <Tooltip id="export" place="top" content="Exportar todos os códigos"/>
+          <Tooltip id="reload" place="top" content="Recarregar lista"/>
         </CodesHeaderRight>
       </CodesHeader>
       

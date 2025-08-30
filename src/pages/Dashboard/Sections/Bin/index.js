@@ -482,7 +482,9 @@ function Bin(){
             <option>Transferências</option>
             <option>Notas</option>
           </SelectInput>
-          <ReloadIcon onClick={() => fetchInfos(binType)} src={ReloadPNG} alt="reload"/>
+          <ReloadIcon onClick={() => fetchInfos(binType)} src={ReloadPNG} data-tooltip-id="reload"/>
+
+          <Tooltip id="reload" place="top" content="Recarregar lista"/>  
         </HeaderRight>
       </Header>
 

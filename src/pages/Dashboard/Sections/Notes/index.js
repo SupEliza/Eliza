@@ -310,7 +310,9 @@ function Notes () {
         </HeaderLeft>
 
         <NotesHeaderRight>
-          <ReloadIcon onClick={handleReloadNotes} src={reloadPNG} alt="reload"/>
+          <ReloadIcon onClick={handleReloadNotes} src={reloadPNG} data-tooltip-id="reload"/>
+
+          <Tooltip id="reload" place="top" content="Recarregar lista"/>
         </NotesHeaderRight>
       </NotesHeader>
       

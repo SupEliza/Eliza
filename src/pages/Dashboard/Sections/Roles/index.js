@@ -54,6 +54,13 @@ const RolesHeaderRight = styled.div`
   gap: .5rem;
   height: 100%; 
 
+  & svg { 
+    height: 100%;
+    width: 3rem;
+    cursor: pointer;
+    fill: var(--background);
+  }
+
   @media screen and (min-width: 350px){
     flex-direction: row;
     justify-content: space-evenly;  
@@ -285,9 +292,10 @@ function Roles () {
 
         <RolesHeaderRight>
             <AddSVG onClick={() => setAddRoleOpen(true)} data-tooltip-id="add"/>
-            <ReloadIcon onClick={fetchRoles} src={ReloadPNG} alt="reload"/>
+            <ReloadIcon onClick={fetchRoles} src={ReloadPNG} data-tooltip-id="reload"/>
 
             <Tooltip id="add" place="top" content="Adicionar cargo"/>
+            <Tooltip id="reload" place="top" content="Recarregar lista"/>
         </RolesHeaderRight>
       </RolesHeader>
 
