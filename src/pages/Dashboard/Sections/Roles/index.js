@@ -12,6 +12,7 @@ import EditRoleModal from "../../../../components/EditRoleModal";
 import TotalContainer from "../../../../components/TotalContainer";
 import { AuthContext } from "../../../../hooks/Authentication/authContext";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
+import { ReactComponent as AddSVG } from "../../../../assets/svg/add.svg";
                                                                                                                                                                                                                                                                                                                                                                                                                      
 const Container = styled.div`
   display: flex;
@@ -87,21 +88,6 @@ const RolesListContainer = styled.div`
   height: 100%;
   width: 100%;
   border: 1px solid rgba(11, 35, 97, 0.3);
-`;
-
-const AddButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  background-color: var(--background);
-  color: var(--secondary-color);
-  font-weight: bold;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  cursor: pointer;
 `;
 
 const RolesListHeader = styled.div`
@@ -298,8 +284,10 @@ function Roles () {
         </HeaderLeft>
 
         <RolesHeaderRight>
-            <AddButton onClick={() => setAddRoleOpen(true)} type="button">Adicionar</AddButton>
+            <AddSVG onClick={() => setAddRoleOpen(true)} data-tooltip-id="add"/>
             <ReloadIcon onClick={fetchRoles} src={ReloadPNG} alt="reload"/>
+
+            <Tooltip id="add" place="top" content="Adicionar cargo"/>
         </RolesHeaderRight>
       </RolesHeader>
 
