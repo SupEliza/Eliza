@@ -124,7 +124,6 @@ const CodesListHeader = styled.div`
   border-radius: 0.5rem;
   font-weight: bold;
   padding: .5rem;
-  margin: .2rem;
   width: 100%;
 `;
 
@@ -192,7 +191,7 @@ const Code = styled.div`
   background-color: #FAFAFA;
   border-radius: 0.5rem;
   padding: .5rem;
-  margin: .2rem;
+  margin: .2rem 0;
   width: 100%;
 `;
 

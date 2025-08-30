@@ -9,8 +9,9 @@ const Container = styled.div`
   background-color: var(--total-background);
   border-radius: .5rem;
   color: white;
+  font-weight: bold;
   height: 100%;
-  padding: 0 .8rem;
+  width: 6rem;
 `
 
 function TotalContainer({loading, total}){

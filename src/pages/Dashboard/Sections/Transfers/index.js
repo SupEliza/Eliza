@@ -96,7 +96,6 @@ const TransferListHeader = styled.div`
   border-radius: 0.5rem;
   font-weight: bold;
   padding: .5rem;
-  margin: .2rem;
   width: 100%;
 `;
 
@@ -146,7 +145,7 @@ const TransferPointer = styled.p`
   cursor: pointer;
 `;
 
-const User = styled.div`
+const Transfer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -155,7 +154,7 @@ const User = styled.div`
   background-color: #FAFAFA;
   border-radius: 0.5rem;
   padding: .5rem;
-  margin: .2rem;
+  margin: .2rem 0;
   width: 100%;
 `;
 
@@ -235,7 +234,7 @@ function Transfers(){
         switch (type) {
             case "Usuário":
             sortedList.sort((a, b) =>
-                isAscending ? a.user_add.localeCompare(b.user_add) : b.user_add.localeCompare(a.user_add)
+                isAscending ? a.Transfer_add.localeCompare(b.Transfer_add) : b.Transfer_add.localeCompare(a.Transfer_add)
             );
             break;
             case "Data/Hora":
@@ -320,8 +319,8 @@ function Transfers(){
               transfersList.length !== 0 ?
                 <TransferList>
                   {transfersList.map((transfer) => (
-                    <User key={transfer.id}>
-                      <TransferListElement>{transfer.user_add}</TransferListElement>
+                    <Transfer key={transfer.id}>
+                      <TransferListElement>{transfer.Transfer_add}</TransferListElement>
                       <TransferListElement>                    
                           {new Date(transfer.created_at).toLocaleString("pt-BR", {
                             timeZone: "America/Sao_Paulo",
@@ -337,7 +336,7 @@ function Transfers(){
                         <Tooltip id="remove" place="top" content="Mover para lixeira"/>
                         <Tooltip id="view" place="top" content="Visualizar transferência"/>
                       </TransferListElement>
-                    </User>
+                    </Transfer>
                   ))}
                   {transfersLimit < totalTransfers && (
                     <TransferListElement>

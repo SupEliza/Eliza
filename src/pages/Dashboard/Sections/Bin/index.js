@@ -100,7 +100,6 @@ const BinListHeader = styled.div`
   border-radius: 0.5rem;
   font-weight: bold;
   padding: .5rem;
-  margin: .2rem;
   width: 100%;
 `;
 
@@ -150,7 +149,7 @@ const BinPointer = styled.p`
   cursor: pointer;
 `;
 
-const User = styled.div`
+const Result = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -159,7 +158,7 @@ const User = styled.div`
   background-color: #FAFAFA;
   border-radius: 0.5rem;
   padding: .5rem;
-  margin: .2rem;
+  margin: .2rem 0;
   width: 100%;
 `;
 
@@ -487,7 +486,7 @@ function Bin(){
           binContentList.length !== 0 ? (
             <BinContentList>
               {binContentList.map((binContent) => (
-                <User key={binContent.id}>
+                <Result key={binContent.id}>
                   {renderRowContent(binType, binContent).map((value, idx) => (
                     <BinListElement key={idx}>{value}</BinListElement>
                   ))}
@@ -509,7 +508,7 @@ function Bin(){
                         <Tooltip id="view" place="top" content="Visualizar" />
                       )}
                     </BinListElement>
-                </User>
+                </Result>
               ))}
 
               {totalItems > binContentList.length && (
