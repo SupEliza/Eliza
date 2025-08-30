@@ -68,10 +68,6 @@ const ReloadIcon = styled.img`
   width: 3rem;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
-
-  &:hover{
-    transform: rotate(360deg);
-  }
 `;
 
 const BinListContainer = styled.div`
