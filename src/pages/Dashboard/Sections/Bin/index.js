@@ -188,6 +188,25 @@ const LoadMoreButton = styled.button`
   cursor: pointer;
 `;
 
+const SelectInput = styled.select`
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: .5rem;
+    border: 1px solid var(--background);
+    color: var(--login-text-color);
+    font-family: "Nunito Sans";
+    font-size: 1.125rem;
+    padding: 0 .8rem;
+    text-align: center;
+    background: #F1F4F9;
+    appearance: none;
+    cursor: pointer;
+
+    &:focus-visible{
+        outline: none;
+    }
+`
+
 function Bin(){
   const [binContentList, setBinContentList] = useState([]);
   const [binType, setbinType] = useState("Baixas");
@@ -458,11 +477,11 @@ function Bin(){
           <TotalContainer loading={loading} total={totalItems} />
         </HeaderLeft>
         <HeaderRight>
-          <select onChange={(e) => setbinType(e.target.value)} value={binType}>
+          <SelectInput onChange={(e) => setbinType(e.target.value)} value={binType}>
             <option>Baixas</option>
             <option>Transferências</option>
             <option>Notas</option>
-          </select>
+          </SelectInput>
           <ReloadIcon onClick={() => fetchInfos(binType)} src={ReloadPNG} alt="reload"/>
         </HeaderRight>
       </Header>
