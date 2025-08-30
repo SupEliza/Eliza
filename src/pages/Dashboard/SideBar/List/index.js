@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import { ReactComponent as PlatesSVG } from "../../../../assets/svg/plates.svg";
 import { ReactComponent as CodesSVG } from "../../../../assets/svg/codes.svg";
 import { ReactComponent as UsersSVG } from "../../../../assets/svg/users.svg";
 import { ReactComponent as NotesSVG } from "../../../../assets/svg/notes.svg";
@@ -73,6 +74,7 @@ const Selected = styled.div`
 `;
 
 const sideBarIcons = {
+    Plates: PlatesSVG,
     Codes: CodesSVG,
     Bin: BinSVG,
     Users: UsersSVG,

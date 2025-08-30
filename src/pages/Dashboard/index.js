@@ -10,6 +10,7 @@ import Transfers from "./Sections/Transfers/index";
 import Logout from "../../utils/logout";
 import Roles from "./Sections/Roles";
 import Bin from "./Sections/Bin";
+import Plates from "./Sections/Plates";
 
 const Container = styled.div`
     display: flex;
@@ -62,6 +63,7 @@ function Dashboard() {
   const sections = {
     "Usuários": <Users/>,
     "Cargos": <Roles/>,
+    "Placas": <Plates/>,
     "Notas": <Notes/>,
     "Transferências": <Transfers/>,
     "Baixas": <Codes/>,
