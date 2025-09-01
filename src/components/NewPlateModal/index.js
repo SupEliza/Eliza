@@ -2,6 +2,7 @@ import { useState } from "react"
 import styled from "styled-components"
 import { getProducts } from "../../services/products"
 import CircleLoad from "../CircleLoad"
+import SearchBar from "../SearchBar"
 
 const Container = styled.div`
     position: fixed;
@@ -76,6 +77,37 @@ const Title = styled.h1`
     font-weight: 700;
 `
 
+const FormContainer = styled.form`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 2.5rem;
+`
+
+const ProductsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    overflow-y: auto;
+`
+
+const Product = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: .5rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    height: 2.5rem;
+    width: 100%;
+    border: 0.6px solid var(--dashboard-border-color);
+    background: #F5F6FA;
+`
+
 const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -143,28 +175,22 @@ function NewPlateModal({isOpen, setIsOpen, title}){
                         <Title>{title}</Title>
                     </Texts>
 
-                    <form onSubmit={(e) => handleSearch(e)}>
-                        <input 
-                            type="search" 
-                            placeholder="Descrição ou código" 
-                            onChange={(e) => setSearch(e.target.value)} 
-                        />
-                        <button type="submit">Buscar</button>
-                    </form>
-
-
+                    <FormContainer onSubmit={(e) => handleSearch(e)}>
+                        <SearchBar setValue={setSearch} type="text" placeholder="Digite a descrição ou código do produto"/>
+                    </FormContainer>
 
                     {loading ? (
                         <CircleLoad />
                     ) : products && products.length > 0 ? (
-                        <div>
+                        <ProductsContainer>
                             {products.map((product) => (
-                                <div>
+                                <Product>
                                     <p>{product.description}</p>
-                                    <p>{product.ean}</p>
-                                </div>
+                                    <p>{product.type}</p>
+                                    <p>{product.price}</p>
+                                </Product>
                             ))}
-                        </div>
+                        </ProductsContainer>
                     ) : (
                         <p>Nenhum produto encontrado</p>
                     )}
