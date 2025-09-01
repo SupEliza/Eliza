@@ -15,7 +15,7 @@ import Plates from "./Sections/Plates";
 const Container = styled.div`
     display: flex;
     flex-direction: row;
-    max-height: 100vh;
+    max-height: 100dvh;
     overflow: hidden;
     background-color: rgba(245, 246, 250, 1);
 `;
