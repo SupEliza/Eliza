@@ -81,14 +81,6 @@ const ModalTitle = styled.div`
     gap: 1.5rem;
 `;
 
-const ModalTexts = styled.p`
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    width: 80%;
-    text-align: ${({ align }) => align || "left"};
-`;
-
 const Logo = styled.img`
     display: none;
     width: 6rem;
@@ -322,7 +314,7 @@ function Login() {
                     <BottomContainer>
                         <SubmitButton disable={buttonDisable} type="submit">
                             <p>Entrar</p>
-                            <Arrow className="arrow-icon"/>
+                            <ArrowIcon className="arrow-icon"/>
                         </SubmitButton>
 
                         {loading ? <CircleLoad/> :
