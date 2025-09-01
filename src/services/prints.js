@@ -17,7 +17,7 @@ API.interceptors.request.use((config) => {
 
 async function getPrints(limit){
     try {
-        const response = await API.get(`/false/${limit}`);
+        const response = await API.get(`/${limit}`);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
