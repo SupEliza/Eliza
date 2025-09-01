@@ -1,8 +1,13 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import styled from "styled-components"
 import { getProducts } from "../../services/products"
 import CircleLoad from "../CircleLoad"
-import SearchBar from "../SearchBar"
+import SearchBar from "../Inputs/SearchBar"
+import { ReactComponent as CloseSVG } from "../../assets/svg/close.svg"
+import { ReactComponent as PrinterSVG } from "../../assets/svg/printer.svg"
+import { addPrint } from "../../services/prints"
+import { AuthContext } from "../../hooks/Authentication/authContext"
+import { useNotify } from "../../hooks/Notify/notifyContext"
 
 const Container = styled.div`
     position: fixed;
@@ -27,7 +32,7 @@ const ModalContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 1rem;
+    border-radius: .8rem;
     overflow: hidden;
     max-height: 70vh;
     width: 75vw;
@@ -57,7 +62,7 @@ const ModalContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
     height: 100%;
     width: 100%;
 `
@@ -67,6 +72,16 @@ const Texts = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: var(--background);
+    gap: 1rem;
+`
+
+const ResultsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     gap: 1rem;
 `
 
@@ -89,9 +104,23 @@ const ProductsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: .5rem;
+    max-height: 40vh;
     width: 100%;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent; 
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--background);
+        border-radius: 5px;
+    }
 `
 
 const Product = styled.div`
@@ -99,47 +128,59 @@ const Product = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    gap: .5rem;
     border-radius: .5rem;
-    padding: 0 1rem;
+    padding: .8rem .8rem;
     box-sizing: border-box;
-    height: 2.5rem;
     width: 100%;
     border: 0.6px solid var(--dashboard-border-color);
     background: #F5F6FA;
+`
+
+const ProductsInfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: .5rem;
+`
+
+const ProductInfos = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
 `
 
 const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     gap: 1rem;
-    width: 100%;
 `
 
 const Button = styled.div`
     display: flex;
     justify-content: center;
-    height: 2.8rem;
     align-items: center;
-    width: 82%;
     box-sizing: border-box;
     border-radius: .5rem;
     color: black;
-    opacity: ${props => props.disable ? 0.5 : 0.8};
     font-size: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     pointer-events: ${props => props.disable ? 'none' : 'auto'};
     cursor: ${props => props.disable ? 'not-allowed' : 'pointer'};
     transition: all 0.3s ease-in-out;
 
-    @media screen and (min-width: 768px) {
-        height: 3.5rem;
-        font-size: 1.25rem;
+    & svg{
+        fill: var(--background);
     }
 `;
 
 
 function NewPlateModal({isOpen, setIsOpen, title}){
+    const { user } = useContext(AuthContext);
+    const { addNotification } = useNotify();
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(false);
@@ -163,6 +204,32 @@ function NewPlateModal({isOpen, setIsOpen, title}){
         setLoading(false);
     }
 
+    async function handlePrint(product){
+        setLoading(true);
+
+        const reqBody = {
+            ean: product.ean,
+            description: product.description,
+            price: product.price,
+            type: product.type,
+            user_add: user.username
+        }
+
+        try {
+            const response = await addPrint(reqBody);
+
+            if(response.success === true){
+                addNotification(response.message);
+                setIsOpen(false);
+            } else {
+                addNotification(response.message || "Erro ao adicionar impressão");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        setLoading(false);
+    }
+
     const handleCancel = () => {
         setIsOpen(false);
     };    
@@ -171,33 +238,44 @@ function NewPlateModal({isOpen, setIsOpen, title}){
         <Container isOpen={isOpen}>
             <ModalContainer isOpen={isOpen}>
                 <ModalContent>
+                    <ButtonsContainer>
+                        <Button disable={loading} onClick={handleCancel}><CloseSVG/></Button>
+                    </ButtonsContainer>
+
                     <Texts>
                         <Title>{title}</Title>
                     </Texts>
 
-                    <FormContainer onSubmit={(e) => handleSearch(e)}>
-                        <SearchBar setValue={setSearch} type="text" placeholder="Digite a descrição ou código do produto"/>
-                    </FormContainer>
+                    <ResultsContainer>
+                        <FormContainer onSubmit={(e) => handleSearch(e)}>
+                            <SearchBar setValue={setSearch} type="text" placeholder="Digite a descrição ou código do produto"/>
+                        </FormContainer>
 
-                    {loading ? (
-                        <CircleLoad />
-                    ) : products && products.length > 0 ? (
-                        <ProductsContainer>
-                            {products.map((product) => (
-                                <Product>
-                                    <p>{product.description}</p>
-                                    <p>{product.type}</p>
-                                    <p>{product.price}</p>
-                                </Product>
-                            ))}
-                        </ProductsContainer>
-                    ) : (
-                        <p>Nenhum produto encontrado</p>
-                    )}
+                        {loading ? (
+                            <CircleLoad />
+                        ) : products && products.length > 0 ? (
+                            <ProductsContainer>
+                                {products.map((product) => (
+                                    <Product>
+                                        <ProductsInfoContainer>
+                                            <p style={{ fontWeight: "bold", color: "var(--background)" }}>{product.description}</p>
+                                            <ProductInfos>
+                                                <p style={{ fontWeight: "bold", color: "green", backgroundColor: "rgba(0, 128, 0, 0.2)", padding: ".5rem", borderRadius: ".5rem" }}>{product.price.toLocaleString("BRL", { style: "currency", currency: "BRL" })}</p>
+                                                <p style={{ fontWeight: "bold", color: "var(--background)", backgroundColor: "rgba(0, 23, 128, 0.2)", padding: ".5rem", borderRadius: ".5rem" }}>{product.type}</p> 
+                                            </ProductInfos>
 
-                    <ButtonsContainer>
-                        <Button disable={loading} onClick={handleCancel}>Cancelar</Button>
-                    </ButtonsContainer>
+                                        </ProductsInfoContainer>
+
+                                        <PrinterSVG onClick={() => handlePrint(product)} style={{ fill: "var(--background)", width: "1.5rem", height: "1.5rem", cursor: "pointer" }}/>
+                                    </Product>
+                                ))}
+                            </ProductsContainer>
+                        ) : (
+                            <Product style={{ justifyContent: "center" }}>
+                                <p style={{ fontWeight: "bold", color: "var(--background)" }}>Nenhum produto encontrado</p>
+                            </Product>
+                        )}
+                    </ResultsContainer>
                 </ModalContent>
             </ModalContainer>
         </Container>

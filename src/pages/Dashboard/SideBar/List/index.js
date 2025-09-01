@@ -74,7 +74,7 @@ const Selected = styled.div`
 `;
 
 const sideBarIcons = {
-    Plates: PrinterSVG,
+    Prints: PrinterSVG,
     Codes: CodesSVG,
     Bin: BinSVG,
     Users: UsersSVG,

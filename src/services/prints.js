@@ -24,4 +24,13 @@ async function getPrints(limit){
     }
 }
 
-export { getPrints };
+async function addPrint(reqBody){
+    try {
+        const response = await API.post(`/add-print`, reqBody);
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+export { getPrints, addPrint };

@@ -63,7 +63,7 @@ function Dashboard() {
   const sections = {
     "Usuários": <Users/>,
     "Cargos": <Roles/>,
-    "Placas": <Plates/>,
+    "Impressões": <Plates/>,
     "Notas": <Notes/>,
     "Transferências": <Transfers/>,
     "Baixas": <Codes/>,

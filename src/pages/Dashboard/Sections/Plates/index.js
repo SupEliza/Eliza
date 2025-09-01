@@ -5,7 +5,7 @@ import reloadPNG from "../../../../assets/images/reload.png";
 import styled from "styled-components";
 import TotalContainer from "../../../../components/TotalContainer";
 import { getPrints } from "../../../../services/prints";
-import { ReactComponent as PrinterSVG } from "../../../../assets/svg/printer.svg";
+import { ReactComponent as PrinterSVG } from "../../../../assets/svg/search.svg";
 import NewPlateModal from "../../../../components/NewPlateModal";
 
 const Container = styled.div`
@@ -303,7 +303,7 @@ function Plates () {
           </PrinterIconContainer>
           <ReloadIcon onClick={handleReloadPlates} src={reloadPNG} data-tooltip-id="reload"/>
 
-          <Tooltip id="print" place="top" content="Imprimir placa"/>
+          <Tooltip id="print" place="top" content="Buscar Produto"/>
           <Tooltip id="reload" place="top" content="Recarregar lista"/>
         </PlatesHeaderRight>
       </PlatesHeader>
