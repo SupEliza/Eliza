@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({    
-    baseURL: "https://elizaapi.onrender.com/prints",
-    // baseURL: "http://localhost:8080/prints",
+    baseURL: "https://elizaapi.onrender.com/products",
+    // baseURL: "http://localhost:8080/products",
 });
 
 API.interceptors.request.use((config) => {
@@ -15,13 +15,13 @@ API.interceptors.request.use((config) => {
     return Promise.reject(error);
 });
 
-async function getPrints(limit){
+async function getProducts(search){
     try {
-        const response = await API.get(`/false/${limit}`);
+        const response = await API.get(`/${search}`);
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;
     }
 }
 
-export { getPrints };
+export { getProducts };

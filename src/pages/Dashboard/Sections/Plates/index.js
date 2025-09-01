@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { getNotes, moveNoteToBin } from "../../../../services/notes";
 import { Tooltip } from "react-tooltip";
 import SmallLoad from "../../../../components/SmallLoad";
 import reloadPNG from "../../../../assets/images/reload.png";
-import viewPNG from "../../../../assets/images/view.png";
-import removePNG from "../../../../assets/images/remove.png";
 import styled from "styled-components";
-import { useNotify } from "../../../../hooks/Notify/notifyContext";
 import TotalContainer from "../../../../components/TotalContainer";
 import { getPrints } from "../../../../services/prints";
+import { ReactComponent as PrinterSVG } from "../../../../assets/svg/printer.svg";
+import NewPlateModal from "../../../../components/NewPlateModal";
 
 const Container = styled.div`
   display: flex;
@@ -60,6 +58,23 @@ const PlatesHeaderRight = styled.div`
     width: unset;
   }
 `;
+
+const PrinterIconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background);
+  border-radius: 100%;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+
+  & svg{
+    fill: var(--secondary-color);
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+`
 
 const ReloadIcon = styled.img`
   width: 3rem;
@@ -118,15 +133,6 @@ const PlatesListElement = styled.div`
 
 const PlatePointer = styled.p`
   cursor: pointer;
-`;
-
-const ActionIcon = styled.img`
-  width: 1rem;
-  cursor: pointer;
-
-  @media screen and (min-width: 768px){
-    width: 2rem;
-  }
 `;
 
 const PlatesList = styled.div`
@@ -188,7 +194,7 @@ function Plates () {
   const [totalPrints, setTotalPrints] = useState(0);
   const [platesLimit, setplatesLimit] = useState(10);
   const [platesList, setPlatesList] = useState([]);
-  const { addNotification } = useNotify();
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -292,8 +298,12 @@ function Plates () {
         </HeaderLeft>
 
         <PlatesHeaderRight>
+          <PrinterIconContainer onClick={() => setShowAddModal(true)} data-tooltip-id="print">
+            <PrinterSVG/>
+          </PrinterIconContainer>
           <ReloadIcon onClick={handleReloadPlates} src={reloadPNG} data-tooltip-id="reload"/>
 
+          <Tooltip id="print" place="top" content="Imprimir placa"/>
           <Tooltip id="reload" place="top" content="Recarregar lista"/>
         </PlatesHeaderRight>
       </PlatesHeader>
@@ -347,6 +357,8 @@ function Plates () {
           : <p>Nenhum registro encontrado.</p>
         }
       </PlatesListContainer>
+
+      {showAddModal && <NewPlateModal isOpen={showAddModal} setIsOpen={setShowAddModal} title="Buscar Produto"/>}
     </Container>
   );
 }
