@@ -318,7 +318,7 @@ function Transfers(){
                 <TransferList>
                   {transfersList.map((transfer) => (
                     <Transfer key={transfer.id}>
-                      <TransferListElement>{transfer.Transfer_add}</TransferListElement>
+                      <TransferListElement>{transfer.user_add}</TransferListElement>
                       <TransferListElement>                    
                           {new Date(transfer.created_at).toLocaleString("pt-BR", {
                             timeZone: "America/Sao_Paulo",
