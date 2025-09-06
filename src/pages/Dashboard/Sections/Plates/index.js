@@ -358,7 +358,7 @@ function Plates () {
         }
       </PlatesListContainer>
 
-      {showAddModal && <NewPlateModal isOpen={showAddModal} setIsOpen={setShowAddModal} title="Buscar Produto"/>}
+      {showAddModal && <NewPlateModal fetchPlates={fetchPlates} isOpen={showAddModal} setIsOpen={setShowAddModal} title="Buscar Produto"/>}
     </Container>
   );
 }

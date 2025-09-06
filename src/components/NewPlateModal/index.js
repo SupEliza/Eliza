@@ -8,6 +8,7 @@ import { ReactComponent as PrinterSVG } from "../../assets/svg/printer.svg"
 import { addPrint } from "../../services/prints"
 import { AuthContext } from "../../hooks/Authentication/authContext"
 import { useNotify } from "../../hooks/Notify/notifyContext"
+import EditPNG from "../../assets/images/edit.png"
 
 const Container = styled.div`
     position: fixed;
@@ -178,7 +179,7 @@ const Button = styled.div`
 `;
 
 
-function NewPlateModal({isOpen, setIsOpen, title}){
+function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
     const { user } = useContext(AuthContext);
     const { addNotification } = useNotify();
     const [products, setProducts] = useState([]);
@@ -221,6 +222,7 @@ function NewPlateModal({isOpen, setIsOpen, title}){
             if(response.success === true){
                 addNotification(response.message);
                 setIsOpen(false);
+                fetchPlates();
             } else {
                 addNotification(response.message || "Erro ao adicionar impressão");
             }
@@ -267,6 +269,7 @@ function NewPlateModal({isOpen, setIsOpen, title}){
                                         </ProductsInfoContainer>
 
                                         <PrinterSVG onClick={() => handlePrint(product)} style={{ fill: "var(--background)", width: "1.5rem", height: "1.5rem", cursor: "pointer" }}/>
+                                        <img style={{ width: "1.5rem", height: "1.5rem", cursor: "pointer" }} src={EditPNG}/>
                                     </Product>
                                 ))}
                             </ProductsContainer>
