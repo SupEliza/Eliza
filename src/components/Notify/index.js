@@ -10,7 +10,7 @@ const NotifyContainer = styled.div`
     top: 10vh;
     right: 10px;
     max-width: 20rem;
-    z-index: 100;
+    z-index: 1001;
 `;
 
 function Notify() {

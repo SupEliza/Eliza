@@ -16,6 +16,7 @@ const NotifyContent = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     transform: ${({ active }) => (active ? "translateX(0)" : "translateX(120%)")};
     transition: transform 0.5s ease-in-out;
+    z-index: 1001;
 `;
 
 const ProgressBar = styled.div`

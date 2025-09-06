@@ -4,11 +4,12 @@ import { getProducts } from "../../services/products"
 import CircleLoad from "../CircleLoad"
 import SearchBar from "../Inputs/SearchBar"
 import { ReactComponent as CloseSVG } from "../../assets/svg/close.svg"
-import { ReactComponent as PrinterSVG } from "../../assets/svg/printer.svg"
 import { addPrint } from "../../services/prints"
 import { AuthContext } from "../../hooks/Authentication/authContext"
 import { useNotify } from "../../hooks/Notify/notifyContext"
-import EditPNG from "../../assets/images/edit.png"
+import editPNG from "../../assets/images/edit.png"
+import printerPNG from "../../assets/images/printer.png"
+import { Tooltip } from "react-tooltip"
 
 const Container = styled.div`
     position: fixed;
@@ -138,6 +139,12 @@ const Product = styled.div`
     background: #F5F6FA;
 `
 
+const ActionImage = styled.img`
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+`
+
 const ProductsInfoContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -232,6 +239,10 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
         setLoading(false);
     }
 
+    async function handleEdit(){
+        addNotification("Calma ai paizão não terminei essa parte ainda :)");
+    }
+
     const handleCancel = () => {
         setIsOpen(false);
     };    
@@ -268,8 +279,11 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
 
                                         </ProductsInfoContainer>
 
-                                        <PrinterSVG onClick={() => handlePrint(product)} style={{ fill: "var(--background)", width: "1.5rem", height: "1.5rem", cursor: "pointer" }}/>
-                                        <img style={{ width: "1.5rem", height: "1.5rem", cursor: "pointer" }} src={EditPNG}/>
+                                        <ActionImage data-tooltip-id="printer" src={printerPNG} onClick={() => handlePrint(product)}/>
+                                        <ActionImage data-tooltip-id="edit" src={editPNG} onClick={() => handleEdit()}/>
+
+                                        <Tooltip id="printer" place="top" content="Imprimir"/>
+                                        <Tooltip id="edit" place="top" content="Editar"/>
                                     </Product>
                                 ))}
                             </ProductsContainer>
