@@ -36,7 +36,7 @@ const ModalContainer = styled.div`
     justify-content: center;
     border-radius: .8rem;
     overflow: hidden;
-    max-height: 70vh;
+    max-height: 75vh;
     width: 75vw;
     padding: 2rem;
     background-color: var(--secondary-color);
@@ -65,7 +65,6 @@ const ModalContent = styled.div`
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    height: 100%;
     width: 100%;
 `
 
@@ -107,8 +106,9 @@ const ProductsContainer = styled.div`
     flex-direction: column;
     align-items: center;
     gap: .5rem;
-    max-height: 40vh;
+    max-height: 50vh;
     width: 100%;
+    box-sizing: border-box;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
@@ -149,7 +149,20 @@ const ProductsInfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: .5rem;
+    gap: .8rem;
+`
+
+const Description = styled.p`
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--background);
+`
+
+const Detail = styled.p`
+    font-size: .9rem;
+    padding: .5rem;
+    border-radius: .5rem;
+    font-weight: bold;
 `
 
 const ProductInfos = styled.div`
@@ -271,10 +284,10 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
                                 {products.map((product) => (
                                     <Product>
                                         <ProductsInfoContainer>
-                                            <p style={{ fontWeight: "bold", color: "var(--background)" }}>{product.ean} - {product.description}</p>
+                                            <Description>{product.ean} - {product.description}</Description>
                                             <ProductInfos>
-                                                <p style={{ fontWeight: "bold", color: "green", backgroundColor: "rgba(0, 128, 0, 0.2)", padding: ".5rem", borderRadius: ".5rem" }}>{product.price.toLocaleString("BRL", { style: "currency", currency: "BRL" })}</p>
-                                                <p style={{ fontWeight: "bold", color: "var(--background)", backgroundColor: "rgba(0, 23, 128, 0.2)", padding: ".5rem", borderRadius: ".5rem" }}>{product.type}</p> 
+                                                <Detail style={{ color: "green", backgroundColor: "rgba(0, 128, 0, 0.2)"}}>{product.price.toLocaleString("BRL", { style: "currency", currency: "BRL" })}</Detail>
+                                                <Detail style={{ color: "var(--background)", backgroundColor: "rgba(0, 23, 128, 0.2)"}}>{product.type}</Detail> 
                                             </ProductInfos>
 
                                         </ProductsInfoContainer>
