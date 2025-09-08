@@ -290,6 +290,12 @@ function Plates () {
     { name: "Data/Hora", action: () => orderList("Data/Hora") },
   ];
 
+  function capitalizeFirstLetter(str) {
+    if (!str) return "";
+    str = str.toLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   return (
     <Container>
       <PlatesHeader>
@@ -328,7 +334,7 @@ function Plates () {
             <PlatesList>
               {platesList.map((plate) => (
                 <Plate key={`${plate.id}-${plate.created_at}`}>
-                    <PlatesListElement>{plate.user_add}</PlatesListElement>
+                    <PlatesListElement>{capitalizeFirstLetter(plate.user_add)}</PlatesListElement>
                     
                     <PlatesListElement>
                         {plate.ean}
