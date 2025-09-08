@@ -270,8 +270,8 @@ function ViewTransfer() {
     }
 
     function eanIncrement(ean){
-        if(ean.length <= 4){
-            const newEan = ean.padStart(13, "0");
+        if(ean.toString().length <= 4){
+            const newEan = ean.toString().padStart(13, "0");
 
             return newEan
         }
