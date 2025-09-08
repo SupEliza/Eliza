@@ -7,7 +7,7 @@ const NotifyContainer = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     position: fixed;
-    top: 10vh;
+    top: 15vh;
     right: 10px;
     max-width: 20rem;
     z-index: 1001;
