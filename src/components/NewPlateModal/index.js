@@ -271,7 +271,7 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
                                 {products.map((product) => (
                                     <Product>
                                         <ProductsInfoContainer>
-                                            <p style={{ fontWeight: "bold", color: "var(--background)" }}>{product.description}</p>
+                                            <p style={{ fontWeight: "bold", color: "var(--background)" }}>{product.ean} - {product.description}</p>
                                             <ProductInfos>
                                                 <p style={{ fontWeight: "bold", color: "green", backgroundColor: "rgba(0, 128, 0, 0.2)", padding: ".5rem", borderRadius: ".5rem" }}>{product.price.toLocaleString("BRL", { style: "currency", currency: "BRL" })}</p>
                                                 <p style={{ fontWeight: "bold", color: "var(--background)", backgroundColor: "rgba(0, 23, 128, 0.2)", padding: ".5rem", borderRadius: ".5rem" }}>{product.type}</p> 
