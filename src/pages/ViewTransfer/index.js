@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getTransfersById } from "../../services/transfers";
+import { getTransfersById, moveTransferToBin } from "../../services/transfers";
 import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
-import { ReactComponent as ExportSVG } from "../../assets/svg/export.svg";
 import { Tooltip } from "react-tooltip";
 import { useNotify } from "../../hooks/Notify/notifyContext";
 import styled from "styled-components";
@@ -244,41 +243,22 @@ function ViewTransfer() {
         fetchTransferById();
     }, []);
 
-    // async function handleMoveToBin(id) {
-    //     setLoading(true);
-    //     try {
-    //         const response = await movetransferToBin(id);
+    async function handleMoveToBin(id) {
+        setLoading(true);
+        try {
+            const response = await moveTransferToBin(id);
 
-    //         if (response.success) {
-    //             navigate("/dashboard");
-    //             addNotification(response.message);
-    //             return;
-    //         }
+            if (response.success) {
+                navigate("/dashboard");
+                addNotification(response.message);
+                return;
+            }
 
-    //         addNotification(response.message);
-    //     } catch (error) {
-    //         addNotification(error.message || "Erro ao mover para lixeira");
-    //     }
-    //     setLoading(false);
-    // }
-
-    function handleExport() {
-        if (transferItems.length === 0){ 
-          addNotification("Nenhum item encontrado!");
-          return;
+            addNotification(response.message);
+        } catch (error) {
+            addNotification(error.message || "Erro ao mover para lixeira");
         }
-
-        const txt = transferItems.map((item, index) => `EAN ${index + 1}: ${item.ean}\nQTD: ${item.quantity}`).join("\n\n");
-        const blob = new Blob([txt], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `Relação TF ${new Date(transfer.created_at).toLocaleString("pt-BR", {
-                timeZone: "America/Sao_Paulo",
-                dateStyle: "short",
-            })}.txt
-        `;
-        link.click();
+        setLoading(false);
     }
 
     function getTotalQuantity(){
@@ -349,11 +329,9 @@ function ViewTransfer() {
 
                     <CardContentContainer>
                         <HeaderContainer isDeleted={transfer.isDeleted}>
-                            <ExportSVG data-tooltip-id="export" onClick={handleExport}/>
                             <MainTitle>Itens</MainTitle>
-                            <CheckSVG style={{ display: transfer.isDeleted ? "none" : "unset" }} data-tooltip-id="check"/>
+                            <CheckSVG style={{ display: transfer.isDeleted ? "none" : "unset" }} onClick={() => handleMoveToBin(transfer.id)} data-tooltip-id="check"/>
 
-                            <Tooltip id="export" place="top" content="Exportar itens"/>
                             <Tooltip id="check" place="top" content="Marcar como concluída"/>
                         </HeaderContainer>
 
