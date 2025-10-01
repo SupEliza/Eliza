@@ -1,14 +1,14 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 import { refreshToken, userAuth } from "../../services/users";
 import { useNotify } from "../Notify/notifyContext";
 
 export const AuthContext = createContext();
 
-let isRefreshing = false;
-
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { addNotification } = useNotify();
+    const refreshingRef = useRef(false);
 
     // 🔹 Sempre pega o token salvo
     function getToken() {
@@ -16,10 +16,9 @@ export function AuthProvider({ children }) {
     }
 
     async function refreshAccessToken() {
-        const { addNotification } = useNotify();
-        if (isRefreshing) return;
+        if (refreshingRef.current) return;
 
-        isRefreshing = true;
+        refreshingRef.current = true;
 
         try {
             const uuid = localStorage.getItem("user_uuid");
@@ -32,28 +31,26 @@ export function AuthProvider({ children }) {
 
             const response = await refreshToken({ uuid, token });
 
-            if (!response || response.success === false) {
+            if (!response?.success || !response.token) {
                 setUser(null);
                 return;
             }
 
-            addNotification(response);
+            // Se renovou, salva o novo token
+            localStorage.setItem("token", response.token);
 
-            if (response.token) {
-                localStorage.setItem("token", response.token);
-            }
+            // 🔹 Opcional: notificação só se quiser mostrar sucesso
+            // addNotification({ type: "success", message: "Sessão renovada com sucesso!" });
 
             await checkAuth();
         } catch (error) {
             setUser(null);
         } finally {
-            isRefreshing = false;
+            refreshingRef.current = false;
         }
     }
 
     async function checkAuth() {
-        const { addNotification } = useNotify();
-
         try {
             const token = getToken();
             if (!token) {
@@ -64,16 +61,15 @@ export function AuthProvider({ children }) {
 
             const response = await userAuth(token);
 
-            if (!response || response.success !== true || !response.user) {
-                await refreshAccessToken();
-                return;
+            if (response?.success && response.user) {
+                setUser({ ...response.user });
+
+                // 🔹 Opcional: só notificar em caso de login válido
+                // addNotification({ type: "info", message: "Usuário autenticado!" });
+            } else {
+                // Token inválido, desloga
+                setUser(null);
             }
-
-            addNotification(response);
-
-            setUser({
-                ...response.user
-            });
         } catch (error) {
             setUser(null);
         } finally {
@@ -86,6 +82,7 @@ export function AuthProvider({ children }) {
     }, []);
 
     useEffect(() => {
+        // 🔹 Atualiza o token a cada 10 minutos
         const intervalId = setInterval(() => {
             refreshAccessToken();
         }, 10 * 60 * 1000);

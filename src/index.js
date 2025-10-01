@@ -57,8 +57,8 @@ root.render(
 
     <GlobalStyle />
     <BrowserRouter>
-      <AuthProvider>
-        <NotifyProvider>
+      <NotifyProvider>
+        <AuthProvider>
           <Notify/>
           <Routes>
             <Route path="/"
@@ -97,8 +97,8 @@ root.render(
               }
             />
           </Routes>
-        </NotifyProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </NotifyProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
