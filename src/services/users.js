@@ -3,17 +3,16 @@ import axios from "axios";
 const API = axios.create({    
     baseURL: "https://elizaapi.onrender.com/users",
     // baseURL: "http://localhost:8080/users",
-
-    withCredentials: true
 });
 
 API.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
-    console.log("📡 Bearer token enviado:", token);
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
+}, (error) => {
+    return Promise.reject(error);
 });
 
 async function getUsers() {
@@ -61,11 +60,9 @@ async function editUserRole(params){
     }
 }
 
-async function userAuth(token) {
+async function userAuth() {
     try {
-        const response = await API.get("/auth", {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await API.get("/auth");
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;

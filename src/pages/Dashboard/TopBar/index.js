@@ -46,7 +46,7 @@ function TopBar({setSideBar}) {
     const [selectedSection, setSelectedSection] = useState("");
 
     useEffect(() => {
-        setSelectedSection(localStorage.getItem("currentSection"));
+        setSelectedSection(localStorage.getItem("currentSection") || "Usuários");
     }, [localStorage.getItem("currentSection")]);
 
     return(
