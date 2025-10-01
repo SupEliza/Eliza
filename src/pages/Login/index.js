@@ -266,7 +266,9 @@ function Login() {
                     uuid: response.uuid,
                 });
 
-                navigate("/dashboard");
+                setTimeout(() => {
+                    navigate("/dashboard");
+                }, 50);
             } else {
                 setApiResponseColor("red");
                 setApiResponse(response.message || "Ocorreu um erro ao fazer login.");
