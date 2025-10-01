@@ -60,9 +60,11 @@ async function editUserRole(params){
     }
 }
 
-async function userAuth() {
+async function userAuth(token) {
     try {
-        const response = await API.get("/auth");
+        const response = await API.get("/auth", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         return response.data;
     } catch (error) {
         return error.response?.data || error.message;

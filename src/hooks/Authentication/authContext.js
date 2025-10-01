@@ -15,6 +15,9 @@ export function AuthProvider({ children }) {
         return localStorage.getItem("token");
     }
 
+    console.log("🔑 token:", getToken());
+    console.log("🧑 uuid:", localStorage.getItem("user_uuid"));
+
     async function refreshAccessToken() {
         if (refreshingRef.current) return;
 
@@ -29,7 +32,7 @@ export function AuthProvider({ children }) {
                 return;
             }
 
-            const response = await refreshToken({ uuid, token });
+            const response = await refreshToken(uuid);
 
             if (!response?.success || !response.token) {
                 setUser(null);
