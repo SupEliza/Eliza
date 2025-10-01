@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { refreshToken, userAuth } from "../../services/users";
+import { useNotify } from "../Notify/notifyContext";
 
 export const AuthContext = createContext();
 
@@ -35,6 +36,8 @@ export function AuthProvider({ children }) {
                 return;
             }
 
+            addNotification(response);
+
             if (response.token) {
                 localStorage.setItem("token", response.token);
             }
@@ -48,6 +51,8 @@ export function AuthProvider({ children }) {
     }
 
     async function checkAuth() {
+        const { addNotification } = useNotify();
+
         try {
             const token = getToken();
             if (!token) {
@@ -62,6 +67,8 @@ export function AuthProvider({ children }) {
                 await refreshAccessToken();
                 return;
             }
+
+            addNotification(response);
 
             setUser({
                 ...response.user
