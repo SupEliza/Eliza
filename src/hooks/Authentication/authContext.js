@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
     }
 
     async function refreshAccessToken() {
+        const { addNotification } = useNotify();
         if (isRefreshing) return;
 
         isRefreshing = true;
