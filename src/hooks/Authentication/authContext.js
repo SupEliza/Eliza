@@ -40,7 +40,7 @@ export function AuthProvider({ children }) {
             localStorage.setItem("token", response.token);
 
             // 🔹 Opcional: notificação só se quiser mostrar sucesso
-            // addNotification({ type: "success", message: "Sessão renovada com sucesso!" });
+            addNotification(response.message);
 
             await checkAuth();
         } catch (error) {
@@ -65,7 +65,7 @@ export function AuthProvider({ children }) {
                 setUser({ ...response.user });
 
                 // 🔹 Opcional: só notificar em caso de login válido
-                // addNotification({ type: "info", message: "Usuário autenticado!" });
+                addNotification(response.message);
             } else {
                 // Token inválido, desloga
                 setUser(null);
