@@ -353,11 +353,6 @@ function Codes () {
       return;
     }
 
-    if(user.user_role !== 'Moderador'){
-      addNotification('Você não tem permissão.');
-      return;
-    }
-
     setConfirmIsOpen(true);
     setConfirmationText("Tem certeza que deseja limpar todos os códigos?");
   }
