@@ -276,7 +276,7 @@ function Codes () {
 
     const exportList = response.codes.filter((code) => !code.isDeleted);
 
-    const txt = exportList.map((code, index) => `EAN ${index}: ${code.ean}\nQTD: ${code.quantity}`).join("\n\n");
+    const txt = exportList.map((code, index) => `EAN ${index + 1}: ${code.ean}\nQTD: ${code.quantity}`).join("\n\n");
     const blob = new Blob([txt], { type: "text/plain" }); 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
