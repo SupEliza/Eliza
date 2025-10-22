@@ -24,4 +24,13 @@ async function getProducts(search){
     }
 }
 
-export { getProducts };
+async function editProduct(id, newDescription){
+    try {
+        const response = await API.post(`/edit`, { id, newDescription });
+        return response.data;
+    } catch (error) {
+        return error.response?.data || error.message;
+    }
+}
+
+export { getProducts, editProduct };

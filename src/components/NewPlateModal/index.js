@@ -1,15 +1,17 @@
 import { useContext, useState } from "react"
 import styled from "styled-components"
-import { getProducts } from "../../services/products"
+import { editProduct, getProducts } from "../../services/products"
 import CircleLoad from "../CircleLoad"
 import SearchBar from "../Inputs/SearchBar"
 import { ReactComponent as CloseSVG } from "../../assets/svg/close.svg"
 import { addPrint } from "../../services/prints"
 import { AuthContext } from "../../hooks/Authentication/authContext"
 import { useNotify } from "../../hooks/Notify/notifyContext"
+import { Tooltip } from "react-tooltip"
+import savePNG from "../../assets/images/confirm.png"
+import removePNG from "../../assets/images/remove.png"
 import editPNG from "../../assets/images/edit.png"
 import printerPNG from "../../assets/images/printer.png"
-import { Tooltip } from "react-tooltip"
 
 const Container = styled.div`
     position: fixed;
@@ -152,6 +154,31 @@ const ProductsInfoContainer = styled.div`
     gap: .8rem;
 `
 
+const EditContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    box-sizing: border-box;
+    width: 100%;
+`
+
+const Input = styled.input`
+    width: 100%;
+    padding: .4rem;
+    border-radius: .4rem;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: transparent;
+    color: var(--background);
+
+    &:focus{
+        outline: none;
+    }
+`
+
 const Description = styled.p`
     font-size: 1rem;
     font-weight: bold;
@@ -204,6 +231,8 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
     const { addNotification } = useNotify();
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState('');
+    const [editingProduct, setEditingProduct] = useState(null);
+    const [newDescription, setNewDescription] = useState('');
     const [loading, setLoading] = useState(false);
 
     async function handleSearch(e) {
@@ -223,6 +252,32 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
         }
 
         setLoading(false);
+    }
+
+    function handleEdit(product) {
+        setEditingProduct(product.ean);
+        setNewDescription(product.description);
+    }
+
+    function handleCancelEdit() {
+        setEditingProduct(null);
+        setNewDescription('');
+    }
+
+    async function handleSaveEdit(product) {
+        console.log(product);
+        try {
+            const response = await editProduct(product.ean, newDescription);
+
+            if(response.success){
+                product.description = newDescription;
+                setEditingProduct(null);
+                addNotification(response.message);
+            }
+        } catch (error) {
+            console.log(error);
+            addNotification('Erro ao atualizar descrição');
+        }
     }
 
     async function handlePrint(product){
@@ -252,10 +307,6 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
         setLoading(false);
     }
 
-    async function handleEdit(){
-        addNotification("Calma ai paizão não terminei essa parte ainda :)");
-    }
-
     const handleCancel = () => {
         setIsOpen(false);
     };    
@@ -281,24 +332,67 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
                             <CircleLoad />
                         ) : products && products.length > 0 ? (
                             <ProductsContainer>
-                                {products.map((product) => (
-                                    <Product>
-                                        <ProductsInfoContainer>
-                                            <Description>{product.ean} - {product.description}</Description>
-                                            <ProductInfos>
-                                                <Detail style={{ color: "green", backgroundColor: "rgba(0, 128, 0, 0.2)"}}>{product.price.toLocaleString("BRL", { style: "currency", currency: "BRL" })}</Detail>
-                                                <Detail style={{ color: "var(--background)", backgroundColor: "rgba(0, 23, 128, 0.2)"}}>{product.type}</Detail> 
-                                            </ProductInfos>
+                                {products.map((product) => {
+                                    const isEditing = editingProduct === product.ean;
+                                    return (
+                                        <Product key={product.ean}>
+                                            <ProductsInfoContainer>
+                                                {isEditing ? (
+                                                    <EditContainer>
+                                                        <Input
+                                                            type="text"
+                                                            value={newDescription}
+                                                            onChange={(e) => setNewDescription(e.target.value)}
+                                                        />
+                                                        <>
+                                                            <ActionImage
+                                                                data-tooltip-id="save"
+                                                                src={savePNG}
+                                                                onClick={() => handleSaveEdit(product)}
+                                                            />
+                                                            <ActionImage
+                                                                data-tooltip-id="cancel"
+                                                                src={removePNG}
+                                                                onClick={handleCancelEdit}
+                                                            />
+                                                            <Tooltip id="save" place="top" content="Salvar" />
+                                                            <Tooltip id="cancel" place="top" content="Cancelar" />
+                                                        </>
+                                                    </EditContainer>
+                                                ) : (
+                                                    <>
+                                                        <Description>{product.ean} - {product.description}</Description>
+                                                        <ProductInfos>
+                                                            <Detail style={{ color: "green", backgroundColor: "rgba(0, 128, 0, 0.2)" }}>
+                                                                {product.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                                                            </Detail>
+                                                            <Detail style={{ color: "var(--background)", backgroundColor: "rgba(0, 23, 128, 0.2)" }}>
+                                                                {product.type}
+                                                            </Detail>
+                                                        </ProductInfos>
+                                                    </>
+                                                )}
+                                            </ProductsInfoContainer>
 
-                                        </ProductsInfoContainer>
-
-                                        <ActionImage data-tooltip-id="printer" src={printerPNG} onClick={() => handlePrint(product)}/>
-                                        <ActionImage data-tooltip-id="edit" src={editPNG} onClick={() => handleEdit()}/>
-
-                                        <Tooltip id="printer" place="top" content="Imprimir"/>
-                                        <Tooltip id="edit" place="top" content="Editar"/>
-                                    </Product>
-                                ))}
+                                            {!isEditing && (
+                                                <>
+                                                    <ActionImage
+                                                        data-tooltip-id="printer"
+                                                        src={printerPNG}
+                                                        onClick={() => handlePrint(product)}
+                                                    />
+                                                    <ActionImage
+                                                        data-tooltip-id="edit"
+                                                        src={editPNG}
+                                                        onClick={() => handleEdit(product)}
+                                                    />
+                                                    <Tooltip id="printer" place="top" content="Imprimir" />
+                                                    <Tooltip id="edit" place="top" content="Editar" />
+                                                </>
+                                            )}
+                                        </Product>
+                                    );
+                                })}
                             </ProductsContainer>
                         ) : (
                             <Product style={{ justifyContent: "center" }}>
