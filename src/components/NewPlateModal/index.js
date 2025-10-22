@@ -267,7 +267,7 @@ function NewPlateModal({isOpen, setIsOpen, title, fetchPlates}){
     async function handleSaveEdit(product) {
         console.log(product);
         try {
-            const response = await editProduct(product.ean, newDescription);
+            const response = await editProduct(product.id, newDescription);
 
             if(response.success){
                 product.description = newDescription;
