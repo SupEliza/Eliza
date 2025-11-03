@@ -186,8 +186,8 @@ function AddCodeModal({isOpen, setIsOpen, title, fetchCodes}){
 
             if (response.success === true) {
                 addNotification(response.message);
-                fetchCodes();
-                handleCancel();
+                setEan("");
+                setQuantity(1);
             } else {
                 setApiResponseColor("red");
                 setApiResponse(response.message);
@@ -206,6 +206,7 @@ function AddCodeModal({isOpen, setIsOpen, title, fetchCodes}){
         setApiResponseColor("");
         setApiResponse("");
         setIsOpen(false);
+        fetchCodes();
     };    
 
     return(
