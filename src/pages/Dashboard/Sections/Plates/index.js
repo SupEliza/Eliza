@@ -259,9 +259,9 @@ function Plates () {
             isAscending ? a.type.localeCompare(b.type) : b.type.localeCompare(a.type)
           );
           break;
-        case "EAN":
+        case "Preço":
           sortedList.sort((a, b) =>
-            isAscending ? a.ean.localeCompare(b.ean) : b.ean.localeCompare(a.ean)
+            isAscending ? a.price - b.price : b.price - a.price
           );
           break;
         default:
@@ -284,8 +284,8 @@ function Plates () {
 
   const headerList = [
     { name: "Usuário", action: () => orderList("Usuário") },
-    { name: "EAN", action: () => orderList("EAN") },
     { name: "Descrição", action: () => orderList("Descrição") },
+    { name: "Preço", action: () => orderList("Preço") },
     { name: "Tipo", action: () => orderList("Tipo") },
     { name: "Data/Hora", action: () => orderList("Data/Hora") },
   ];
@@ -336,11 +336,11 @@ function Plates () {
                 <Plate key={`${plate.id}-${plate.created_at}`}>
                     <PlatesListElement>{capitalizeFirstLetter(plate.user_add)}</PlatesListElement>
                     
-                    <PlatesListElement>
-                        {plate.ean}
-                    </PlatesListElement>
-
                     <PlatesListElement>{plate.description}</PlatesListElement>
+
+                    <PlatesListElement>
+                        {plate.price}
+                    </PlatesListElement>
 
                     <PlatesListElement>{plate.type}</PlatesListElement>
 
