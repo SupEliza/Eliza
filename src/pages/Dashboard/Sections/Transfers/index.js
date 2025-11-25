@@ -8,6 +8,7 @@ import viewPNG from "../../../../assets/images/view.png";
 import removePNG from "../../../../assets/images/remove.png";
 import TotalContainer from "../../../../components/TotalContainer";
 import { useNotify } from "../../../../hooks/Notify/notifyContext";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -187,6 +188,7 @@ function Transfers(){
     const [transfersLimit, setTransfersLimit] = useState(10);
     const [sortOrder, setSortOrder] = useState({ type: "", ascending: false });
     const { addNotification } = useNotify();
+    const navigate = useNavigate();
 
     async function fetchTransfers(append = false) {
         try {
@@ -329,7 +331,7 @@ function Transfers(){
                       <TransferListElement>{transfer.items.length}</TransferListElement>
                       <TransferListElement>
                         <ActionIcon data-tooltip-id="remove" onClick={() => handleMoveToBin(transfer.id)} src={removePNG} alt="Mover para lixeira"/>
-                        <ActionIcon data-tooltip-id="view" onClick={() => {window.open(`/dashboard/view/transfer/${transfer.id}`, "_blank")}} src={viewPNG} alt="Visualizar"/>
+                        <ActionIcon data-tooltip-id="view" onClick={() => {navigate(`/dashboard/view/transfer/${transfer.id}`)}} src={viewPNG} alt="Visualizar"/>
 
                         <Tooltip id="remove" place="top" content="Mover para lixeira"/>
                         <Tooltip id="view" place="top" content="Visualizar transferência"/>
