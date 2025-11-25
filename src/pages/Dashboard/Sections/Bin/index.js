@@ -192,7 +192,7 @@ const SelectInput = styled.select`
     color: var(--login-text-color);
     font-family: "Nunito Sans";
     font-size: 1.125rem;
-    padding: 0 .8rem;
+    width: 9rem;
     text-align: center;
     background: #F1F4F9;
     appearance: none;
