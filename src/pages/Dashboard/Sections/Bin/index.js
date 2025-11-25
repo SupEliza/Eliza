@@ -420,6 +420,12 @@ function Bin(){
     }
   ];
 
+  function capitalizeFirstLetter(str) {
+    if (!str) return "";
+    str = str.toLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   const currentSection = sectionAttributes.find(s => s.binContent === binType);
 
   function renderRowContent(binType, binContent) {
@@ -427,7 +433,7 @@ function Bin(){
       return [
         binContent.ean,
         binContent.quantity,
-        binContent.user_add,
+        capitalizeFirstLetter(binContent.user_add),
         new Date(binContent.created_at).toLocaleString("pt-BR", {
           timeZone: "America/Sao_Paulo",
           dateStyle: "short",
@@ -438,7 +444,7 @@ function Bin(){
 
     if (binType === "Transferências") {
       return [
-        binContent.user_add,
+        capitalizeFirstLetter(binContent.user_add),
         new Date(binContent.created_at).toLocaleString("pt-BR", {
           timeZone: "America/Sao_Paulo",
           dateStyle: "short",

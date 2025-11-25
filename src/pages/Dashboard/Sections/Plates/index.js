@@ -334,23 +334,23 @@ function Plates () {
             <PlatesList>
               {platesList.map((plate) => (
                 <Plate key={`${plate.id}-${plate.created_at}`}>
-                    <PlatesListElement>{capitalizeFirstLetter(plate.user_add)}</PlatesListElement>
-                    
-                    <PlatesListElement>{plate.description}</PlatesListElement>
+                  <PlatesListElement>{capitalizeFirstLetter(plate.user_add)}</PlatesListElement>
+                  
+                  <PlatesListElement>{plate.description}</PlatesListElement>
 
-                    <PlatesListElement>
-                        {plate.price}
-                    </PlatesListElement>
+                  <PlatesListElement>
+                    {plate.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                  </PlatesListElement>
 
-                    <PlatesListElement>{plate.type}</PlatesListElement>
+                  <PlatesListElement>{plate.type}</PlatesListElement>
 
-                    <PlatesListElement>
-                        {new Date(plate.created_at).toLocaleString("pt-BR", {
-                            timeZone: "America/Sao_Paulo",
-                            dateStyle: "short",
-                            timeStyle: "short"
-                        })}
-                    </PlatesListElement>
+                  <PlatesListElement>
+                    {new Date(plate.created_at).toLocaleString("pt-BR", {
+                      timeZone: "America/Sao_Paulo",
+                      dateStyle: "short",
+                      timeStyle: "short"
+                    })}
+                  </PlatesListElement>
                 </Plate>
               ))}
 
